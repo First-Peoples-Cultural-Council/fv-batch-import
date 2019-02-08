@@ -12,8 +12,8 @@ There are a number of 'Migrators' included that can be generated as runnable jar
 To change which 'Migrator' is being used, update pom.xml, changing the mainClass in the maven-jar-plugin:
 
 `
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
+            <plugin> 
+                <groupId>org.apache.maven.plugins</groupId> 
                 <artifactId>maven-jar-plugin</artifactId>
                 <configuration>
                     <archive>
