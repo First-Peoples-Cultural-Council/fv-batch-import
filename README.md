@@ -11,7 +11,7 @@ Others will need more testing with data and may need some tweaking to run.
 There are a number of 'Migrators' included that can be generated as runnable jar files.
 To change which 'Migrator' is being used, update pom.xml, changing the mainClass in the maven-jar-plugin:
 
-`
+```
             <plugin> 
                 <groupId>org.apache.maven.plugins</groupId> 
                 <artifactId>maven-jar-plugin</artifactId>
@@ -25,13 +25,13 @@ To change which 'Migrator' is being used, update pom.xml, changing the mainClass
                     </archive>
                 </configuration>
             </plugin>
-`
+```
 
 Run `mvn clean install` to generate the jar file (will be in target/fv-batch-import.x.x.x.jar)
 
 To execute the batch upload for words, for example, run the following command:
 
-`java -Xmx1g -jar target/fv-batch-import-1.0.0.jar \
+```java -Xmx1g -jar target/fv-batch-import-1.0.0.jar \
         -url "http://localhost:8080/nuxeo"
         -username YOUR_USER
         -domain FV
@@ -41,7 +41,7 @@ To execute the batch upload for words, for example, run the following command:
         -data-path
         /path/to/media/files/
         -password
-`
+```
 
 You will be promoted for a password once you run the command.
 Parameters will differ depending on the Migrator being executed; memory allocation on the size of the import.
