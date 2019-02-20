@@ -3,6 +3,7 @@ package task;
 import com.beust.jcommander.JCommander;
 import common.ConsoleLogger;
 import mappers.CsvMapper;
+import mappers.CsvValidator;
 import mappers.firstvoices.BinaryMapper;
 import mappers.firstvoices.WordMapper;
 import org.apache.commons.cli.ParseException;
@@ -13,6 +14,7 @@ import reader.CsvReader;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -71,9 +73,14 @@ public class FVWordMigrator extends AbstractMigrator {
             wordMigrator.setReader(reader);
         }
 
-        // TODO: Add some more validation of the CSV file prior to processing
-        // e.g. are images present? Are there duplicates internally?
+        CsvValidator csvVal = new CsvValidator(url, username, password, csvFile, dialectID);
+        List<String> valid = csvVal.validate(blobDataPath);
 
-        wordMigrator.process(url, username, password, "/" + domain + "/Workspaces/");
+        if(valid.isEmpty())
+            wordMigrator.process(url, username, password, "/" + domain + "/Workspaces/");
+        else
+            System.out.println(valid);
+
+        csvVal.close();
     }
 }
