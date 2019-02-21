@@ -32,6 +32,8 @@ public class CsvValidator{
         add("false");
     }};
     protected Documents categories;
+    protected Documents shared_categories;
+
     protected Documents words;
     private static final String[] POS_VALUES = new String[]{"basic", "verb", "noun", "pronoun", "adjective", "adverb", "preposition", "conjunction",
             "interjection", "particle", "advanced", "pronoun_personal", "pronoun_reflexive", "pronoun_reciprocal",
@@ -151,6 +153,10 @@ public class CsvValidator{
                 .set("query", "SELECT * FROM Document WHERE ecm:primaryType = 'FVCategory' AND fva:dialect = '" + dialect+"'")
                 .execute();
 
+        shared_categories = (Documents) session.newRequest("Repository.Query")
+                .set("query", "SELECT * FROM FVCategory WHERE ecm:path STARTSWITH '/FV/Workspaces/SharedData/Shared Categories'")
+                .execute();
+
     }
 
     private void checkCategoryExists(String w, int line){
@@ -161,14 +167,28 @@ public class CsvValidator{
             temp = w.split(",");
             for (String word: temp) {
                 match = false;
+
+                // Fail on space between categories
+                if (word.startsWith(" ")) {
+                    match = false;
+                }
+
                 if(!word.isEmpty()){
                     for (Document d:categories) {
                         if(word.equals(d.getTitle())) {
                             match = true;
                             break;
                         }
-
                     }
+
+                    for (Document d:shared_categories) {
+                        String title = d.getTitle();
+                        if(word.equals(d.getTitle())) {
+                            match = true;
+                            break;
+                        }
+                    }
+
                     if(!match)
                         invalid.add("Only existing categories are supported: line " + (line) +", " +word);
                 }
@@ -181,10 +201,18 @@ public class CsvValidator{
                     match = true;
                     break;
                 }
-
             }
+
+            for (Document d:shared_categories) {
+                String title = d.getTitle();
+                if(w.equals(d.getTitle())) {
+                    match = true;
+                    break;
+                }
+            }
+
             if(!match)
-                invalid.add("Only existing categories are supported: line " + (line) +", " +w);
+                invalid.add("Only existing categories are supported, ensure no spaces between categories: line " + (line) +", " +w);
         }
     }
 
