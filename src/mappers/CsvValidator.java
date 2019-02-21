@@ -1,11 +1,10 @@
 package mappers;
 
 import org.nuxeo.ecm.automation.client.Session;
-import org.nuxeo.ecm.automation.client.model.Document;
+import org.nuxeo.ecm.automation.client.model.*;
 import com.opencsv.CSVReader;
 
 import org.nuxeo.ecm.automation.client.jaxrs.impl.HttpAutomationClient;
-import org.nuxeo.ecm.automation.client.model.Documents;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -29,8 +28,8 @@ public class CsvValidator{
     protected static final ArrayList<String> TFVALUES = new ArrayList<String>() {{
         add("1");
         add("0");
-        add("True");
-        add("False");
+        add("true");
+        add("false");
     }};
     protected Documents categories;
     protected Documents words;
@@ -72,6 +71,7 @@ public class CsvValidator{
         int lineNumber = 0;
         String headerTemp;
         while((nextLine = csvReader.readNext()) != null){
+            Boolean audio_1 = false;
             int wordCount=0;
             lineNumber++;
             for (String word: nextLine) {
@@ -94,11 +94,16 @@ public class CsvValidator{
                         invalid.add(header[wordCount] + " can only have true or false values: line " +lineNumber +", " +word);
                 }
 
-                if(headerTemp.equals("_FILENAME") && !word.equals("")){
+                if(headerTemp.endsWith("_FILENAME") && !word.equals("")){
                     checkFileExists(path+word, header[wordCount], lineNumber, word);
+                    if(header[wordCount].equals("AUDIO_FILENAME"))
+                        audio_1 = true;
+                    if(header[wordCount].startsWith("AUDIO_2") && !audio_1)
+                        invalid.add("Audio file 2 is given without audio file 1: line " +lineNumber +", " +word);
                 }
+
                 if(headerTemp.equals("PART_OF_SPEECH"))
-                    word = checkPartsOfSpeech(word, lineNumber);
+                    checkPartsOfSpeech(word, lineNumber);
 
                 if(headerTemp.equals("USERNAME"))
                     checkUserExists(word, lineNumber);
@@ -117,12 +122,13 @@ public class CsvValidator{
         }
     }
 
-    private String checkPartsOfSpeech(String pos, int line)throws IOException{
-
-        String temppos = pos.toLowerCase().replaceAll("/ -(),", "_");
+    private void checkPartsOfSpeech(String pos, int line)throws IOException{
+        String temppos = pos.toLowerCase();
+        if(!temppos.equals(pos))
+            invalid.add("Parts of speech must be written in lowercase: line " + line + ", "+pos);
+        temppos = temppos.replaceAll("/ -(),", "_");
         if(!POS.contains(temppos))
             invalid.add("Only existing parts of speech are supported: line " + line + ", "+pos);
-        return pos.toLowerCase();
 
     }
 

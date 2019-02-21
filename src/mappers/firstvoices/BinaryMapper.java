@@ -5,12 +5,10 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import org.nuxeo.ecm.automation.client.Constants;
-import org.nuxeo.ecm.automation.client.model.Document;
-import org.nuxeo.ecm.automation.client.model.FileBlob;
+import org.nuxeo.ecm.automation.client.model.*;
 
 import mappers.propertyreaders.PropertyReader;
 import mappers.propertyreaders.StorePropertyReader;
-import org.nuxeo.ecm.automation.client.model.PropertyMap;
 import reader.AbstractReader;
 
 public abstract class BinaryMapper extends DictionaryCachedMapper {
@@ -95,7 +93,18 @@ public abstract class BinaryMapper extends DictionaryCachedMapper {
                 .setInput(fb)
                 .set("document", binaryDoc).execute();
         }
-        documents.get("current").set(linkKey, binaryDoc.getId());
+
+        if(getPrefix().equals("AUDIO_2")) {
+            String qu = "SELECT * FROM Document WHERE ecm:primaryType='FVAudio' AND ecm:currentLifeCycleState != 'deleted' ORDER BY dc:created DESC";
+            Documents ques = (Documents) session.newRequest("Repository.Query").setHeader(
+                    Constants.HEADER_NX_SCHEMAS, "*")
+                    .set("query", qu)
+                    .execute();
+
+            documents.get("current").set(linkKey, ques.get(1).getId()+","+ binaryDoc.getId());
+        }
+        else
+            documents.get("current").set(linkKey, binaryDoc.getId());
 
         System.out.println("Setting value: '" + linkKey + "' to doc: '" + binaryDoc.getTitle() + "'");
 
