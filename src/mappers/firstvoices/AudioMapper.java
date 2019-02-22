@@ -14,6 +14,6 @@ public class AudioMapper extends BinaryMapper {
     }
 
     public AudioMapper(int number) {
-        super("FVAudio","AUDIO_" + number +"_"+ Columns.FILENAME, "AUDIO_2", Properties.RELATED_AUDIO);
+        super("FVAudio","AUDIO_" + number +"_"+ Columns.FILENAME, "AUDIO_"+number, Properties.RELATED_AUDIO);
     }
 }

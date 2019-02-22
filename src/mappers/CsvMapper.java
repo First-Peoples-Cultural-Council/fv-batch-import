@@ -31,7 +31,7 @@ public abstract class CsvMapper {
 	/**
 	 * Use to create other documents from the same CSV line
 	 */
-	protected Set<CsvMapper> subdocuments = new HashSet<CsvMapper>();
+	protected LinkedHashSet<CsvMapper> subdocuments = new LinkedHashSet<CsvMapper>();
 	/**
 	 * Will contains the documents created during process
 	 */

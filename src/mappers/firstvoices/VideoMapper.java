@@ -13,4 +13,8 @@ public class VideoMapper extends BinaryMapper {
         super("FVVideo", "VIDEO_" + Columns.FILENAME, "VIDEO", Properties.RELATED_VIDEOS);
     }
 
+    public VideoMapper(int number) {
+        super("FVVideo", "VIDEO_" + number +"_"+ Columns.FILENAME, "VIDEO_"+number, Properties.RELATED_VIDEOS);
+    }
+
 }

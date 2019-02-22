@@ -94,8 +94,8 @@ public abstract class BinaryMapper extends DictionaryCachedMapper {
                 .set("document", binaryDoc).execute();
         }
 
-        if(getPrefix().equals("AUDIO_2")) {
-            String qu = "SELECT * FROM Document WHERE ecm:primaryType='FVAudio' AND ecm:currentLifeCycleState != 'deleted' ORDER BY dc:created DESC";
+        if(getPrefix().contains("2")){
+            String qu = "SELECT * FROM Document WHERE ecm:primaryType='"+binaryDoc.getType()+"' AND ecm:currentLifeCycleState != 'deleted' ORDER BY dc:created DESC";
             Documents ques = (Documents) session.newRequest("Repository.Query").setHeader(
                     Constants.HEADER_NX_SCHEMAS, "*")
                     .set("query", qu)

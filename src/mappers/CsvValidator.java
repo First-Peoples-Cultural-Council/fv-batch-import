@@ -10,11 +10,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.HashSet;
-import java.util.Arrays;
-import java.util.Set;
+import java.util.*;
 
 
 public class CsvValidator{
@@ -70,10 +66,13 @@ public class CsvValidator{
         String header[] = csvReader.readNext();
         String fileTypes[] = {"AUDIO", "VIDEO", "IMG"};
         String nextLine[];
+        Map<String, Boolean> first_files = new HashMap<>();
         int lineNumber = 0;
         String headerTemp;
         while((nextLine = csvReader.readNext()) != null){
-            Boolean audio_1 = false;
+            first_files.put("AUDIO", false);
+            first_files.put("IMG", false);
+            first_files.put("VIDEO", false);
             int wordCount=0;
             lineNumber++;
             for (String word: nextLine) {
@@ -98,10 +97,10 @@ public class CsvValidator{
 
                 if(headerTemp.endsWith("_FILENAME") && !word.equals("")){
                     checkFileExists(path+word, header[wordCount], lineNumber, word);
-                    if(header[wordCount].equals("AUDIO_FILENAME"))
-                        audio_1 = true;
-                    if(header[wordCount].startsWith("AUDIO_2") && !audio_1)
-                        invalid.add("Audio file 2 is given without audio file 1: line " +lineNumber +", " +word);
+                    if(headerTemp.equals("_FILENAME"))
+                        first_files.put(header[wordCount].substring(0,header[wordCount].indexOf("_")), true);
+                    if(headerTemp.contains("2") && !first_files.get(header[wordCount].substring(0,header[wordCount].indexOf("_"))))
+                        invalid.add(header[wordCount] +" is given without file 1: line " +lineNumber +", " +word);
                 }
 
                 if(headerTemp.equals("PART_OF_SPEECH"))

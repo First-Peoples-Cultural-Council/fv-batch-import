@@ -52,10 +52,12 @@ public class WordMapper extends CsvMapper {
         subdocuments.add(new PhraseMapper());
         subdocuments.add(new CategoryMapper());
         subdocuments.add(new SourcesMapper());
-        subdocuments.add(new AudioMapper(2));
         subdocuments.add(new AudioMapper());
+        subdocuments.add(new AudioMapper(2));
         subdocuments.add(new PictureMapper());
+        subdocuments.add(new PictureMapper(2));
         subdocuments.add(new VideoMapper());
+        subdocuments.add(new VideoMapper(2));
     }
 
     public WordMapper(Session existingSession) {
