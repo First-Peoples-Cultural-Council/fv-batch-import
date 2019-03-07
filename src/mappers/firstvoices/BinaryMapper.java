@@ -3,6 +3,8 @@ package mappers.firstvoices;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.nuxeo.ecm.automation.client.Constants;
 import org.nuxeo.ecm.automation.client.model.*;
@@ -94,14 +96,23 @@ public abstract class BinaryMapper extends DictionaryCachedMapper {
                 .set("document", binaryDoc).execute();
         }
 
-        if(getPrefix().contains("2")){
+        if(getPrefix().matches(".*\\d+.*")){
+            Pattern r = Pattern.compile("(.*)(\\d+)(.*)");
+            Matcher m = r.matcher(getPrefix());
+            int match=0;
+            if(m.matches()) {
+                match = Integer.parseInt(m.group(2));
+            }
             String qu = "SELECT * FROM Document WHERE ecm:primaryType='"+binaryDoc.getType()+"' AND ecm:currentLifeCycleState != 'deleted' ORDER BY dc:created DESC";
             Documents ques = (Documents) session.newRequest("Repository.Query").setHeader(
                     Constants.HEADER_NX_SCHEMAS, "*")
                     .set("query", qu)
                     .execute();
-
-            documents.get("current").set(linkKey, ques.get(1).getId()+","+ binaryDoc.getId());
+            String id_str = binaryDoc.getId();
+            for(int i=1;i<match; i++){
+                id_str += ","+ques.get(i).getId();
+            }
+            documents.get("current").set(linkKey, id_str);
         }
         else
             documents.get("current").set(linkKey, binaryDoc.getId());

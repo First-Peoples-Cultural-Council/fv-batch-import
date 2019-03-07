@@ -54,6 +54,7 @@ public class WordMapper extends CsvMapper {
         subdocuments.add(new SourcesMapper());
         subdocuments.add(new AudioMapper());
         subdocuments.add(new AudioMapper(2));
+        subdocuments.add(new AudioMapper(3));
         subdocuments.add(new PictureMapper());
         subdocuments.add(new PictureMapper(2));
         subdocuments.add(new VideoMapper());
