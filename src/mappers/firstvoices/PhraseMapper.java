@@ -21,6 +21,8 @@ public class PhraseMapper extends DictionaryCachedMapper {
 		propertyReaders.add(new PropertyReader(Properties.TITLE, Columns.PHRASE_COLUMN));
 		propertyReaders.add(new TranslationReader(Properties.TRANSLATION, Columns.DOMINANT_LANGUAGE, Columns.DOMINANT_LANGUAGE_SENTENCE));
 		propertyReaders.add(new TranslationReader(Properties.DEFINITION, Columns.DOMINANT_LANGUAGE, Columns.DOMINANT_LANGUAGE_SENTENCE_DEFINITION));
+		subdocuments.add(new AudioMapper(Columns.PHRASE_COLUMN));
+		subdocuments.add(new AudioMapper(Columns.PHRASE_COLUMN, 2));
 	}
 
 	protected PhraseMapper(String type, Object column) {
