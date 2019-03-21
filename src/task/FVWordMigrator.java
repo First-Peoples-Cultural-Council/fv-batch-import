@@ -59,10 +59,6 @@ public class FVWordMigrator extends AbstractMigrator {
         }
     }
 
-    private void setReader(AbstractReader reader) {
-        this.reader = reader;
-    }
-
     public static void main(String[] argv) throws Exception, SQLException, ClassNotFoundException, ParseException {
         AbstractReader reader = null;
 
