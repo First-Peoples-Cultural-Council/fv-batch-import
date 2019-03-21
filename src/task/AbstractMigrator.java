@@ -362,4 +362,8 @@ public abstract class AbstractMigrator {
         // Show usage
         jc.usage();
     }
+
+    protected void setReader(AbstractReader reader) {
+        this.reader = reader;
+    }
 }

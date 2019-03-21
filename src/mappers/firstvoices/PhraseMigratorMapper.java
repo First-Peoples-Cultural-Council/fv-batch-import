@@ -26,7 +26,7 @@ public class PhraseMigratorMapper extends DictionaryCachedMapper {
     public static int cachedPhrases = 0;
 
     public PhraseMigratorMapper() {
-        super("FVPhrase", "PHRASE_ID");
+        super("FVPhrase", Columns.PHRASE);
         propertyReaders.add(new PropertyReader(Properties.TITLE, Columns.PHRASE));
         propertyReaders.add(new PropertyReader(Properties.CULTURAL_NOTE, Columns.CULTURAL_NOTE));
         propertyReaders.add(new PropertyReader(Properties.ASSIGNED_USR_ID, Columns.ASSIGNED_USR_ID));
@@ -35,7 +35,7 @@ public class PhraseMigratorMapper extends DictionaryCachedMapper {
         propertyReaders.add(new PropertyReader(Properties.REFERENCE, Columns.REFERENCE));
         propertyReaders.add(new PropertyReader(Properties.AVAILABLE_IN_CHILDRENS_ARCHIVE, Columns.AVAILABLE_IN_CHILDRENS_ARCHIVE));
         propertyReaders.add(new PropertyReader(Properties.STATUS_ID, Columns.PHRASE_STATUS));
-        propertyReaders.add(new TranslationReader(Properties.DEFINITION, Columns.DOMINANT_LANGUAGE, Columns.DOMINANT_LANGUAGE_PHRASE));
+        propertyReaders.add(new TranslationReader(Properties.DEFINITION, Columns.DOMINANT_LANGUAGE, Columns.DOMINANT_LANGUAGE_DEFINITION));
 
         subdocuments.add(new SourcesMapper());
 
