@@ -11,6 +11,8 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 
 public class CsvValidator{
@@ -66,13 +68,11 @@ public class CsvValidator{
         String header[] = csvReader.readNext();
         String fileTypes[] = {"AUDIO", "VIDEO", "IMG"};
         String nextLine[];
-        Map<String, Boolean> first_files = new HashMap<>();
+        Map<String, Integer> files_read = new HashMap<>();
         int lineNumber = 0;
         String headerTemp;
         while((nextLine = csvReader.readNext()) != null){
-            first_files.put("AUDIO", false);
-            first_files.put("IMG", false);
-            first_files.put("VIDEO", false);
+            files_read.clear();
             int wordCount=0;
             lineNumber++;
             for (String word: nextLine) {
@@ -95,12 +95,22 @@ public class CsvValidator{
                         invalid.add(header[wordCount] + " can only have true or false values: line " +lineNumber +", " +word);
                 }
 
-                if(headerTemp.endsWith("_FILENAME") && !word.equals("")){
+                if(header[wordCount].endsWith("_FILENAME") && !word.equals("")){
                     checkFileExists(path+word, header[wordCount], lineNumber, word);
-                    if(headerTemp.equals("_FILENAME"))
-                        first_files.put(header[wordCount].substring(0,header[wordCount].indexOf("_")), true);
-                    if(headerTemp.contains("2") && !first_files.get(header[wordCount].substring(0,header[wordCount].indexOf("_"))))
-                        invalid.add(header[wordCount] +" is given without file 1: line " +lineNumber +", " +word);
+                    if(header[wordCount].matches(".*\\d+.*")){
+                        Pattern r = Pattern.compile("(.*)(\\d+)(.*)");
+                        Matcher m = r.matcher(header[wordCount]);
+                        if(m.matches()) {
+                            String title = m.group(1);
+                            int num = Integer.parseInt(m.group(2));
+                            if(files_read.get(title) != num-1)
+                                invalid.add(header[wordCount] +" is given without other number files: line " +lineNumber +", " +word);
+                            else
+                                files_read.put(title, num);
+                        }
+                    }
+                    else
+                        files_read.put(header[wordCount].substring(0,header[wordCount].indexOf("FILENAME")), 1);
                 }
 
                 if(headerTemp.equals("PART_OF_SPEECH"))
