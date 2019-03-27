@@ -25,8 +25,8 @@ public class CharacterMigratorMapper extends DictionaryCachedMapper {
         propertyReaders.add(new PropertyReader("fvcharacter:upper_case_character", "UPPER_CASE_CHAR_DATA"));
         propertyReaders.add(new PropertyReader("fvl:import_id", "ID"));
 
-        subdocuments.add(new CharacterAudioMapper());
-        subdocuments.add(new CharacterSampleWordMapper());
+//        subdocuments.add(new CharacterAudioMapper());
+//        subdocuments.add(new CharacterSampleWordMapper());
 
 	}
 
@@ -47,7 +47,7 @@ public class CharacterMigratorMapper extends DictionaryCachedMapper {
 
 			// If the parent document exists in the section, go ahead and publish the current document to the section
 			//if(documents.get("SECTION_" + parentKey) != null) {
-	    		publishDocument(result);
+	    		//publishDocument(result);
 			//}
 		}
 		// If the character document already exists, skip it
