@@ -7,6 +7,8 @@ It can be used to import words, phrases, songs, stories, alphabets and potential
 Currently only FVWordMigrator has been tested and refactored.
 Others will need more testing with data and may need some tweaking to run.
 
+Tasks in standalone_tasks have been removed and are gradually being re-done in: https://github.com/First-Peoples-Cultural-Council/fv-utils
+
 ## How to Use ##
 There are a number of 'Migrators' included that can be generated as runnable jar files.
 To change which 'Migrator' is being used, update pom.xml, changing the mainClass in the maven-jar-plugin:
@@ -20,7 +22,7 @@ To change which 'Migrator' is being used, update pom.xml, changing the mainClass
                         <manifest>
                             <addClasspath>true</addClasspath>
                             <classpathPrefix>lib/</classpathPrefix>
-                            <mainClass>*task/FVWordMigrator*</mainClass>
+                            <mainClass>*main.java.task/FVWordMigrator*</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
