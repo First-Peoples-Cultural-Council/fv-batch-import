@@ -63,7 +63,7 @@ public class CsvValidator{
         getData(dialectID);
     }
 
-    public List<String> validate(String path) throws IOException{
+    public List<String> validate(String path, int limit) throws IOException{
 
         String header[] = csvReader.readNext();
         String fileTypes[] = {"AUDIO", "VIDEO", "IMG"};
@@ -71,7 +71,7 @@ public class CsvValidator{
         Map<String, Integer> files_read = new HashMap<>();
         int lineNumber = 0;
         String headerTemp;
-        while((nextLine = csvReader.readNext()) != null){
+        while((nextLine = csvReader.readNext()) != null && lineNumber < limit){
             files_read.clear();
             int wordCount=0;
             lineNumber++;

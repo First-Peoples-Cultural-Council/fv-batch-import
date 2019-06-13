@@ -60,7 +60,7 @@ public class FVCharacterMigrator extends AbstractMigrator {
         }
 
         CsvValidator csvVal = new CsvValidator(url, username, password, csvFile, dialectID);
-        List<String> valid = csvVal.validate(blobDataPath);
+        List<String> valid = csvVal.validate(blobDataPath, limit);
 
         if(valid.isEmpty())
             characterMigrator.process(url, username, password, "/" + domain + "/Workspaces/");
