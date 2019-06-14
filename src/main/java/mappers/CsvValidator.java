@@ -112,9 +112,9 @@ public class CsvValidator{
                     else
                         files_read.put(header[wordCount].substring(0,header[wordCount].indexOf("FILENAME")), 1);
                 }
-
-                if(headerTemp.equals("PART_OF_SPEECH"))
-                    checkPartsOfSpeech(word, lineNumber);
+//                Disable part of speech look-up since it's hardcoded
+//                if(headerTemp.equals("PART_OF_SPEECH"))
+//                    checkPartsOfSpeech(word, lineNumber);
 
                 if(headerTemp.equals("USERNAME"))
                     checkUserExists(word, lineNumber);

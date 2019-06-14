@@ -8,16 +8,15 @@ import com.beust.jcommander.Parameter;
 import common.CsvLogWriter;
 import common.SkipRowException;
 import mappers.CsvMapper;
-import reader.AbstractReader;
-import reader.CsvReader;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.nuxeo.client.NuxeoClient;
 import org.nuxeo.client.cache.ResultCacheInMemory;
 import org.nuxeo.client.objects.Document;
 import org.nuxeo.client.objects.Documents;
-import org.nuxeo.client.objects.directory.DirectoryEntries;
 import org.nuxeo.client.spi.NuxeoClientException;
+import reader.AbstractReader;
+import reader.CsvReader;
 
 import java.io.File;
 import java.io.IOException;
@@ -143,10 +142,6 @@ public abstract class AbstractMigrator {
             try {
                 root = client.schemas("*").repository().fetchDocumentByPath(dataPath);
                 sectionRoot = client.schemas("*").repository().fetchDocumentByPath(sectionDataPath);
-
-                DirectoryEntries parts_of_speech =
-                        client.directoryManager().fetchDirectories()
-                        .getDirectory("parts_of_speech").fetchEntries();
 
                 // Print the name out
                 while (reader.next()) {

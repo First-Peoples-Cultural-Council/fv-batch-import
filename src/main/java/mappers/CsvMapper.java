@@ -8,17 +8,14 @@ import mappers.firstvoices.Columns;
 import mappers.firstvoices.Properties;
 import mappers.propertyreaders.PropertyReader;
 import mappers.propertyreaders.SimpleListPropertyReader;
-import reader.AbstractReader;
 import org.nuxeo.client.NuxeoClient;
 import org.nuxeo.client.objects.Document;
 import org.nuxeo.client.objects.Documents;
+import reader.AbstractReader;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.LinkedHashSet;
-import java.util.Map;
+import java.util.*;
 import java.util.Map.Entry;
-import java.util.Set;
 
 /**
  * @author loopingz
@@ -128,22 +125,22 @@ public abstract class CsvMapper {
 		// Tag created document
 		Document newResult = client.operation("Services.TagDocument").input(resultDoc).param("tags", getTag()).execute();
 
-		// Set username
-		String username = (String) localDoc.getDirtyProperties().get(Properties.CREATOR);
-		String contributors = (String) localDoc.getDirtyProperties().get(Properties.CONTRIBUTORS);
-
-		// Update created document with creator / lastContributor (has to happen after creation)
-		if (username != null) {
-			resultDoc.setPropertyValue(Properties.CREATOR, username);
-		}
-
-		if (contributors != null) {
-			resultDoc.setPropertyValue(Properties.CONTRIBUTORS, contributors);
-		}
+//		// Set username
+//		String username = (String) localDoc.getDirtyProperties().get(Properties.CREATOR);
+//		ArrayList<String> contributors = (ArrayList<String>) localDoc.getDirtyProperties().get(Properties.CONTRIBUTORS);
+//
+//		// Update created document with creator / lastContributor (has to happen after creation)
+//		if (username != null) {
+//			resultDoc.setPropertyValue(Properties.CREATOR, username);
+//		}
+//
+//		if (contributors != null) {
+//			resultDoc.setPropertyValue(Properties.CONTRIBUTORS, contributors);
+//		}
 
 		// Update creator and contributors fields
 		if (!resultDoc.getDirtyProperties().isEmpty()) {
-			newResult = (Document) client.operation("Document.Update").input(resultDoc).param("properties", resultDoc).execute();
+			newResult = (Document) client.operation("Document.Update").input(resultDoc).param("properties", resultDoc.getDirtyProperties()).execute();
 		}
 
 		return newResult;

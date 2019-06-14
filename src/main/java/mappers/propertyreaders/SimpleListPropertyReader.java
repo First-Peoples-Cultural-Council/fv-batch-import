@@ -20,9 +20,9 @@ public class SimpleListPropertyReader extends PropertyReader {
 		this.columns = columns;
 	}
 
-	public String getValue(AbstractReader reader) {
+	public ArrayList<Object> getValue(AbstractReader reader) {
 
-		ArrayList<String> values = new ArrayList<>();
+		ArrayList<Object> values = new ArrayList<>();
 
 		for (int i = 0; i < columns.length; ++i) {
 			String value = reader.getString(columns[i]).replace(",", "\\,");
@@ -32,7 +32,7 @@ public class SimpleListPropertyReader extends PropertyReader {
 			}
 		}
 
-		return String.join(",", values);
+		return values;
 	}
 //
 //	public String getJsonValue(AbstractReader reader) {
