@@ -8,6 +8,7 @@ import mappers.propertyreaders.TranslationReader;
 import org.nuxeo.client.objects.Document;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 /**
  * @author loopingz
@@ -43,7 +44,9 @@ public class PhraseMapper extends DictionaryCachedMapper {
     }
 
     protected void updateMainDocumentReference(Document subDocument) {
-        documents.get("current").setPropertyValue(Properties.RELATED_PHRASES, subDocument.getId());
+		ArrayList<String> phrases = new ArrayList<>();
+		phrases.add(subDocument.getId());
+		documents.get("current").setPropertyValue(Properties.RELATED_PHRASES, phrases);
     }
 
 }
