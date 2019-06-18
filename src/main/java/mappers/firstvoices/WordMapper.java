@@ -7,6 +7,7 @@ import mappers.CsvMapper;
 import mappers.propertyreaders.PropertyReader;
 import mappers.propertyreaders.SimpleListPropertyReader;
 import mappers.propertyreaders.TranslationReader;
+import mappers.propertyreaders.TrueFalsePropertyReader;
 import org.nuxeo.client.NuxeoClient;
 import org.nuxeo.client.objects.Document;
 
@@ -38,8 +39,8 @@ public class WordMapper extends CsvMapper {
         propertyReaders.add(new PropertyReader(Properties.IMPORT_ID, Columns.WORD_ID));
         propertyReaders.add(new PropertyReader(Properties.REFERENCE, Columns.REFERENCE));
         propertyReaders.add(new PropertyReader(Properties.ACKNOWLEDGEMENT, Columns.ACKNOWLEDGEMENT));
-        propertyReaders.add(new PropertyReader(Properties.AVAILABLE_IN_CHILDRENS_ARCHIVE, Columns.AVAILABLE_IN_CHILDRENS_ARCHIVE));
-        propertyReaders.add(new PropertyReader(Properties.AVAILABLE_IN_GAMES, Columns.AVAILABLE_IN_GAMES));
+        propertyReaders.add(new TrueFalsePropertyReader(Properties.AVAILABLE_IN_CHILDRENS_ARCHIVE, Columns.AVAILABLE_IN_CHILDRENS_ARCHIVE));
+        propertyReaders.add(new TrueFalsePropertyReader(Properties.AVAILABLE_IN_GAMES, Columns.AVAILABLE_IN_GAMES));
         //propertyReaders.add(new PropertyReader(Properties.STATUS_ID, Columns.WORD_STATUS));
 
         //propertyReaders.add(new TranslationReader(Properties.TRANSLATION, Columns.DOMINANT_LANGUAGE, literalTranslationCols));

@@ -6,6 +6,7 @@ package mappers.firstvoices;
 import common.ConsoleLogger;
 import mappers.propertyreaders.PropertyReader;
 import mappers.propertyreaders.TranslationReader;
+import mappers.propertyreaders.TrueFalsePropertyReader;
 import org.nuxeo.client.objects.Document;
 
 import java.io.IOException;
@@ -30,7 +31,7 @@ public class PhraseMigratorMapper extends DictionaryCachedMapper {
         propertyReaders.add(new PropertyReader(Properties.CHANGE_DTTM, Columns.CHANGE_DTTM));
         propertyReaders.add(new PropertyReader(Properties.IMPORT_ID, Columns.PHRASE_ID));
         propertyReaders.add(new PropertyReader(Properties.REFERENCE, Columns.REFERENCE));
-        propertyReaders.add(new PropertyReader(Properties.AVAILABLE_IN_CHILDRENS_ARCHIVE, Columns.AVAILABLE_IN_CHILDRENS_ARCHIVE));
+        propertyReaders.add(new TrueFalsePropertyReader(Properties.AVAILABLE_IN_CHILDRENS_ARCHIVE, Columns.AVAILABLE_IN_CHILDRENS_ARCHIVE));
         propertyReaders.add(new PropertyReader(Properties.STATUS_ID, Columns.PHRASE_STATUS));
         propertyReaders.add(new TranslationReader(Properties.DEFINITION, Columns.DOMINANT_LANGUAGE, Columns.DOMINANT_LANGUAGE_DEFINITION));
 
