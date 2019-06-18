@@ -86,6 +86,10 @@ public abstract class AbstractMigrator {
     @Parameter(names = { "-data-path" }, description = "Path to media files")
     protected static String blobDataPath;
 
+    @Parameter(names = { "-skipValidation" }, description = "Allows you to skip the validation and process valid records")
+    protected static Boolean skipValidation = false;
+
+
     protected AbstractMigrator(AbstractReader reader) {
 		this.reader = reader;
 	}
