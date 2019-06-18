@@ -71,7 +71,7 @@ public class CsvValidator{
         Map<String, Integer> files_read = new HashMap<>();
         int lineNumber = 0;
         String headerTemp;
-        while((nextLine = csvReader.readNext()) != null && lineNumber < limit){
+        while((nextLine = csvReader.readNext()) != null){
             files_read.clear();
             int wordCount=0;
             lineNumber++;
@@ -121,6 +121,11 @@ public class CsvValidator{
 
                 wordCount++;
 
+            }
+
+            // If limit is reached, skip the next iteration
+            if (limit != 0  && lineNumber == limit) {
+                break;
             }
         }
         return invalid;
