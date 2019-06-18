@@ -171,7 +171,7 @@ public class CsvValidator{
         categories = client.operation("Repository.Query").param("query", "SELECT * FROM Document WHERE ecm:primaryType = 'FVCategory' AND fva:dialect = '" + dialect+"'")
                 .execute();
 
-        shared_categories = client.operation("Repository.Query").param("query", "SELECT * FROM FVCategory WHERE ecm:path STARTSWITH '/FV/Workspaces/SharedData/Shared Categories'")
+        shared_categories = client.operation("Repository.Query").param("query", "SELECT * FROM FVCategory WHERE fva:dialect IS NULL AND ecm:isTrashed = 0 AND ecm:isVersion = 0")
                 .execute();
 
     }

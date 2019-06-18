@@ -18,9 +18,8 @@ public class CategoryMapper extends PhraseMapper {
     @Override
     protected String getCacheQuery() {
     	// Include all categories in the Shared Data folder
-        return "SELECT * FROM FVCategory WHERE (ecm:parentId='" + documents.get("Shared Categories").getId() + "'"
-        		+ " OR ecm:parentId='" + documents.get("Categories").getId()
-        		+ "') AND ecm:isTrashed = 0";
+        return "SELECT * FROM FVCategory WHERE (fva:dialect IS NULL OR ecm:parentId='" + documents.get("Categories").getId()
+        		+ "') AND ecm:isTrashed = 0 AND ecm:isVersion = 0";
     }
 
     private void updateMainDocumentReference(ArrayList<String> docIDList) {
