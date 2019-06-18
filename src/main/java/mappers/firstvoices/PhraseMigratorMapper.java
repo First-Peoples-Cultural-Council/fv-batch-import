@@ -112,6 +112,6 @@ public class PhraseMigratorMapper extends DictionaryCachedMapper {
 
 	@Override
 	protected String getCacheQuery() {
-        return "SELECT * FROM FVPhrase WHERE ecm:parentId='" + documents.get("Dictionary").getId() + "' AND ecm:currentLifeCycleState != 'deleted'";
+        return "SELECT * FROM FVPhrase WHERE ecm:parentId='" + documents.get("Dictionary").getId() + "' AND ecm:isTrashed = 0";
 	}
 }

@@ -75,6 +75,6 @@ public class SourcesMapper extends DictionaryCachedMapper {
 
     @Override
     protected String getCacheQuery() {
-        return "SELECT * FROM FVContributor WHERE ecm:parentId='" + documents.get("Contributors").getId() + "' AND ecm:currentLifeCycleState != 'deleted'";
+        return "SELECT * FROM FVContributor WHERE ecm:parentId='" + documents.get("Contributors").getId() + "' AND ecm:isTrashed = 0";
     }
 }

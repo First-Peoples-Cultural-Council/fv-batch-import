@@ -61,6 +61,6 @@ public class CharacterMigratorMapper extends DictionaryCachedMapper {
 
 	@Override
 	protected String getCacheQuery() {
-        return "SELECT * FROM FVCharacter WHERE ecm:parentId='" + documents.get(parentKey).getId() + "' AND ecm:currentLifeCycleState != 'deleted'";
+        return "SELECT * FROM FVCharacter WHERE ecm:parentId='" + documents.get(parentKey).getId() + "' AND ecm:isTrashed = 0";
 	}
 }

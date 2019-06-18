@@ -110,7 +110,7 @@ public abstract class BinaryMapper extends DictionaryCachedMapper {
             if(m.matches()) {
                 match = Integer.parseInt(m.group(2));
             }
-            String qu = "SELECT * FROM Document WHERE ecm:primaryType='"+binaryDoc.getType()+"' AND ecm:currentLifeCycleState != 'deleted' ORDER BY dc:created DESC";
+            String qu = "SELECT * FROM Document WHERE ecm:primaryType='"+binaryDoc.getType()+"' AND ecm:isTrashed = 0 ORDER BY dc:created DESC";
             Documents ques = client.operation("Repository.Query").schemas("*")
                     .param("query", qu)
                     .execute();
@@ -154,7 +154,7 @@ public abstract class BinaryMapper extends DictionaryCachedMapper {
 
     @Override
     protected String getCacheQuery() {
-        return "SELECT * FROM " + type + " WHERE ecm:parentId='" + documents.get("Resources").getId() + "' AND ecm:currentLifeCycleState != 'deleted'";
+        return "SELECT * FROM " + type + " WHERE ecm:parentId='" + documents.get("Resources").getId() + "' AND ecm:isTrashed = 0";
     }
 
 }

@@ -98,7 +98,7 @@ public class FVBookEntryMigrator extends AbstractMigrator {
 		Integer page = 0;
 		Integer pageSize = 1000;
 		System.out.println("Loading Book document cache...");
-		String query = "SELECT * FROM FVBook WHERE ecm:currentLifeCycleState != 'deleted' AND ecm:path STARTSWITH '/FV/Workspaces'";
+		String query = "SELECT * FROM FVBook WHERE ecm:isTrashed = 0 AND ecm:path STARTSWITH '/FV/Workspaces'";
 		
 		while (true) {
 			Documents docs = client.operation("Repository.Query").schemas(
@@ -123,7 +123,7 @@ public class FVBookEntryMigrator extends AbstractMigrator {
 		Integer page = 0;
 		Integer pageSize = 1000;
 		System.out.println("Loading section Book document cache...");
-		String query = "SELECT * FROM FVBook WHERE ecm:currentLifeCycleState != 'deleted' AND ecm:path STARTSWITH '/FV/sections'";
+		String query = "SELECT * FROM FVBook WHERE ecm:isTrashed = 0 AND ecm:path STARTSWITH '/FV/sections'";
 		
 		while (true) {
 			Documents docs = client.operation("Repository.Query").schemas(

@@ -123,7 +123,7 @@ public class WordMapper extends CsvMapper {
             return;
         }
         cache = new HashMap<String, Document>();
-        String query = "SELECT * FROM FVWord WHERE ecm:currentLifeCycleState != 'deleted' AND ecm:path STARTSWITH '/FV/'";
+        String query = "SELECT * FROM FVWord WHERE ecm:isTrashed = 0 AND ecm:path STARTSWITH '/FV/'";
         loadCache(query);*/
 
 return;

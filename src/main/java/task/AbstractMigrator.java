@@ -247,6 +247,9 @@ public abstract class AbstractMigrator {
         // Add SharedData directory to cache
         cache.put("Shared Data", client.schemas("*").repository().fetchDocumentByPath(sharedDataPath));
 
+        // Add Shared Categories to cache
+        cache.put("Shared Categories", client.schemas("*").repository().fetchDocumentByPath(sharedDataPath + "Shared Categories"));
+
         // Add dialect children to cache
         Iterator<Document> dialectChildrenIterator = dialectChildren.getDocuments().iterator();
 

@@ -80,6 +80,6 @@ public class PortalMigratorMapper extends DictionaryCachedMapper {
 
 	@Override
 	protected String getCacheQuery() {
-        return "SELECT * FROM FVPortal WHERE ecm:parentId='" + documents.get("Dialect").getId() + "' AND ecm:currentLifeCycleState != 'deleted'";
+        return "SELECT * FROM FVPortal WHERE ecm:parentId='" + documents.get("Dialect").getId() + "' AND ecm:isTrashed = 0";
 	}
 }

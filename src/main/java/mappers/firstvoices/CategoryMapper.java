@@ -18,12 +18,12 @@ public class CategoryMapper extends PhraseMapper {
     @Override
     protected String getCacheQuery() {
     	// Include all categories in the Shared Data folder
-        return "SELECT * FROM FVCategory WHERE ecm:ancestorId='" + documents.get("Shared Data").getId()
-        		+ "' OR ecm:parentId='" + documents.get("Categories").getId()
-        		+ "' AND ecm:currentLifeCycleState != 'deleted'";
+        return "SELECT * FROM FVCategory WHERE (ecm:parentId='" + documents.get("Shared Categories").getId() + "'"
+        		+ " OR ecm:parentId='" + documents.get("Categories").getId()
+        		+ "') AND ecm:isTrashed = 0";
     }
 
-    private void updateMainDocumentReference(String docIDList) {
+    private void updateMainDocumentReference(ArrayList<String> docIDList) {
         documents.get("current").setPropertyValue(Properties.WORD_CATEGORIES, docIDList);
     }
 
@@ -37,7 +37,7 @@ public class CategoryMapper extends PhraseMapper {
     @Override
     protected Document createDocument(Document doc, Integer depth) throws IOException {
 
-        String[] categories = doc.toString().split(",");
+        String[] categories = doc.getPropertyValue("fv-word:categories").toString().split(",");
         ArrayList<String> categoryIDs = new ArrayList<>();
 
         for (String category : categories) {
@@ -60,7 +60,7 @@ public class CategoryMapper extends PhraseMapper {
 
         }
 
-        updateMainDocumentReference(String.join(",", categoryIDs));
+        updateMainDocumentReference(categoryIDs);
         return null;
     }
 }

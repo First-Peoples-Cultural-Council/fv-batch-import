@@ -422,7 +422,7 @@ public class FirstVoicesMigrator extends AbstractMigrator {
 			// Cache dictionary
 			Documents existingWords = client.operation("Repository.Query").schemas(
 			        "fvlegacy")
-					.param("query", "SELECT * FROM FVWord WHERE ecm:parentId=? AND ecm:currentLifeCycleState != 'deleted'")
+					.param("query", "SELECT * FROM FVWord WHERE ecm:parentId=? AND ecm:isTrashed = 0")
 					.param("queryParams", dictionary.getId()).param("currentPageIndex", page).param("pageSize", pageSize).param("sortBy", "fvl:import_id").execute();
 			for (int i = 0; i < existingWords.size(); i++) {
 				list.add(existingWords.getDocument(i).getPropertyValue("fvl:import_id"));
@@ -438,7 +438,7 @@ public class FirstVoicesMigrator extends AbstractMigrator {
 		while (true) {
 			Documents existingPhrases = client.operation("Repository.Query").schemas(
 			        "dublincore")
-					.param("query", "SELECT * FROM FVPhrase WHERE ecm:parentId=? AND ecm:currentLifeCycleState != 'deleted'")
+					.param("query", "SELECT * FROM FVPhrase WHERE ecm:parentId=? AND ecm:isTrashed = 0")
 					.param("queryParams", dictionary.getId()).param("currentPageIndex", page).param("pageSize", pageSize).param("sortBy", "fvl:import_id").execute();
 			for (int i = 0; i < existingPhrases.size(); i++) {
 				listPhrases.put(existingPhrases.getDocument(i).getPropertyValue("dc:title"), existingPhrases.getDocument(i).getId());
@@ -486,7 +486,7 @@ public class FirstVoicesMigrator extends AbstractMigrator {
 
                                     Documents existingContributorDocs = (Documents) client.operation("Repository.Query")
                                                     .param("query",
-                                                                    "SELECT * FROM FVContributor WHERE dc:title=? AND ecm:currentLifeCycleState != 'deleted'")
+                                                                    "SELECT * FROM FVContributor WHERE dc:title=? AND ecm:isTrashed = 0")
                                                     .param("queryParams", params).execute();
                                     Document contributor = null;
                                     // Contributor does not exist. Create a new one
@@ -570,7 +570,7 @@ public class FirstVoicesMigrator extends AbstractMigrator {
 		Documents images = (Documents) client.operation("Repository.Query")
 				.param("query",
 						"SELECT * FROM " + profile
-								+ " WHERE dc:title=? AND ecm:currentLifeCycleState != 'deleted' AND ecm:parentId=?")
+								+ " WHERE dc:title=? AND ecm:isTrashed = 0 AND ecm:parentId=?")
 				.param("queryParams", params).execute();
 		if (!images.getDocuments().isEmpty()) {
 			for (int i = 0; i < images.size(); i++) {
@@ -633,7 +633,7 @@ public class FirstVoicesMigrator extends AbstractMigrator {
     		params.add(phraseTitle);
     		params.add(dictionaryFolder.getId());
     		Documents existingPhraseDocs = (Documents) client.operation("Repository.Query")
-    				.param("query", "SELECT * FROM FVPhrase WHERE dc:title=? AND ecm:currentLifeCycleState != 'deleted' AND ecm:parentId=?")
+    				.param("query", "SELECT * FROM FVPhrase WHERE dc:title=? AND ecm:isTrashed = 0 AND ecm:parentId=?")
     				.param("queryParams", params).execute();
 
         	Document phrase = null;

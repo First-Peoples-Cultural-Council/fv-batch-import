@@ -16,7 +16,7 @@ public class PhraseBookMapper extends PhraseMapper {
     protected String getCacheQuery() {
     	// Include all categories in the Shared Data folder
         return "SELECT * FROM FVCategory WHERE ecm:parentId='" + documents.get("Phrase Books").getId()
-        		+ "' AND ecm:currentLifeCycleState != 'deleted'";
+        		+ "' AND ecm:isTrashed = 0";
     }
 
     @Override

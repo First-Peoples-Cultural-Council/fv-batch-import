@@ -124,7 +124,7 @@ public class TestWords {
 			try {
 				results = (RecordSet) client.operation("Repository.ResultSetQuery").schemas(
 				        "dublincore")
-						.param("query", "SELECT COUNT(ecm:uuid) FROM FVWord WHERE fvl:import_id = "+ id +" AND ecm:isProxy = 0 AND ecm:isCheckedInVersion = 0 AND ecm:currentLifeCycleState != 'deleted'")
+						.param("query", "SELECT COUNT(ecm:uuid) FROM FVWord WHERE fvl:import_id = "+ id +" AND ecm:isProxy = 0 AND ecm:isCheckedInVersion = 0 AND ecm:isTrashed = 0")
 						.param("currentPageIndex", 0).param("pageSize", 1000).execute();
 			} catch (NuxeoClientException e) {
 				// TODO Auto-generated catch block

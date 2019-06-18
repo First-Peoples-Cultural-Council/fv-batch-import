@@ -79,6 +79,6 @@ public class BookMigratorMapper extends DictionaryCachedMapper {
 
 	@Override
 	protected String getCacheQuery() {
-        return "SELECT * FROM FVBook WHERE ecm:ancestorId='" + documents.get("Dialect").getId() + "' AND ecm:currentLifeCycleState != 'deleted'";
+        return "SELECT * FROM FVBook WHERE ecm:ancestorId='" + documents.get("Dialect").getId() + "' AND ecm:isTrashed = 0";
 	}
 }
