@@ -149,7 +149,17 @@ public abstract class BinaryMapper extends DictionaryCachedMapper {
         propertyReaders.add(new PropertyReader(Properties.CHILD_FOCUSED, prefix + "_" + Columns.CHILD_FOCUSED));
 
         subdocuments.add(new SourcesMapper(Properties.MEDIA_SOURCE, prefix + "_" + Columns.SOURCE));
+
+        subdocuments.add(new SourcesMapper(Properties.MEDIA_SOURCE, prefix + "_" + Columns.SOURCE + "_2"));
+        subdocuments.add(new SourcesMapper(Properties.MEDIA_SOURCE, prefix + "_" + Columns.SOURCE + "_3"));
+        subdocuments.add(new SourcesMapper(Properties.MEDIA_SOURCE, prefix + "_" + Columns.SOURCE + "_4"));
+        subdocuments.add(new SourcesMapper(Properties.MEDIA_SOURCE, prefix + "_" + Columns.SOURCE + "_5"));
+
         subdocuments.add(new SourcesMapper(Properties.MEDIA_RECORDER, prefix + "_" + Columns.RECORDER));
+        subdocuments.add(new SourcesMapper(Properties.MEDIA_RECORDER, prefix + "_" + Columns.RECORDER + "_2"));
+        subdocuments.add(new SourcesMapper(Properties.MEDIA_RECORDER, prefix + "_" + Columns.RECORDER + "_3"));
+        subdocuments.add(new SourcesMapper(Properties.MEDIA_RECORDER, prefix + "_" + Columns.RECORDER + "_4"));
+        subdocuments.add(new SourcesMapper(Properties.MEDIA_RECORDER, prefix + "_" + Columns.RECORDER + "_5"));
     }
 
     @Override

@@ -55,8 +55,19 @@ public class SourcesMapper extends DictionaryCachedMapper {
             sourcesIds.add(remoteDoc.getId());
         }
 
+        // Get current sources, and append new values if exists
+        if (documents.get("current").getPropertyValue(linkKey) != null) {
+            ArrayList<String> existigSourcesIds = documents.get("current").getPropertyValue(linkKey);
+            sourcesIds.addAll(existigSourcesIds);
+        }
+
         documents.get("current").setPropertyValue(linkKey, sourcesIds);
         return remoteDoc;
+    }
+
+    public SourcesMapper(int number) {
+        super("FVContributor", Columns.CONTRIBUTER + "_" + number);
+        propertyReaders.add(new PropertyReader(Properties.CONTRIBUTER, Columns.CONTRIBUTER + "_" + number));
     }
 
     public SourcesMapper() {
