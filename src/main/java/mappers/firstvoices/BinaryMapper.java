@@ -103,24 +103,12 @@ public abstract class BinaryMapper extends DictionaryCachedMapper {
                 .param("document", binaryDoc).execute();
         }
 
-        if(getPrefix().matches(".*\\d+.*")){
-            Pattern r = Pattern.compile("(.*)(\\d+)(.*)");
-            Matcher m = r.matcher(getPrefix());
-            int match=0;
-            if(m.matches()) {
-                match = Integer.parseInt(m.group(2));
-            }
-            String qu = "SELECT * FROM Document WHERE ecm:primaryType='"+binaryDoc.getType()+"' AND ecm:isTrashed = 0 ORDER BY dc:created DESC";
-            Documents ques = client.operation("Repository.Query").schemas("*")
-                    .param("query", qu)
-                    .execute();
-            String id_str = binaryDoc.getId();
-            for(int i=1;i<match; i++){
-                binaryIds.add(ques.getDocument(i).getId());
-            }
-        }
-        else {
-            binaryIds.add(binaryDoc.getId());
+        binaryIds.add(binaryDoc.getId());
+
+        // Get current binaries, and append new values if exists
+        if (documents.get("current").getPropertyValue(linkKey) != null) {
+            ArrayList<String> existigBinaryIds = documents.get("current").getPropertyValue(linkKey);
+            binaryIds.addAll(existigBinaryIds);
         }
 
         documents.get("current").setPropertyValue(linkKey, binaryIds);
