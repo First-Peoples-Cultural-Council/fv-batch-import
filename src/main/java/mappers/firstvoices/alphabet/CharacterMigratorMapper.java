@@ -18,10 +18,9 @@ public class CharacterMigratorMapper extends DictionaryCachedMapper {
         parentKey = "Alphabet";
         cacheProperty = "fvl:import_id";
 
-        propertyReaders.add(new PropertyReader(Properties.TITLE, "CHAR_DATA"));
-        propertyReaders.add(new PropertyReader("fvcharacter:alphabet_order", "ALPH_ORDER"));
-        propertyReaders.add(new PropertyReader("fvcharacter:upper_case_character", "UPPER_CASE_CHAR_DATA"));
-        propertyReaders.add(new PropertyReader("fvl:import_id", "ID"));
+        propertyReaders.add(new PropertyReader(Properties.TITLE, "CHAR"));
+		propertyReaders.add(new PropertyReader("fvcharacter:upper_case_character", "CHAR_UPPER_CASE"));
+        propertyReaders.add(new PropertyReader("fvcharacter:alphabet_order", "ORDER"));
 
 //        subdocuments.add(new CharacterAudioMapper());
 //        subdocuments.add(new CharacterSampleWordMapper());
