@@ -3,20 +3,20 @@
  */
 package mappers.firstvoices;
 
-import common.ConsoleLogger;
+import mappers.CsvMapper;
 import mappers.propertyreaders.PropertyReader;
+import mappers.propertyreaders.SimpleListPropertyReader;
 import mappers.propertyreaders.TranslationReader;
 import mappers.propertyreaders.TrueFalsePropertyReader;
 import org.nuxeo.client.objects.Document;
 
-import java.io.IOException;
 import java.util.Map;
 
 /**
  * @author cstuart
- *
+ * Class to migrate phrases from a CSV file (or potentially an Oracle database) into the FirstVoices system.
  */
-public class PhraseMigratorMapper extends DictionaryCachedMapper {
+public class PhraseMigratorMapper extends CsvMapper {
 
     protected static Map<String, Document> cache = null;
     public static int createdPhrases = 0;
@@ -25,94 +25,35 @@ public class PhraseMigratorMapper extends DictionaryCachedMapper {
 
     public PhraseMigratorMapper() {
         super("FVPhrase", Columns.PHRASE);
+
+		String[] definitionCols = {Columns.DOMINANT_LANGUAGE_DEFINITION, Columns.DOMINANT_LANGUAGE_DEFINITION + "_2", Columns.DOMINANT_LANGUAGE_DEFINITION + "_3", Columns.DOMINANT_LANGUAGE_DEFINITION + "_4", Columns.DOMINANT_LANGUAGE_DEFINITION + "_5"};
+		String[] literalTranslationCols = {Columns.DOMINANT_LANGUAGE_PHRASE, Columns.DOMINANT_LANGUAGE_PHRASE + "_2", Columns.DOMINANT_LANGUAGE_PHRASE + "_3", Columns.DOMINANT_LANGUAGE_PHRASE + "_4", Columns.DOMINANT_LANGUAGE_PHRASE + "_5"};
+		String[] culturalNoteCols = {Columns.CULTURAL_NOTE, Columns.CULTURAL_NOTE + "_2", Columns.CULTURAL_NOTE + "_3", Columns.CULTURAL_NOTE + "_4", Columns.CULTURAL_NOTE + "_5"};
+
         propertyReaders.add(new PropertyReader(Properties.TITLE, Columns.PHRASE));
-        propertyReaders.add(new PropertyReader(Properties.CULTURAL_NOTE, Columns.CULTURAL_NOTE));
+		propertyReaders.add(new SimpleListPropertyReader(Properties.CULTURAL_NOTE, culturalNoteCols));
         propertyReaders.add(new PropertyReader(Properties.ASSIGNED_USR_ID, Columns.ASSIGNED_USR_ID));
         propertyReaders.add(new PropertyReader(Properties.CHANGE_DTTM, Columns.CHANGE_DTTM));
         propertyReaders.add(new PropertyReader(Properties.IMPORT_ID, Columns.PHRASE_ID));
         propertyReaders.add(new PropertyReader(Properties.REFERENCE, Columns.REFERENCE));
+		propertyReaders.add(new PropertyReader(Properties.ACKNOWLEDGEMENT, Columns.ACKNOWLEDGEMENT));
         propertyReaders.add(new TrueFalsePropertyReader(Properties.AVAILABLE_IN_CHILDRENS_ARCHIVE, Columns.AVAILABLE_IN_CHILDRENS_ARCHIVE));
         propertyReaders.add(new PropertyReader(Properties.STATUS_ID, Columns.PHRASE_STATUS));
-        propertyReaders.add(new TranslationReader(Properties.DEFINITION, Columns.DOMINANT_LANGUAGE, Columns.DOMINANT_LANGUAGE_DEFINITION));
 
-        subdocuments.add(new SourcesMapper());
+		propertyReaders.add(new TranslationReader(Properties.TRANSLATION, Columns.DOMINANT_LANGUAGE, literalTranslationCols));
+		propertyReaders.add(new TranslationReader(Properties.DEFINITION, Columns.DOMINANT_LANGUAGE, Columns.DOMINANT_LANGUAGE_DEFINITION));
+		propertyReaders.add(new TranslationReader(Properties.DEFINITION, Columns.DOMINANT_LANGUAGE, definitionCols));
 
-        subdocuments.add(new AudioMapper());
-        subdocuments.add(new PictureMapper());
-        subdocuments.add(new VideoMapper());
+
+		subdocuments.add(new SourcesMapper());
+		subdocuments.add(new AudioMapper());
+		subdocuments.add(new AudioMapper(2));
+		subdocuments.add(new AudioMapper(3));
+		subdocuments.add(new PictureMapper());
+		subdocuments.add(new PictureMapper(2));
+		subdocuments.add(new VideoMapper());
+		subdocuments.add(new VideoMapper(2));
 
         subdocuments.add(new PhraseBookMapper());
     }
-
-    @Override
-	protected Document createDocument(Document doc, Integer depth) throws IOException {
-		Document result = getFromCache(doc);
-		if (!fakeCreation && result == null) {
-			result = client.operation("Document.Create").schemas( "*")
-				.input(documents.get(parentKey)).param("type", doc.getType()).param("name", doc.getId())
-				.param("properties", doc).execute();
-
-			tagAndUpdateCreator(result, doc);
-
-			createdObjects++;
-
-			// Set the document state based on the fvl:status_id
-			result = setDocumentState(result);
-
-            if (doc.getType().endsWith("Phrase")) {
-                createdPhrases++;
-            }
-			cacheDocument(result);
-
-			// If the parent document exists in the section, go ahead and publish the current document to the section
-			//if(documents.get("SECTION_" + parentKey) != null) {
-	    		publishDocument(result);
-			//}
-		}
-		// Phrase was found in the cache
-		else {
-			ConsoleLogger.out("Phrase found in cache: " + (String) doc.getDirtyProperties().get("dc:title"));
-			String existingPhraseImportId = (String) result.getProperties().get("fvl:import_id");
-			// If importId is null, the phrase was imported previously as part of a word import - update it
-			if(existingPhraseImportId == null || existingPhraseImportId.isEmpty()) {
-				ConsoleLogger.out("Phrase import_id is null - updating existing phrase document.");
-				result = client.operation("Document.Update").input(result).param("properties", doc).execute();
-				updatedPhrases++;
-
-				// If the parent document exists in the section, go ahead and publish the current document to the section
-				//if(documents.get("SECTION_" + parentKey) != null) {
-		    		publishDocument(result);
-				//}
-			} else {
-				String newPhraseImportId = (String) doc.getDirtyProperties().get("fvl:import_id");
-				if(!newPhraseImportId.equals(existingPhraseImportId)) {
-					// Phrase title found in the cache, but with a different import_id - a duplicate in the CSV. We need to create it
-					result = client.operation("Document.Create").schemas( "*")
-							.input(documents.get(parentKey)).param("type", doc.getType()).param("name", doc.getId())
-							.param("properties", doc).execute();
-					createdPhrases++;
-
-					tagAndUpdateCreator(result, doc);
-
-					// If the parent document exists in the section, go ahead and publish the current document to the section
-					//if(documents.get("SECTION_" + parentKey) != null) {
-			    		publishDocument(result);
-					//}
-				} else {
-					// If the import ids are the same, return the existing phrase
-					cachedPhrases++;
-				}
-			}
-		}
-
-		if (depth == 1) {
-			documents.put("main", result);
-		}
-		return result;
-	}
-
-	@Override
-	protected String getCacheQuery() {
-        return "SELECT * FROM FVPhrase WHERE ecm:parentId='" + documents.get("Dictionary").getId() + "' AND ecm:isTrashed = 0";
-	}
 }

@@ -49,6 +49,6 @@ public final class Columns {
     public static final String PHRASE = "PHRASE";
     public static final String PHRASE_ID = "PHRASE_ID"; 
     public static final String PHRASE_STATUS = "PHRASE_STATUS";    
-    public static final String DOMINANT_LANGUAGE_PHRASE = "DOMINANT_LANGUAGE_PHRASE";
+    public static final String DOMINANT_LANGUAGE_PHRASE = "LITERAL_TRANSLATION";
 
 }
