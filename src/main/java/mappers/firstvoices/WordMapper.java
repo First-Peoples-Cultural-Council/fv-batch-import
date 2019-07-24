@@ -41,9 +41,9 @@ public class WordMapper extends CsvMapper {
         propertyReaders.add(new PropertyReader(Properties.ACKNOWLEDGEMENT, Columns.ACKNOWLEDGEMENT));
         propertyReaders.add(new TrueFalsePropertyReader(Properties.AVAILABLE_IN_CHILDRENS_ARCHIVE, Columns.AVAILABLE_IN_CHILDRENS_ARCHIVE));
         propertyReaders.add(new TrueFalsePropertyReader(Properties.AVAILABLE_IN_GAMES, Columns.AVAILABLE_IN_GAMES));
-        //propertyReaders.add(new PropertyReader(Properties.STATUS_ID, Columns.WORD_STATUS));
+        propertyReaders.add(new PropertyReader(Properties.STATUS_ID, Columns.WORD_STATUS));
 
-        //propertyReaders.add(new TranslationReader(Properties.TRANSLATION, Columns.DOMINANT_LANGUAGE, literalTranslationCols));
+        propertyReaders.add(new TranslationReader(Properties.TRANSLATION, Columns.DOMINANT_LANGUAGE, literalTranslationCols));
         //propertyReaders.add(new TranslationReader(Properties.DEFINITION, Columns.DOMINANT_LANGUAGE, Columns.DOMINANT_LANGUAGE_DEFINITION));
         propertyReaders.add(new TranslationReader(Properties.DEFINITION, Columns.DOMINANT_LANGUAGE, definitionCols));
 

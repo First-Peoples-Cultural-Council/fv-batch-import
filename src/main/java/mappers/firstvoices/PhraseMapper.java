@@ -12,7 +12,7 @@ import java.util.ArrayList;
 
 /**
  * @author loopingz
- *
+ * Class to migrate RELATED_PHRASES from a CSV file into the FirstVoices system.
  */
 public class PhraseMapper extends DictionaryCachedMapper {
 

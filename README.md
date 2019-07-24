@@ -47,3 +47,32 @@ To execute the batch upload for words, for example, run the following command:
 
 You will be promoted for a password once you run the command.
 Parameters will differ depending on the Migrator being executed; memory allocation on the size of the import.
+
+## AbstractMigrator Parameters
+
+-url = "Nuxeo URL to connect to", required = true)
+	protected static String url;
+
+-username = "Username to connect with", required = true)
+	protected static String username;
+
+-password = "Password to connect with", required = true, password = true)
+	protected static String password;
+
+-domain = "Nuxeo Domain to operate within", required = true)
+    protected static String domain;
+
+-limit = "Limit the number of lines to process")
+    protected static int limit = 0;
+
+-dialect-id = "The GUID of the dialect to input the entries into", required = true)
+    protected static String dialectID;
+
+-csv-file = "Path to CSV file", required = true)
+    protected static String csvFile;
+
+-data-path = "Path to media files")
+    protected static String blobDataPath;
+
+-skipValidation = "Allows you to skip the validation and process valid records")
+    protected static Boolean skipValidation = false;

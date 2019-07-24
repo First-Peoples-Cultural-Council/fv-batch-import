@@ -71,6 +71,7 @@ public class CsvValidator{
         Map<String, Integer> files_read = new HashMap<>();
         int lineNumber = 0;
         String headerTemp;
+
         while((nextLine = csvReader.readNext()) != null){
             files_read.clear();
             int wordCount=0;
@@ -84,6 +85,7 @@ public class CsvValidator{
                         headerTemp = header[wordCount].substring(type.length());
                 }
 
+// Disable if duplicate words need to be added
                 if(headerTemp.equals("WORD"))
                     checkWordDuplicate(word, lineNumber);
 
@@ -103,6 +105,9 @@ public class CsvValidator{
                         if(m.matches()) {
                             String title = m.group(1);
                             int num = Integer.parseInt(m.group(2));
+
+//                      Check that the number of previously read files matches the number in the heading
+//                      Disable if Team is leaving out AUDIO_FILENAME intentionally
                             if(files_read.get(title) != num-1)
                                 invalid.add(header[wordCount] +" is given without other number files: line " +lineNumber +", " +word);
                             else
