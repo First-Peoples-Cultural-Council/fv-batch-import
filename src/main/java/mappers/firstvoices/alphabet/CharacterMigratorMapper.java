@@ -14,9 +14,9 @@ public class CharacterMigratorMapper extends DictionaryCachedMapper {
 	public static int existingCharacters = 0;
 
 	public CharacterMigratorMapper() {
-        super("FVCharacter", "ID");
+        super("FVCharacter", "CHAR");
         parentKey = "Alphabet";
-        cacheProperty = "fvl:import_id";
+        cacheProperty = "dc:title";
 
         propertyReaders.add(new PropertyReader(Properties.TITLE, "CHAR"));
 		propertyReaders.add(new PropertyReader("fvcharacter:upper_case_character", "CHAR_UPPER_CASE"));
@@ -32,9 +32,10 @@ public class CharacterMigratorMapper extends DictionaryCachedMapper {
 		Document result = getFromCache(doc);
 		// Create new FVCharacter document
 		if (!fakeCreation && result == null) {
-			result = client.operation("Document.Create").schemas("*")
-				.input(documents.get(parentKey)).param("type", doc.getType()).param("name", doc.getId())
-				.param("properties", doc).execute();
+
+			result = Document.createWithName(doc.getName(), doc.getType());
+			result.setProperties(doc.getProperties());
+			result = client.repository().createDocumentById(documents.get(parentKey).getId(), result);
 
 			tagAndUpdateCreator(result, doc);
 
@@ -42,10 +43,8 @@ public class CharacterMigratorMapper extends DictionaryCachedMapper {
 			createdCharacters++;
 			cacheDocument(result);
 
-			// If the parent document exists in the section, go ahead and publish the current document to the section
-			//if(documents.get("SECTION_" + parentKey) != null) {
-	    		//publishDocument(result);
-			//}
+			// Characters should be enabled, at the very least
+			client.operation("Document.FollowLifecycleTransition").param("value", "Enable").input(result).execute();
 		}
 		// If the character document already exists, skip it
 		else {
