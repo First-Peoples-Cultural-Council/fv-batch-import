@@ -36,9 +36,7 @@ public class FVWordMigrator extends AbstractMigrator {
         mapper.setFakeCreation(false);
 
         // Setup output of errors and log to path of data/csv file
-        if (csvFile != null) {
-            setupErrorOutputFiles(csvFile);
-        }
+        if (csvFile != null) setupErrorOutputFiles(csvFile);
     }
 
     @Override

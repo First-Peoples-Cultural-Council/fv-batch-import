@@ -32,6 +32,7 @@ public final class Properties {
     public static final String MEDIA_SHARED = "fvm:shared";
     public static final String MEDIA_RECORDER = "fvm:recorder";
     public static final String MEDIA_SOURCE = "fvm:source";
+    public static final String MEDIA_ACKNOWLEDGEMENT = "fvm:acknowledgement";
     public static final String MEDIA_STATUS = "fvl:status_id";
     public static final String RELATED_VIDEOS = "fv:related_videos";
     public static final String RELATED_AUDIO = "fv:related_audio";
@@ -41,5 +42,6 @@ public final class Properties {
     public static final String CONTRIBUTORS = "dc:contributors";
     
     public static final String PHRASE_BOOKS = "fv-phrase:phrase_books";
+    public static final String PHRASE_ACKNOWLEDGEMENT = "fv-phrase:acknowledgement";
 
 }
