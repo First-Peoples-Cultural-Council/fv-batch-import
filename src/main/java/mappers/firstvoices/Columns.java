@@ -33,14 +33,13 @@ public final class Columns {
     public static final String CATEGORY_ID = "CATEGORY_ID";
     public static final String CATEGORY_NAME = "CATEGORY_NAME";
     public static final String CATEGORIES = "CATEGORIES";
-    public static final String CONTRIBUTER = "CONTRIBUTER";
+    public static final String CONTRIBUTOR = "CONTRIBUTOR";
     public static final Object ID = "ID";
     public static final Object FILENAME = "FILENAME";
     public static final String DESCR = "DESCRIPTION";
     public static final String SHARED = "SHARED_WITH_OTHER_DIALECTS";
     public static final String RECORDER = "RECORDER";
     public static final String USER_ID = "USER_ID";
-    public static final String CONTRIBUTOR = "CONTRIBUTOR";
     public static final String SOURCE = "SOURCE";
     public static final String STATUS = "STATUS";
     public static final Object TITLE = "TITLE";

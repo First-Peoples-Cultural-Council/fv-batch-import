@@ -29,7 +29,7 @@ public final class Properties {
     public static final String DEFINITION = "fv:definitions";
     public static final String RELATED_PHRASES = "fv-word:related_phrases";
     public static final String WORD_CATEGORIES = "fv-word:categories";
-    public static final String CONTRIBUTER = "fv:source";
+    public static final String CONTRIBUTOR = "fv:source";
     public static final String MEDIA_SHARED = "fvm:shared";
     public static final String MEDIA_RECORDER = "fvm:recorder";
     public static final String MEDIA_SOURCE = "fvm:source";

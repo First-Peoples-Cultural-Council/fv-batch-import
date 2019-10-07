@@ -66,15 +66,15 @@ public class SourcesMapper extends DictionaryCachedMapper {
     }
 
     public SourcesMapper(int number) {
-        super("FVContributor", Columns.CONTRIBUTER + "_" + number);
-        propertyReaders.add(new PropertyReader(Properties.CONTRIBUTER, Columns.CONTRIBUTER + "_" + number));
+        super("FVContributor", Columns.CONTRIBUTOR + "_" + number);
+        propertyReaders.add(new PropertyReader(Properties.CONTRIBUTOR, Columns.CONTRIBUTOR + "_" + number));
     }
 
     public SourcesMapper() {
-        super("FVContributor", Columns.CONTRIBUTER);
+        super("FVContributor", Columns.CONTRIBUTOR);
         parentKey = "Contributors";
-        linkKey = Properties.CONTRIBUTER;
-        propertyReaders.add(new PropertyReader(Properties.TITLE, Columns.CONTRIBUTER));
+        linkKey = Properties.CONTRIBUTOR;
+        propertyReaders.add(new PropertyReader(Properties.TITLE, Columns.CONTRIBUTOR));
     }
 
     public SourcesMapper(String linkKey, String column) {
