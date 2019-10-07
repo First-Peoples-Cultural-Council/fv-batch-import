@@ -14,6 +14,7 @@ public final class Properties {
     public static final String DESCR = "dc:description";
     public static final String CULTURAL_NOTE = "fv:cultural_note";
     public static final String PART_OF_SPEECH_ID = "fv-word:part_of_speech";
+    public static final String ALTERNATE_SPELLINGS = "fv-word:alternate_spellings";
     public static final String PHONETIC_INFO = "fv-word:pronunciation";
     public static final String ACKNOWLEDGEMENT = "fv-word:acknowledgement";
     public static final String PLURAL = "fv-word:plural";

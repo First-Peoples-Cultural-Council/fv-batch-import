@@ -28,9 +28,11 @@ public class WordMapper extends CsvMapper {
         String[] literalTranslationCols = {Columns.DOMINANT_LANGUAGE_VALUE, Columns.DOMINANT_LANGUAGE_VALUE + "_2", Columns.DOMINANT_LANGUAGE_VALUE + "_3", Columns.DOMINANT_LANGUAGE_VALUE + "_4", Columns.DOMINANT_LANGUAGE_VALUE + "_5"};
         String[] culturalNoteCols = {Columns.CULTURAL_NOTE, Columns.CULTURAL_NOTE + "_2", Columns.CULTURAL_NOTE + "_3", Columns.CULTURAL_NOTE + "_4", Columns.CULTURAL_NOTE + "_5"};
         String[] pluralCols = {Columns.WORD_PLURAL, Columns.WORD_PLURAL + "_2", Columns.WORD_PLURAL + "_3", Columns.WORD_PLURAL + "_4", Columns.WORD_PLURAL + "_5"};
+        String[] spellingCols = {Columns.ALTERNATE_SPELLING, Columns.ALTERNATE_SPELLING + "_2", Columns.ALTERNATE_SPELLING + "_3", Columns.ALTERNATE_SPELLING + "_4", Columns.ALTERNATE_SPELLING + "_5"};
 
         propertyReaders.add(new PropertyReader(Properties.TITLE, Columns.WORD_VALUE));
         propertyReaders.add(new PartOfSpeechPropertyReader(Properties.PART_OF_SPEECH_ID, Columns.PART_OF_SPEECH));
+        propertyReaders.add(new SimpleListPropertyReader(Properties.ALTERNATE_SPELLINGS, spellingCols));
         propertyReaders.add(new SimpleListPropertyReader(Properties.CULTURAL_NOTE, culturalNoteCols));
         propertyReaders.add(new SimpleListPropertyReader(Properties.PLURAL, pluralCols));
         propertyReaders.add(new PropertyReader(Properties.PHONETIC_INFO, Columns.PHONETIC_INFO));
@@ -46,6 +48,7 @@ public class WordMapper extends CsvMapper {
 
         propertyReaders.add(new TranslationReader(Properties.TRANSLATION, Columns.DOMINANT_LANGUAGE, literalTranslationCols));
         propertyReaders.add(new TranslationReader(Properties.DEFINITION, Columns.DOMINANT_LANGUAGE, definitionCols));
+
 
         subdocuments.add(new PhraseMapper());
         subdocuments.add(new CategoryMapper());

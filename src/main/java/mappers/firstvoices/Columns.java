@@ -11,6 +11,7 @@ public final class Columns {
     public static final String WORD_VALUE = "WORD";
     public static final String CULTURAL_NOTE = "CULTURAL_NOTE";
     public static final String PART_OF_SPEECH_ID = "PART_OF_SPEECH_ID";
+    public static final String ALTERNATE_SPELLING = "ALTERNATE_SPELLING";
     public static final String PART_OF_SPEECH = "PART_OF_SPEECH";
     public static final String PHONETIC_INFO = "PRONUNCIATION";
     public static final String ASSIGNED_USR_ID = "ASSIGNED_USR_ID";
