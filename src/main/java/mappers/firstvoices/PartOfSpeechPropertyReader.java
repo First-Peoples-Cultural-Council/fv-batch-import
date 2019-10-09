@@ -75,6 +75,7 @@ public class PartOfSpeechPropertyReader extends PropertyReader {
         case "32":
             case "suffix_prefix": return "suffix_prefix";
         default:
+            // Note: To use a part of speech that is NOT in the list, return reader.getString(column);
             System.out.println("Could not retrieve Nuxeo part of speech value");
             case "": return "";
         }
