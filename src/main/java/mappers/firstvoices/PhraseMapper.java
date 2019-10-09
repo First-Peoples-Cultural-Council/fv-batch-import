@@ -20,8 +20,9 @@ public class PhraseMapper extends DictionaryCachedMapper {
 	public PhraseMapper() {
 		super("FVPhrase", Columns.PHRASE_COLUMN);
 		propertyReaders.add(new PropertyReader(Properties.TITLE, Columns.PHRASE_COLUMN));
-		propertyReaders.add(new TranslationReader(Properties.TRANSLATION, Columns.DOMINANT_LANGUAGE, Columns.DOMINANT_LANGUAGE_SENTENCE));
+		propertyReaders.add(new TranslationReader(Properties.TRANSLATION, Columns.DOMINANT_LANGUAGE, Columns.DOMINANT_LANGUAGE_SENTENCE_VALUE));
 		propertyReaders.add(new TranslationReader(Properties.DEFINITION, Columns.DOMINANT_LANGUAGE, Columns.DOMINANT_LANGUAGE_SENTENCE_DEFINITION));
+		propertyReaders.add(new PropertyReader(Properties.PHRASE_ACKNOWLEDGEMENT, Columns.PHRASE_ACKNOWLEDGEMENT));
 		subdocuments.add(new AudioMapper(Columns.PHRASE_COLUMN));
 		subdocuments.add(new AudioMapper(Columns.PHRASE_COLUMN, 2));
 	}

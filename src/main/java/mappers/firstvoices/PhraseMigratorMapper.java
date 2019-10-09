@@ -27,7 +27,7 @@ public class PhraseMigratorMapper extends CsvMapper {
         super("FVPhrase", Columns.PHRASE);
 
 		String[] definitionCols = {Columns.DOMINANT_LANGUAGE_DEFINITION, Columns.DOMINANT_LANGUAGE_DEFINITION + "_2", Columns.DOMINANT_LANGUAGE_DEFINITION + "_3", Columns.DOMINANT_LANGUAGE_DEFINITION + "_4", Columns.DOMINANT_LANGUAGE_DEFINITION + "_5"};
-		String[] literalTranslationCols = {Columns.DOMINANT_LANGUAGE_PHRASE, Columns.DOMINANT_LANGUAGE_PHRASE + "_2", Columns.DOMINANT_LANGUAGE_PHRASE + "_3", Columns.DOMINANT_LANGUAGE_PHRASE + "_4", Columns.DOMINANT_LANGUAGE_PHRASE + "_5"};
+		String[] literalTranslationCols = {Columns.DOMINANT_LANGUAGE_VALUE, Columns.DOMINANT_LANGUAGE_VALUE + "_2", Columns.DOMINANT_LANGUAGE_VALUE + "_3", Columns.DOMINANT_LANGUAGE_VALUE + "_4", Columns.DOMINANT_LANGUAGE_VALUE + "_5"};
 		String[] culturalNoteCols = {Columns.CULTURAL_NOTE, Columns.CULTURAL_NOTE + "_2", Columns.CULTURAL_NOTE + "_3", Columns.CULTURAL_NOTE + "_4", Columns.CULTURAL_NOTE + "_5"};
 
         propertyReaders.add(new PropertyReader(Properties.TITLE, Columns.PHRASE));
@@ -36,7 +36,7 @@ public class PhraseMigratorMapper extends CsvMapper {
         propertyReaders.add(new PropertyReader(Properties.CHANGE_DTTM, Columns.CHANGE_DTTM));
         propertyReaders.add(new PropertyReader(Properties.IMPORT_ID, Columns.PHRASE_ID));
         propertyReaders.add(new PropertyReader(Properties.REFERENCE, Columns.REFERENCE));
-		propertyReaders.add(new PropertyReader(Properties.ACKNOWLEDGEMENT, Columns.ACKNOWLEDGEMENT));
+		propertyReaders.add(new PropertyReader(Properties.PHRASE_ACKNOWLEDGEMENT, Columns.ACKNOWLEDGEMENT));
         propertyReaders.add(new TrueFalsePropertyReader(Properties.AVAILABLE_IN_CHILDRENS_ARCHIVE, Columns.AVAILABLE_IN_CHILDRENS_ARCHIVE));
         propertyReaders.add(new PropertyReader(Properties.STATUS_ID, Columns.PHRASE_STATUS));
 
