@@ -12,6 +12,7 @@ import org.nuxeo.client.NuxeoClient;
 import org.nuxeo.client.objects.Document;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -74,8 +75,9 @@ public class WordMapper extends CsvMapper {
 
     @Override
 	protected Document createDocument(Document doc, Integer depth) throws IOException {
-		Document result = null;
-		if (!fakeCreation) {
+        Document result = getFromCache(doc);
+
+		if (!fakeCreation && result == null) {
 
 		    // Set some defaults for words if they are not defined
 
@@ -105,7 +107,9 @@ public class WordMapper extends CsvMapper {
 			/*if(documents.get("SECTION_" + parentKey) != null && "Enabled".equals(doc.getState())) {
 	    		publishDocument(result);
 			}*/
-		}
+		} else {
+		    System.out.println("Result exists. Skipping.");
+        }
 
 		if (depth == 1) {
 			documents.put("main", result);
@@ -115,17 +119,26 @@ public class WordMapper extends CsvMapper {
 
     @Override
     protected void cacheDocument(Document doc) {
-        cache.put(doc.getPropertyValue(Properties.IMPORT_ID), doc);
+        cache.put(doc.getPropertyValue(Properties.TITLE), doc);
+    }
+
+    @Override
+    protected Document getFromCache(Document doc) {
+        String cacheKey = doc.getPropertyValue("dc:title");
+        if (cache.containsKey(cacheKey)) {
+            return cache.get(cacheKey);
+        }
+        return null;
     }
 
     @Override
     public void buildCache() throws IOException {
-/*        if (cache != null) {
+        if (cache != null) {
             return;
         }
         cache = new HashMap<String, Document>();
-        String query = "SELECT * FROM FVWord WHERE ecm:isTrashed = 0 AND ecm:path STARTSWITH '/FV/'";
-        loadCache(query);*/
+        String query = "SELECT * FROM FVWord WHERE ecm:isTrashed = 0 AND fva:dialect = '" + this.getDialectID() + "'";
+        loadCache(query);
 
 return;
     }

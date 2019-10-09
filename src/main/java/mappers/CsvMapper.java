@@ -68,6 +68,16 @@ public abstract class CsvMapper {
 
 	protected static String globalUsername;
 
+	public void setDialectID(String dialectID) {
+		this.dialectID = dialectID;
+	}
+
+	public static String getDialectID() {
+		return dialectID;
+	}
+
+	protected static String dialectID;
+
 	/**
 	 * By default not caching anything
 	 * @param doc to cache
@@ -155,7 +165,7 @@ public abstract class CsvMapper {
 
 			result = Document.createWithName(doc.getName(), doc.getType());
 			result.setProperties(doc.getProperties());
-			result = client.repository().createDocumentByPath(documents.get(parentKey).getPath(), result);
+			result = client.repository().schemas("").createDocumentByPath(documents.get(parentKey).getPath(), result);
 
 			tagAndUpdateCreator(result, doc);
 
@@ -287,7 +297,7 @@ public abstract class CsvMapper {
 			}
 			page++;
 		}
-		//System.out.println("Caching Complete.");
+		System.out.println("Caching Complete.");
 	}
 
 	protected CsvMapper(String type, Object column) {
