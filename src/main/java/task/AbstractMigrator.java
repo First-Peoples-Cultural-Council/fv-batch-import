@@ -14,6 +14,7 @@ import org.nuxeo.client.NuxeoClient;
 import org.nuxeo.client.cache.ResultCacheInMemory;
 import org.nuxeo.client.objects.Document;
 import org.nuxeo.client.objects.Documents;
+import org.nuxeo.client.objects.Repository;
 import org.nuxeo.client.spi.NuxeoClientException;
 import reader.AbstractReader;
 import reader.CsvReader;
@@ -79,6 +80,9 @@ public abstract class AbstractMigrator {
 
     @Parameter(names = { "-dialect-id" }, description = "The GUID of the dialect to input the entries into", required = true)
     protected static String dialectID;
+    
+    @Parameter(names = { "-language-path" }, description = "The path to the language rooted at /FV/Workspaces/Data/")
+    protected static String languagePath;
 
     @Parameter(names = { "-csv-file" }, description = "Path to CSV file", required = true)
     protected static String csvFile;
@@ -208,7 +212,14 @@ public abstract class AbstractMigrator {
 
 	protected Map<String, Document> getOrCreateLanguageDocument(NuxeoClient client, String family, String lang, String dialect)
 			throws IOException {
-
+     
+	    // If path to language is given as a parameter then get the ID and set dialectID to that ID
+	    if ( languagePath != null ) {
+            Repository repository = client.repository();
+            Document folder = repository.fetchDocumentByPath("/FV/Workspaces/Data/" + languagePath);
+            dialectID = folder.getUid();
+        }
+	    
 		String cacheKey = dialectID;
 		String key = null;
 
