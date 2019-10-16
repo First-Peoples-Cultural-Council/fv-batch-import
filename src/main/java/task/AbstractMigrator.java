@@ -143,6 +143,8 @@ public abstract class AbstractMigrator {
                     .authentication(username, password)
                     .connect();
 
+            client.readTimeout(180).connectTimeout(180);
+
             try {
                 root = client.schemas("*").repository().fetchDocumentByPath(dataPath);
                 sectionRoot = client.schemas("*").repository().fetchDocumentByPath(sectionDataPath);

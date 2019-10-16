@@ -120,6 +120,7 @@ public class WordMapper extends CsvMapper {
 		return result;
 	}
 
+	// To upload duplicates comment out the code below this line and -skipvalidation
     @Override
     protected void cacheDocument(Document doc) {
         cache.put(doc.getPropertyValue(Properties.TITLE), doc);
@@ -143,6 +144,6 @@ public class WordMapper extends CsvMapper {
         String query = "SELECT * FROM FVWord WHERE ecm:isTrashed = 0 AND fva:dialect = '" + this.getDialectID() + "'";
         loadCache(query);
 
-return;
+        return;
     }
 }
