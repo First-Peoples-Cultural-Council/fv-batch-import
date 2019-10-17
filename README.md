@@ -47,6 +47,7 @@ To execute the batch upload for words, for example, run the following command:
 
 You will be promoted for a password once you run the command.
 Parameters will differ depending on the Migrator being executed; memory allocation on the size of the import.
+The optional "-language-path" parameter will override the "-dialect-id" parameter by going to the path, getting the id from Nuxeo and using that instead.
 
 ## AbstractMigrator Parameters
 
@@ -67,6 +68,9 @@ Parameters will differ depending on the Migrator being executed; memory allocati
 
 -dialect-id = "The GUID of the dialect to input the entries into", required = true)
     protected static String dialectID;
+    
+-language-path = "The path to the language to input the entries into, rooted at /FV/Workspace/Data/")
+    protected static String languagePath;
 
 -csv-file = "Path to CSV file", required = true)
     protected static String csvFile;
