@@ -50,5 +50,6 @@ public final class Columns {
     public static final String PHRASE_ID = "PHRASE_ID"; 
     public static final String PHRASE_STATUS = "PHRASE_STATUS";
     public static final Object PHRASE_ACKNOWLEDGEMENT = "RELATED_PHRASE_ACKNOWLEDGEMENT";
+    public static final Object PHRASE_REFERENCE = "RELATED_PHRASE_REFERENCE";
 
 }

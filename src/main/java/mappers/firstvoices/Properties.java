@@ -44,5 +44,4 @@ public final class Properties {
     
     public static final String PHRASE_BOOKS = "fv-phrase:phrase_books";
     public static final String PHRASE_ACKNOWLEDGEMENT = "fv-phrase:acknowledgement";
-
 }
