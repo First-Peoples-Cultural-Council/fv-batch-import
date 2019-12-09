@@ -1,5 +1,6 @@
 package mappers.firstvoices.alphabet;
 
+import mappers.firstvoices.AudioMapper;
 import mappers.firstvoices.DictionaryCachedMapper;
 import mappers.firstvoices.Properties;
 import mappers.propertyreaders.PropertyReader;
@@ -21,8 +22,9 @@ public class CharacterMigratorMapper extends DictionaryCachedMapper {
         propertyReaders.add(new PropertyReader(Properties.TITLE, "CHAR"));
 		propertyReaders.add(new PropertyReader("fvcharacter:upper_case_character", "CHAR_UPPER_CASE"));
         propertyReaders.add(new PropertyReader("fvcharacter:alphabet_order", "ORDER"));
+		propertyReaders.add(new PropertyReader("fvcharacter:fuzzy_latin_match", "LATIN"));
 
-//        subdocuments.add(new CharacterAudioMapper());
+		subdocuments.add(new AudioMapper());
 //        subdocuments.add(new CharacterSampleWordMapper());
 
 	}
