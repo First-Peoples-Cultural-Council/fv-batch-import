@@ -21,59 +21,29 @@ public class SourcesMapper extends DictionaryCachedMapper {
     private static Map<String, Map<String,Document>> cache = null;
 
     @Override
-    protected Document createDocument(Document doc, Integer depth) throws IOException {
-        String title = (String) doc.getDirtyProperties().get(Properties.TITLE);
-        String value = "";
-        Document remoteDoc = null;
+    protected String getCacheQuery() {
+        // Include all contributors from Dialect
+        return "SELECT * FROM FVContributor WHERE ecm:parentId='" + documents.get("Contributors").getId() + "' AND ecm:isTrashed = 0";
+    }
 
-        ArrayList<String> sourcesIds = new ArrayList<String>();
-
-        if (!title.contains("http:") && title.contains("/")) {
-            // Multivalued within a string
-            String[] sources = title.split("/");
-            for (String src : sources) {
-                src = src.trim();
-                Document sourceDoc = Document.createWithName(src, type);
-                sourceDoc.setPropertyValue(Properties.TITLE, src);
-                remoteDoc = getFromCache(sourceDoc);
-                if (remoteDoc == null) {
-
-                    remoteDoc = Document.createWithName(doc.getName(), doc.getType());
-                    remoteDoc.setProperties(sourceDoc.getProperties());
-                    remoteDoc = client.repository().createDocumentByPath(documents.get("Contributors").getPath(), remoteDoc);
-
-                    CsvMapper.createdObjects++;
-                    cacheDocument(remoteDoc);
-
-                    tagAndUpdateCreator(remoteDoc, doc);
-                }
-                sourcesIds.add(remoteDoc.getId());
-            }
-        } else {
-            // If not multivalued normal behavior
-            remoteDoc = super.createDocument(doc, depth);
-            sourcesIds.add(remoteDoc.getId());
-        }
-
+    private void updateMainDocumentReference(String linkKey, ArrayList<String> sourcesIds) {
         // Get current sources, and append new values if exists
         if (documents.get("current").getPropertyValue(linkKey) != null) {
-            ArrayList<String> existigSourcesIds = documents.get("current").getPropertyValue(linkKey);
-            sourcesIds.addAll(existigSourcesIds);
+            ArrayList<String> existingSourcesIds = documents.get("current").getPropertyValue(linkKey);
+            sourcesIds.addAll(existingSourcesIds);
         }
-
         documents.get("current").setPropertyValue(linkKey, sourcesIds);
-        return remoteDoc;
     }
 
     public SourcesMapper(int number) {
         super("FVContributor", Columns.CONTRIBUTOR + "_" + number);
-        propertyReaders.add(new PropertyReader(Properties.CONTRIBUTOR, Columns.CONTRIBUTOR + "_" + number));
+        propertyReaders.add(new PropertyReader(Properties.SOURCE, Columns.CONTRIBUTOR + "_" + number));
     }
 
     public SourcesMapper() {
         super("FVContributor", Columns.CONTRIBUTOR);
         parentKey = "Contributors";
-        linkKey = Properties.CONTRIBUTOR;
+        linkKey = Properties.SOURCE;
         propertyReaders.add(new PropertyReader(Properties.TITLE, Columns.CONTRIBUTOR));
     }
 
@@ -85,7 +55,29 @@ public class SourcesMapper extends DictionaryCachedMapper {
     }
 
     @Override
-    protected String getCacheQuery() {
-        return "SELECT * FROM FVContributor WHERE ecm:parentId='" + documents.get("Contributors").getId() + "' AND ecm:isTrashed = 0";
+    protected Document createDocument(Document doc, Integer depth) throws IOException {
+//        String title = (String) doc.getDirtyProperties().get(Properties.TITLE);
+        String title = (String) doc.getPropertyValue("dc:title");
+        String value = "";
+        Document remoteDoc = null;
+
+        ArrayList<String> sourcesIds = new ArrayList<String>();
+
+        String trimmedTitle = title.trim();
+
+        Document fakeLookupDoc = Document.createWithName(trimmedTitle, "FVContributor");
+        fakeLookupDoc.setPropertyValue("dc:title", trimmedTitle);
+
+        Document cachedDoc = getFromCache(fakeLookupDoc);
+
+        if (cachedDoc != null) {
+            sourcesIds.add(cachedDoc.getId());
+        } else {
+            remoteDoc = super.createDocument(doc, depth);
+            sourcesIds.add(remoteDoc.getId());
+        }
+
+        updateMainDocumentReference(linkKey, sourcesIds);
+        return remoteDoc;
     }
 }

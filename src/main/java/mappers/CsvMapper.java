@@ -305,8 +305,8 @@ public abstract class CsvMapper {
 	    this.column = column;
 
 	    // Set some default properties
-		String[] usernameCols = {Columns.USERNAME, Columns.USERNAME + "_2", Columns.USERNAME + "_3", Columns.USERNAME + "_4", Columns.USERNAME + "_5"};
 		propertyReaders.add(new PropertyReader(Properties.CREATOR, Columns.USERNAME));
+		String[] usernameCols = {Columns.USERNAME, Columns.USERNAME + "_2", Columns.USERNAME + "_3", Columns.USERNAME + "_4", Columns.USERNAME + "_5"};
 		propertyReaders.add(new SimpleListPropertyReader(Properties.CONTRIBUTORS, usernameCols));
 	}
 
