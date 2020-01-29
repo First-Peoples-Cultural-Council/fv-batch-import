@@ -51,7 +51,7 @@ public class WordMapper extends CsvMapper {
         propertyReaders.add(new TranslationReader(Properties.DEFINITION, Columns.DOMINANT_LANGUAGE, definitionCols));
 
 
-        subdocuments.add(new PhraseMapper());
+        subdocuments.add(new RelatedPhraseMapper());
         subdocuments.add(new CategoryMapper());
         subdocuments.add(new SourcesMapper());
         subdocuments.add(new AudioMapper());
@@ -120,7 +120,7 @@ public class WordMapper extends CsvMapper {
 		return result;
 	}
 
-	// To upload duplicates comment out the code below this line and -skipvalidation
+	// To upload duplicates comment out the code below this line, as well as CsvValidator line 88,  and -skipvalidation
     @Override
     protected void cacheDocument(Document doc) {
         cache.put(doc.getPropertyValue(Properties.TITLE), doc);

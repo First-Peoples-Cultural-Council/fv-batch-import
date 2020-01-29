@@ -13,7 +13,7 @@ import java.util.ArrayList;
  * @author dyona
  *
  */
-public class PhraseBookMapper extends PhraseMapper {
+public class PhraseBookMapper extends RelatedPhraseMapper {
     
     @Override
     protected String getCacheQuery() {
