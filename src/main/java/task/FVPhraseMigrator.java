@@ -4,7 +4,7 @@ import common.ConsoleLogger;
 import mappers.CsvMapper;
 import mappers.CsvValidator;
 import mappers.firstvoices.BinaryMapper;
-import mappers.firstvoices.PhraseMigratorMapper;
+import mappers.firstvoices.PhraseMapper;
 import reader.AbstractReader;
 import reader.CsvReader;
 import org.apache.commons.cli.ParseException;
@@ -33,7 +33,7 @@ public class FVPhraseMigrator extends AbstractMigrator {
         // Set binary mapper data path
         BinaryMapper.setDataPath(blobDataPath);
 
-		mapper = new PhraseMigratorMapper();
+		mapper = new PhraseMapper();
         mapper.setFakeCreation(false);
 
         // Setup output of errors and log to path of data/csv file
@@ -57,9 +57,9 @@ public class FVPhraseMigrator extends AbstractMigrator {
 
         if (lines % 1000 == 0) {
             ConsoleLogger.out("##### " + lines + " lines, " + errors + " errors, "
-            		+ PhraseMigratorMapper.createdPhrases + " phrases created, "
-            		+ PhraseMigratorMapper.updatedPhrases + " null import_id phrases updated, "
-            		+ PhraseMigratorMapper.cachedPhrases + " phrases in cache and skipped, "
+            		+ PhraseMapper.createdPhrases + " phrases created, "
+            		+ PhraseMapper.updatedPhrases + " null import_id phrases updated, "
+            		+ PhraseMapper.cachedPhrases + " phrases in cache and skipped, "
             		+ CsvMapper.createdObjects + " objects created");
         }
 	}

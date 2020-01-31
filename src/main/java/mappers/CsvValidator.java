@@ -85,7 +85,7 @@ public class CsvValidator{
                         headerTemp = header[wordCount].substring(type.length());
                 }
 
-// Disable if duplicate words need to be added
+// Disable if duplicate words need to be added as well as WordMapper line 123 and below
                 if(headerTemp.equals("WORD"))
                     checkWordDuplicate(word, lineNumber);
 
