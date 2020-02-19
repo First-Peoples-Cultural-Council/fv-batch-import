@@ -174,7 +174,10 @@ public abstract class CsvMapper {
                 createdWords++;
             }
 			cacheDocument(result);
+		} else {
+			System.out.println("Result exists. Skipping.");
 		}
+
 		if (depth == 1) {
 			documents.put("main", result);
 		}

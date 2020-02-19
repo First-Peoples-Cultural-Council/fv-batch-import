@@ -35,11 +35,10 @@ public class FVPhraseMigrator extends AbstractMigrator {
 
 		mapper = new PhraseMapper();
         mapper.setFakeCreation(false);
+        mapper.setDialectID(dialectID);
 
         // Setup output of errors and log to path of data/csv file
-        if (csvFile != null) {
-            setupErrorOutputFiles(csvFile);
-        }
+        if (csvFile != null) setupErrorOutputFiles(csvFile);
 	}
 
 	@Override

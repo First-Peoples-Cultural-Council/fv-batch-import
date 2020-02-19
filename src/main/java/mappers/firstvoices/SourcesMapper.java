@@ -37,6 +37,13 @@ public class SourcesMapper extends CsvMapper {
         propertyReaders.add(new PropertyReader(Properties.TITLE, Columns.CONTRIBUTOR));
     }
 
+    public SourcesMapper(String column) {
+        super("FVContributor", column);
+        parentKey = "Contributors";
+        linkKey = Properties.SOURCE;
+        propertyReaders.add(new PropertyReader(Properties.TITLE, Columns.CONTRIBUTOR));
+    }
+
     public SourcesMapper(String linkKey, String column) {
         super("FVContributor", column);
         parentKey = "Contributors";

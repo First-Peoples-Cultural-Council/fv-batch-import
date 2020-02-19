@@ -8,7 +8,7 @@ package mappers.firstvoices;
  *
  */
 public final class Columns {
-    public static final String WORD_VALUE = "WORD";
+    public static final String WORD = "WORD";
     public static final String CULTURAL_NOTE = "CULTURAL_NOTE";
     public static final String PART_OF_SPEECH_ID = "PART_OF_SPEECH_ID";
     public static final String ALTERNATE_SPELLING = "ALTERNATE_SPELLING";
@@ -18,7 +18,7 @@ public final class Columns {
     public static final String CHANGE_DTTM = "CHANGE_DTTM";
     public static final String WORD_ID = "WORD_ID";
 	public static final Object WORD_STATUS = "WORD_STATUS";
-    public static final String WORD_PLURAL = "PLURAL";
+    public static final String PLURAL = "PLURAL";
     public static final Object ACKNOWLEDGEMENT = "ACKNOWLEDGEMENT";
     public static final String REFERENCE = "REFERENCE";
     public static final String PHRASE_COLUMN = "RELATED_PHRASE";
@@ -49,8 +49,12 @@ public final class Columns {
     public static final String PHRASE = "PHRASE";
     public static final String PHRASE_ID = "PHRASE_ID"; 
     public static final String PHRASE_STATUS = "PHRASE_STATUS";
+    public static final String PHRASE_BOOK = "PHRASE_BOOK";
     public static final Object PHRASE_ACKNOWLEDGEMENT = "RELATED_PHRASE_ACKNOWLEDGEMENT";
     public static final Object PHRASE_REFERENCE = "RELATED_PHRASE_REFERENCE";
-    public static final String PHRASE_BOOK = "PHRASE_BOOK";
+    public static final String PHRASE_SOURCE = "RELATED_PHRASE_SOURCE";
+    public static final String PHRASE_CULTURAL_NOTE = "RELATED_PHRASE_CULTURAL_NOTE";
+    public static final String PHRASE_ALTERNATE_SPELLING = "RELATED_PHRASE_ALTERNATE_SPELLING";
+
 
 }
