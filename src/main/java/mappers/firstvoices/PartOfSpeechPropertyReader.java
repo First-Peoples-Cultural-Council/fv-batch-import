@@ -74,6 +74,34 @@ public class PartOfSpeechPropertyReader extends PropertyReader {
             case "question_word": return "question_word";
         case "32":
             case "suffix_prefix": return "suffix_prefix";
+        case "33":
+            case "affirmation": return "affirmation";
+        case "34":
+            case "connective": return "connective";
+        case "35":
+            case "connective_irrealis": return "connective_irrealis";
+        case "36":
+            case "demonstrative": return "demonstrative";
+        case "37":
+            case "interrogative": return "interrogative";
+        case "38":
+            case "modifier_noun": return "modifier_noun";
+        case "39":
+            case "modifier_verb": return "modifier_verb";
+        case "40":
+            case "negation": return "negation";
+        case "41":
+            case "number": return "number";
+        case "42":
+            case "plural_marker": return "plural_marker";
+        case "43":
+            case "question_marker": return "question_marker";
+        case "44":
+            case "tense_aspect": return "tense_aspect";
+        case "45":
+            case "intransitive_verb": return "intransitive_verb";
+        case "46":
+            case "transitive_verb": return "transitive_verb";
         default:
             // Note: To use a part of speech that is NOT in the list, return reader.getString(column);
             System.out.println("Could not retrieve Nuxeo part of speech value");

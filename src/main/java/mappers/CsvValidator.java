@@ -37,7 +37,9 @@ public class CsvValidator{
             "particle_article_determiner", "particle_tense_aspect", "particle_modal", "particle_conjunction",
             "particle_auxiliary_verb", "particle_adjective", "particle_adverb", "entity_noun_like_word",
             "event_activity_verb_like_word", "event_activity_verb_like_word_transitive", "event_activity_verb_like_word_intransitive",
-            "event_activity_verb_like_word_reflexive", "event_activity_verb_like_word_reciprocal", "question_word", "suffix_prefix"};
+            "event_activity_verb_like_word_reflexive", "event_activity_verb_like_word_reciprocal", "question_word", "suffix_prefix",
+            "affirmation", "transitive_verb", "intransitive_verb", "connective", "connective_irrealis", "demonstrative", "interrogative",
+            "modifier_noun", "modifier_verb", "negation", "number", "plural_marker", "question_marker", "question_word", "tense_aspect"};
     private static final Set<String> POS = new HashSet<>(Arrays.asList(POS_VALUES));
 
 
@@ -192,7 +194,7 @@ public class CsvValidator{
 
                 // Fail on space between categories
                 if (word.startsWith(" ")) {
-                    match = false;
+                    word = word.trim();
                 }
 
                 if(!word.isEmpty()){
