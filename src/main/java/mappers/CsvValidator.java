@@ -173,6 +173,7 @@ public class CsvValidator{
 
     private void getData(String dialect) throws IOException {
 
+        // Get the directory id for the dialect categories
         Documents dialect_categories_directory = client.operation("Repository.Query").param("query",  "SELECT * FROM FVCategories " +
                 "WHERE fva:dialect = '" + dialect + "' " +
                 "AND ecm:path STARTSWITH '/FV/Workspaces/' " +
