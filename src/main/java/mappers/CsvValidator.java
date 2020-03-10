@@ -13,6 +13,7 @@ import java.io.InputStreamReader;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 public class CsvValidator{
 
@@ -172,25 +173,37 @@ public class CsvValidator{
 
     private void getData(String dialect) throws IOException {
 
+        Documents dialect_categories_directory = client.operation("Repository.Query").param("query",  "SELECT * FROM FVCategories " +
+                "WHERE fva:dialect = '" + dialect + "' " +
+                "AND ecm:path STARTSWITH '/FV/Workspaces/' " +
+                "AND dc:title = 'Categories' " +
+                "AND ecm:isTrashed = 0 " +
+                "AND ecm:isVersion = 0")
+                .execute();
+        List<Document> documentsList = dialect_categories_directory.streamEntries().collect(Collectors.toList());
+        Document categories_directory = documentsList.get(0);
+        String categories_directory_id = categories_directory.getId();
+
         words = client.operation("Repository.Query").param("query", "SELECT * FROM Document WHERE ecm:primaryType = 'FVWord' AND fva:dialect = '" + dialect +"'")
                 .execute();
 
-        categories = client.operation("Repository.Query").param("query", "SELECT * FROM Document WHERE ecm:primaryType = 'FVCategory' AND fva:dialect = '" + dialect+"'")
+        categories = client.operation("Repository.Query").param("query", "SELECT * FROM FVCategory WHERE ecm:ancestorId = '" + categories_directory_id + "'AND ecm:isTrashed = 0 AND ecm:isVersion = 0")
                 .execute();
 
         shared_categories = client.operation("Repository.Query").param("query", "SELECT * FROM FVCategory WHERE fva:dialect IS NULL AND ecm:isTrashed = 0 AND ecm:isVersion = 0")
                 .execute();
 
+
+
     }
 
     private void checkCategoryExists(String w, int line){
-        Boolean match;
+        Boolean match = false;
         String temp[];
 
         if(w.contains(",")) {
             temp = w.split(",");
             for (String word: temp) {
-                match = false;
 
                 // Fail on space between categories
                 if (word.startsWith(" ")) {
@@ -199,7 +212,8 @@ public class CsvValidator{
 
                 if(!word.isEmpty()){
                     for (Document d:categories.getDocuments()) {
-                        if(word.equals(d.getTitle())) {
+                        String title = d.getTitle();
+                        if(word.contentEquals(title)) {
                             match = true;
                             break;
                         }
@@ -207,7 +221,7 @@ public class CsvValidator{
 
                     for (Document d:shared_categories.getDocuments()) {
                         String title = d.getTitle();
-                        if(word.equals(d.getTitle())) {
+                        if(word.contentEquals(title)) {
                             match = true;
                             break;
                         }
@@ -219,9 +233,9 @@ public class CsvValidator{
             }
         }
         else if(!w.isEmpty()){
-            match = false;
             for (Document d:categories.getDocuments()) {
-                if(w.equals(d.getTitle())) {
+                String title = d.getTitle();
+                if(w.contentEquals(title)) {
                     match = true;
                     break;
                 }
@@ -229,7 +243,7 @@ public class CsvValidator{
 
             for (Document d:shared_categories.getDocuments()) {
                 String title = d.getTitle();
-                if(w.equals(d.getTitle())) {
+                if(w.contentEquals(title)) {
                     match = true;
                     break;
                 }
