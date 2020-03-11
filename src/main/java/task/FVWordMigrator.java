@@ -67,7 +67,7 @@ public class FVWordMigrator extends AbstractMigrator {
             wordMigrator.setReader(reader);
         }
 
-        CsvValidator csvVal = new CsvValidator(url, username, password, csvFile, dialectID);
+        CsvValidator csvVal = new CsvValidator(url, username, password, csvFile, dialectID, languagePath);
         List<String> valid = csvVal.validate(blobDataPath, limit);
 
         if(valid.isEmpty() || skipValidation)

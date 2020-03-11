@@ -5,6 +5,7 @@ import org.nuxeo.client.NuxeoClient;
 import org.nuxeo.client.cache.ResultCacheInMemory;
 import org.nuxeo.client.objects.Document;
 import org.nuxeo.client.objects.Documents;
+import org.nuxeo.client.objects.Repository;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -44,7 +45,7 @@ public class CsvValidator{
     private static final Set<String> POS = new HashSet<>(Arrays.asList(POS_VALUES));
 
 
-    public CsvValidator(String nuxeoUrl, String nuxeoUser, String nuxeoPassword, String csvFile, String dialectID) throws IOException{
+    public CsvValidator(String nuxeoUrl, String nuxeoUser, String nuxeoPassword, String csvFile, String dialectID, String languagePath) throws IOException{
 
         if (csvFile != null && !csvFile.isEmpty()) {
             fileReader = new InputStreamReader(new FileInputStream(csvFile), "UTF-8");
@@ -62,7 +63,14 @@ public class CsvValidator{
         t_or_f.add("CHILD_FRIENDLY");
         t_or_f.add("_SHARED_WITH_OTHER_DIALECTS");
         t_or_f.add("_CHILD_FOCUSED");
-
+        
+        // If path to language is given as a parameter then get the ID and set dialectID to that ID
+        if ( languagePath != null ) {
+            Repository repository = client.repository();
+            Document folder = repository.fetchDocumentByPath("/FV/Workspaces/Data/" + languagePath);
+            dialectID = folder.getUid();
+        }
+        
         getData(dialectID);
     }
 
