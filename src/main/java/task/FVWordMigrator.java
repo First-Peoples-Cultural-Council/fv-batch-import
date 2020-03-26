@@ -5,15 +5,16 @@ import mappers.CsvMapper;
 import mappers.CsvValidator;
 import mappers.firstvoices.BinaryMapper;
 import mappers.firstvoices.WordMapper;
-import reader.AbstractReader;
-import reader.CsvReader;
 import org.apache.commons.cli.ParseException;
 import org.nuxeo.client.NuxeoClient;
 import org.nuxeo.client.objects.Document;
+import reader.AbstractReader;
+import reader.CsvReader;
 
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.List;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -68,12 +69,12 @@ public class FVWordMigrator extends AbstractMigrator {
         }
 
         CsvValidator csvVal = new CsvValidator(url, username, password, csvFile, dialectID, languagePath);
-        List<String> valid = csvVal.validate(blobDataPath, limit);
+        HashMap<String, ArrayList<String>> valid = csvVal.validate(blobDataPath, limit);
 
         if(valid.isEmpty() || skipValidation)
             wordMigrator.process(url, username, password, "/" + domain + "/Workspaces/");
         else
-            System.out.println(valid);
+            csvVal.printInvalidEntries();
 
         csvVal.close();
     }

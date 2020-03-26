@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 
 public class CsvValidator{
 
-    protected List<String> invalid = new ArrayList<>();
+    protected HashMap<String, ArrayList<String>> invalid = new HashMap<>();
     protected List<String> t_or_f = new ArrayList<>();
     protected InputStreamReader fileReader;
     protected CSVReader csvReader;
@@ -46,7 +46,6 @@ public class CsvValidator{
 
 
     public CsvValidator(String nuxeoUrl, String nuxeoUser, String nuxeoPassword, String csvFile, String dialectID, String languagePath) throws IOException{
-
         if (csvFile != null && !csvFile.isEmpty()) {
             fileReader = new InputStreamReader(new FileInputStream(csvFile), "UTF-8");
             csvReader = new CSVReader(fileReader, ',', '"', '\0');
@@ -74,7 +73,7 @@ public class CsvValidator{
         getData(dialectID);
     }
 
-    public List<String> validate(String path, int limit) throws IOException{
+    public HashMap<String, ArrayList<String>> validate(String path, int limit) throws IOException{
 
         String header[] = csvReader.readNext();
         String fileTypes[] = {"AUDIO", "VIDEO", "IMG"};
@@ -104,8 +103,9 @@ public class CsvValidator{
                     checkCategoryExists(word, lineNumber);
 
                 if(t_or_f.contains(headerTemp) && !word.equals("")){
-                    if(!TFVALUES.contains(word))
-                        invalid.add(header[wordCount] + " can only have true or false values: line " +lineNumber +", " +word);
+                    if(!TFVALUES.contains(word)) {
+                        addToInvalid("Invalid Types", "Only true/false allowed, but found " + word + " in Column " + header[wordCount] +", " +"Line " + lineNumber);
+                    }
                 }
 
                 if(header[wordCount].endsWith("_FILENAME") && !word.equals("")){
@@ -119,10 +119,11 @@ public class CsvValidator{
 
 //                      Check that the number of previously read files matches the number in the heading
 //                      Disable if Team is leaving out AUDIO_FILENAME intentionally
-                            if(files_read.get(title) != num-1)
-                                invalid.add(header[wordCount] +" is given without other number files: line " +lineNumber +", " +word);
-                            else
+                            if(files_read.get(title) != num-1) {
+                                addToInvalid("File number Mismatch", header[wordCount] +" is given without other number files: line " +lineNumber +", " +word);
+                            } else {
                                 files_read.put(title, num);
+                            }
                         }
                     }
                     else
@@ -148,31 +149,34 @@ public class CsvValidator{
     }
 
     private void checkFileExists(String path, String header, int line, String word ){
-        File temp = new File(path);
+        File temp = new File(path.trim());
         File temp_with_mp3 = new File(path.replace("wav", "mp3"));
 
         if(!temp.exists()){
             if (temp_with_mp3.exists()){
-                invalid.add("Wrong extension for file: " + header +", " +"line " +line +", " +word);
+                addToInvalid("Audio Issues", "Wrong extension for file " + word + " in Column " + header +", " +"Line " + (line+1));
             } else {
-                invalid.add("Unable to find file: " + header +", " +"line " +line +", " +word);
+                addToInvalid("Audio Issues", "Missing file " + word + " in Column " + header +", " +"Line " + (line+1));
             }
         }
     }
 
     private void checkPartsOfSpeech(String pos, int line)throws IOException{
         String temppos = pos.toLowerCase();
-        if(!temppos.equals(pos))
-            invalid.add("Parts of speech must be written in lowercase: line " + line + ", "+pos);
+        if(!temppos.equals(pos)) {
+            addToInvalid("Parts of Speech", "Parts of speech must be written in lowercase: line " + (line + 1) + ", "+pos);
+        }
         temppos = temppos.replaceAll("/ -(),", "_");
-        if(!POS.contains(temppos))
-            invalid.add("Only existing parts of speech are supported: line " + line + ", "+pos);
-
+        if(!POS.contains(temppos)) {
+            addToInvalid("Parts of Speech", "Only existing parts of speech are supported: line " + (line + 1) + ", "+pos);
+        }
     }
 
     private void checkUserExists(String user, int line) throws IOException{
-        if(user.equals(""))
-            invalid.add("Username must be filled in: line " +line +", " +user);
+        if(user.equals("")) {
+            addToInvalid("Missing required fields", "Username must be filled in: line " + (line +1) +", " +user);
+        }
+
 
         //Document doc  = (Document) session.newRequest("Document.Fetch").set("value", "/FV/workspaces/Data/TestLanguageFamily/TestLanguage/TestDialect_1").execute();
         //doc = (Document) session.newRequest("Document.GetUsersAndGroups").input(doc).set("permission", "edit").set("variable name", "usrs").execute();
@@ -236,8 +240,9 @@ public class CsvValidator{
                         }
                     }
 
-                    if(!match)
-                        invalid.add("Only existing categories are supported: line " + (line) +", " +word);
+                    if(!match) {
+                        addToInvalid("Missing Categories", "Only existing categories allowed: " + word + " in line " + (line + 1));
+                    }
                 }
             }
         }
@@ -258,15 +263,16 @@ public class CsvValidator{
                 }
             }
 
-            if(!match)
-                invalid.add("Only existing categories are supported, ensure no spaces between categories: line " + (line) +", " +w);
+            if(!match) {
+                addToInvalid("Missing Categories", "Only existing categories allowed. Check for spaces between categories: " + w + " in line " + (line + 1));
+            }
         }
     }
 
     private void checkWordDuplicate(String word, int line){
         for (Document d:words.getDocuments()) {
             if(d.getTitle().equals(word)){
-                invalid.add("Cannot upload duplicate words: line " + (line) +", " +d.getTitle());
+                addToInvalid("Duplicates", "Cannot upload duplicate words: line " + (line + 1) +", " +d.getTitle());
             }
         }
     }
@@ -274,6 +280,25 @@ public class CsvValidator{
     public void close()throws IOException{
         csvReader.close();
         client.disconnect();
+    }
+
+    private void addToInvalid(String key, String errorValue) {
+        if (!invalid.containsKey(key)) {
+            invalid.put(key, new ArrayList<>());
+        }
+
+        ArrayList<String> currentValuesInKey = invalid.get(key);
+        currentValuesInKey.add(errorValue);
+        invalid.put(key, currentValuesInKey);
+    }
+
+    public void printInvalidEntries() {
+        for (Map.Entry<String, ArrayList<String>> entry : invalid.entrySet()) {
+            System.out.println(entry.getKey());
+            for (String error : entry.getValue()) {
+                System.out.println(" -> " + error);
+            }
+        }
     }
 
 }
