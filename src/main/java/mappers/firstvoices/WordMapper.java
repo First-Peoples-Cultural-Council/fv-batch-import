@@ -110,7 +110,7 @@ public class WordMapper extends CsvMapper {
 	    		publishDocument(result);
 			}*/
 		} else {
-		    System.out.println("Result exists. Skipping.");
+		    throw new IOException("Results exist in DB. Skipping.");
         }
 
 		if (depth == 1) {
