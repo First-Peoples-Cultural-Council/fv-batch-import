@@ -109,8 +109,8 @@ public class CsvValidator{
 
                 // Disable if duplicate words need to be added as well as WordMapper line 123 and below
                 // This checks for duplicates against the remote DB, not within the CSV
-//                if(columnHeader.equals("WORD"))
-//                    checkWordDuplicate(column, lineNumber);
+                if(columnHeader.equals("WORD"))
+                    checkWordDuplicate(column, lineNumber);
 
                 if(columnHeader.equals("CATEGORIES"))
                     checkCategoryExists(column, lineNumber);
