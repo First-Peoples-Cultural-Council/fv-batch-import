@@ -74,45 +74,58 @@ public class CsvValidator{
     }
 
     public HashMap<String, ArrayList<String>> validate(String path, int limit) throws IOException{
-
         String header[] = csvReader.readNext();
         String fileTypes[] = {"AUDIO", "VIDEO", "IMG"};
         String nextLine[];
         Map<String, Integer> files_read = new HashMap<>();
         int lineNumber = 0;
-        String headerTemp;
+        String columnHeader;
 
-        while((nextLine = csvReader.readNext()) != null){
+        Map<String, String[]> rowsProcessed = new TreeMap<String, String[]>();
+
+        while((nextLine = csvReader.readNext()) != null) {
             files_read.clear();
-            int wordCount=0;
+            int columnCount=0;
             lineNumber++;
-            for (String word: nextLine) {
 
-                headerTemp= header[wordCount];
+            // Add to rows processed if not a duplicate
+            if (!rowsProcessed.containsKey(nextLine[0])) {
+                rowsProcessed.put(nextLine[0], nextLine);
+            }
+            // This is a duplicate within the CSV file - mark as such
+            else {
+                addToInvalid("Duplicates", "Cannot upload duplicate words in CSV: line " + (lineNumber + 1) +", " + nextLine[0]);
+            }
+
+            // Review column values for each row
+            for (String column : nextLine) {
+
+                columnHeader = header[columnCount];
 
                 for (String type: fileTypes) {
-                    if(header[wordCount].startsWith(type))
-                        headerTemp = header[wordCount].substring(type.length());
+                    if(header[columnCount].startsWith(type))
+                        columnHeader = header[columnCount].substring(type.length());
                 }
 
-// Disable if duplicate words need to be added as well as WordMapper line 123 and below
-                if(headerTemp.equals("WORD"))
-                    checkWordDuplicate(word, lineNumber);
+                // Disable if duplicate words need to be added as well as WordMapper line 123 and below
+                // This checks for duplicates against the remote DB, not within the CSV
+                if(columnHeader.equals("WORD"))
+                    checkWordDuplicate(column, lineNumber);
 
-                if(headerTemp.equals("CATEGORIES"))
-                    checkCategoryExists(word, lineNumber);
+                if(columnHeader.equals("CATEGORIES"))
+                    checkCategoryExists(column, lineNumber);
 
-                if(t_or_f.contains(headerTemp) && !word.equals("")){
-                    if(!TFVALUES.contains(word)) {
-                        addToInvalid("Invalid Types", "Only true/false allowed, but found " + word + " in Column " + header[wordCount] +", " +"Line " + lineNumber);
+                if(t_or_f.contains(columnHeader) && !column.equals("")){
+                    if(!TFVALUES.contains(column)) {
+                        addToInvalid("Invalid Types", "Only true/false allowed, but found " + column + " in Column " + header[columnCount] +", " +"Line " + lineNumber);
                     }
                 }
 
-                if(header[wordCount].endsWith("_FILENAME") && !word.equals("")){
-                    checkFileExists(path+word, header[wordCount], lineNumber, word);
-                    if(header[wordCount].matches(".*\\d+.*")){
+                if(header[columnCount].endsWith("_FILENAME") && !column.equals("")){
+                    checkFileExists(path+column, header[columnCount], lineNumber, column);
+                    if(header[columnCount].matches(".*\\d+.*")){
                         Pattern r = Pattern.compile("(.*)(\\d+)(.*)");
-                        Matcher m = r.matcher(header[wordCount]);
+                        Matcher m = r.matcher(header[columnCount]);
                         if(m.matches()) {
                             String title = m.group(1);
                             int num = Integer.parseInt(m.group(2));
@@ -120,24 +133,23 @@ public class CsvValidator{
 //                      Check that the number of previously read files matches the number in the heading
 //                      Disable if Team is leaving out AUDIO_FILENAME intentionally
                             if(files_read.get(title) != num-1) {
-                                addToInvalid("File number Mismatch", header[wordCount] +" is given without other number files: line " +lineNumber +", " +word);
+                                addToInvalid("File number Mismatch", header[columnCount] +" is given without other number files: line " +lineNumber +", " +column);
                             } else {
                                 files_read.put(title, num);
                             }
                         }
                     }
                     else
-                        files_read.put(header[wordCount].substring(0,header[wordCount].indexOf("FILENAME")), 1);
+                        files_read.put(header[columnCount].substring(0,header[columnCount].indexOf("FILENAME")), 1);
                 }
 //                Disable part of speech look-up since it's hardcoded
 //                if(headerTemp.equals("PART_OF_SPEECH"))
 //                    checkPartsOfSpeech(word, lineNumber);
 
-                if(headerTemp.equals("USERNAME"))
-                    checkUserExists(word, lineNumber);
+                if(columnHeader.equals("USERNAME"))
+                    checkUserExists(column, lineNumber);
 
-                wordCount++;
-
+                columnCount++;
             }
 
             // If limit is reached, skip the next iteration
@@ -269,6 +281,11 @@ public class CsvValidator{
         }
     }
 
+    /**
+     * This will check against the words that already exist in the FirstVoices database
+     * @param word
+     * @param line
+     */
     private void checkWordDuplicate(String word, int line){
         for (Document d:words.getDocuments()) {
             if(d.getTitle().equals(word)){
