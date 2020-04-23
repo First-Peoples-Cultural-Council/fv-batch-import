@@ -100,6 +100,12 @@ public class CsvValidator{
             // Review column values for each row
             for (String column : nextLine) {
 
+                // Check for a mismatch between HEADER columns and ROW COLUMNS
+                if (columnCount >= header.length) {
+                    addToInvalid("Header/Row Mismatch", "Found more data than expected on Line " + (lineNumber + 1) + " (expecting " + header.length + " values)" );
+                    break;
+                }
+
                 columnHeader = header[columnCount];
 
                 for (String type: fileTypes) {
@@ -117,7 +123,7 @@ public class CsvValidator{
 
                 if(t_or_f.contains(columnHeader) && !column.equals("")){
                     if(!TFVALUES.contains(column)) {
-                        addToInvalid("Invalid Types", "Only true/false allowed, but found " + column + " in Column " + header[columnCount] +", " +"Line " + lineNumber);
+                        addToInvalid("Invalid Types", "Only true/false allowed, but found " + column + " in Column " + header[columnCount] +", " +"Line " + (lineNumber + 1));
                     }
                 }
 
@@ -133,7 +139,7 @@ public class CsvValidator{
 //                      Check that the number of previously read files matches the number in the heading
 //                      Disable if Team is leaving out AUDIO_FILENAME intentionally
                             if(files_read.get(title) != num-1) {
-                                addToInvalid("File number Mismatch", header[columnCount] +" is given without other number files: line " +lineNumber +", " +column);
+                                addToInvalid("File number Mismatch", header[columnCount] +" is given without other number files: line " +(lineNumber + 1) +", " +column);
                             } else {
                                 files_read.put(title, num);
                             }
