@@ -33,16 +33,17 @@ Run `mvn clean install` to generate the jar file (will be in target/fv-batch-imp
 
 To execute the batch upload for words, for example, run the following command:
 
-```java -Xmx1g -jar target/fv-batch-import-1.0.0.jar \
-        -url "http://localhost:8080/nuxeo"
-        -username YOUR_USER
-        -domain FV
-        -dialect-id 00f00f0-aef0-468f-adc7-d0e00000d09
-        -csv-file
-        /path/to/csv/words.csv
-        -data-path
-        /path/to/media/files/
-        -password
+```
+java -Xmx1g -jar target/fv-batch-import-1.0.0.jar \
+    -url "http://localhost:8080/nuxeo"
+    -username YOUR_USER
+    -domain FV
+    -dialect-id 00f00f0-aef0-468f-adc7-d0e00000d09
+    -csv-file
+    /path/to/csv/words.csv
+    -data-path
+    /path/to/media/files/
+    -password
 ```
 
 You will be promoted for a password once you run the command.
