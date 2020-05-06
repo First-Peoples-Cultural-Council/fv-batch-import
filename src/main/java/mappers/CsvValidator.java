@@ -29,7 +29,7 @@ public class CsvValidator{
         add("true");
         add("false");
     }};
-    protected Documents categories;
+    protected Documents categories = null;
     protected Documents shared_categories;
 
     protected Documents words;
@@ -75,6 +75,10 @@ public class CsvValidator{
 
     public HashMap<String, ArrayList<String>> validate(String path, int limit) throws IOException{
         String header[] = csvReader.readNext();
+        LinkedList<String> headerList = new LinkedList<String>(Arrays.asList(header));
+
+        headerList.removeIf(item -> item == null || "".equals(item));
+
         String fileTypes[] = {"AUDIO", "VIDEO", "IMG"};
         String nextLine[];
         Map<String, Integer> files_read = new HashMap<>();
@@ -101,8 +105,8 @@ public class CsvValidator{
             for (String column : nextLine) {
 
                 // Check for a mismatch between HEADER columns and ROW COLUMNS
-                if (columnCount >= header.length) {
-                    addToInvalid("Header/Row Mismatch", "Found more data than expected on Line " + (lineNumber + 1) + " (expecting " + header.length + " values)" );
+                if (columnCount >= headerList.size()) {
+                    addToInvalid("Header/Row Mismatch", "Found more data than expected on Line " + (lineNumber + 1) + " (expecting " + headerList.size() + " values)" );
                     break;
                 }
 
@@ -118,7 +122,7 @@ public class CsvValidator{
                 if(columnHeader.equals("WORD"))
                     checkWordDuplicate(column, lineNumber);
 
-                if(columnHeader.equals("CATEGORIES"))
+                if(columnHeader.equals("CATEGORIES") && categories != null)
                     checkCategoryExists(column, lineNumber);
 
                 if(t_or_f.contains(columnHeader) && !column.equals("")){
@@ -212,13 +216,15 @@ public class CsvValidator{
                 "AND ecm:isVersion = 0")
                 .execute();
         List<Document> documentsList = dialect_categories_directory.streamEntries().collect(Collectors.toList());
-        Document categories_directory = documentsList.get(0);
-        String categories_directory_id = categories_directory.getId();
+
+        if (documentsList.size() > 0) {
+            Document categories_directory = documentsList.get(0);
+            String categories_directory_id = categories_directory.getId();
+            categories = client.operation("Repository.Query").param("query", "SELECT * FROM FVCategory WHERE ecm:ancestorId = '" + categories_directory_id + "'AND ecm:isTrashed = 0 AND ecm:isVersion = 0")
+                .execute();
+        }
 
         words = client.operation("Repository.Query").param("query", "SELECT * FROM Document WHERE ecm:primaryType = 'FVWord' AND fva:dialect = '" + dialect +"'")
-                .execute();
-
-        categories = client.operation("Repository.Query").param("query", "SELECT * FROM FVCategory WHERE ecm:ancestorId = '" + categories_directory_id + "'AND ecm:isTrashed = 0 AND ecm:isVersion = 0")
                 .execute();
 
         shared_categories = client.operation("Repository.Query").param("query", "SELECT * FROM FVCategory WHERE fva:dialect IS NULL AND ecm:isTrashed = 0 AND ecm:isVersion = 0")
