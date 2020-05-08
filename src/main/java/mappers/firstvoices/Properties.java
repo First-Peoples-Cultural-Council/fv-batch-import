@@ -36,7 +36,7 @@ public final class Properties {
     // fvl
     public static final String ASSIGNED_USR_ID = "fvl:assigned_usr_id";
     public static final String CHANGE_DTTM = "fvl:change_date";
-    public static final String IMPORT_ID = "fvl:import_id";
+    public static final String IMPORT_ID = "fvl:import_id-v2";
     public static final String MEDIA_STATUS = "fvl:status_id";
     public static final String STATUS_ID = "fvl:status_id";
     // fvm
