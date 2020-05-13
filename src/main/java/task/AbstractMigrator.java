@@ -93,6 +93,9 @@ public abstract class AbstractMigrator {
     @Parameter(names = { "-skipValidation" }, description = "Allows you to skip the validation and process valid records")
     protected static Boolean skipValidation = false;
 
+  @Parameter(names = { "-localCategories" }, description = "Allows you to skip the validation and process valid records")
+  protected static Boolean localCategories = false;
+
 
     protected AbstractMigrator(AbstractReader reader) {
 		this.reader = reader;

@@ -76,7 +76,17 @@ public abstract class CsvMapper {
 		return dialectID;
 	}
 
+	public void setLocalCategories(Boolean localCategories) {
+		this.localCategories = localCategories;
+	}
+
+	public static Boolean isLocalCategories() {
+		return localCategories;
+	}
+
 	protected static String dialectID;
+
+	protected static Boolean localCategories;
 
 	/**
 	 * By default not caching anything

@@ -81,3 +81,6 @@ The optional "-language-path" parameter will override the "-dialect-id" paramete
 
 -skipValidation = "Allows you to skip the validation and process valid records")
     protected static Boolean skipValidation = false;
+    
+-localCategories = "Allows you to specify use of local dialect categories for word uploads"
+    protected static Boolean localCategories = false;

@@ -79,6 +79,8 @@ public class WordMapper extends CsvMapper {
 	protected Document createDocument(Document doc, Integer depth) throws IOException {
         Document result = getFromCache(doc);
 
+        System.out.println("Creating Document of type '" + doc.getType() + "': " + doc.getName());
+
 		if (!fakeCreation && result == null) {
 
 		    // Set some defaults for words if they are not defined
