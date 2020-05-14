@@ -92,7 +92,7 @@ public class CsvValidator{
             int columnCount=0;
             lineNumber++;
 
-            // Add to rows processed if not a duplicate
+            // Add to rows processed if not a duplicate --- Comment out line 96 and 98-102 if duplicates wanted
             if (!rowsProcessed.containsKey(nextLine[0])) {
                 rowsProcessed.put(nextLine[0], nextLine);
             }
