@@ -47,6 +47,9 @@ public class FVWordMigrator extends AbstractMigrator {
         Map<String, Document> docs = getOrCreateLanguageDocument(client, reader);
         docs.put("parent", docs.get("Dictionary"));
 
+        // Set sharedCategoriesID for use by CategoryMapper
+        mapper.setSharedCategoriesID(sharedCategoriesID);
+
         try {
             Document wordDoc = mapper.process(docs, client, reader);
         } catch (IOException e) {

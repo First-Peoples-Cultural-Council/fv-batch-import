@@ -38,11 +38,13 @@ public class CategoryMapper extends DictionaryCachedMapper {
       Document categoriesDirectory = documentsList.get(0);
       String categoriesDirectoryId = categoriesDirectory.getId();
       return "SELECT * FROM FVCategory WHERE ecm:ancestorId = '" + categoriesDirectoryId
-          + "'AND ecm:isTrashed = 0 AND ecm:isVersion = 0";
+          + "'AND ecm:isTrashed = 0 AND ecm:isVersion = 0 AND ecm:isProxy = 0";
     }
+    String sharedCategoriesID = getSharedCategoriesID();
 
     /* Else return query for shared categories */
-    return "SELECT * FROM FVCategory WHERE fva:dialect IS NULL AND ecm:isTrashed = 0 AND ecm:isVersion = 0";
+    return "SELECT * FROM FVCategory WHERE ecm:ancestorId = '" + sharedCategoriesID
+        + "'AND ecm:isTrashed = 0 AND ecm:isVersion = 0 AND ecm:isProxy = 0";
 
   }
 
