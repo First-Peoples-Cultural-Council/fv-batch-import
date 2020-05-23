@@ -31,7 +31,7 @@ public class PropertyReader {
 		if (value == null || value.toString().isEmpty()) {
 			return;
 		}
-		System.out.println("Setting value: '" + property + "' to '" + value + "' on doc '" + doc.getName() + "'");
+		System.out.println("   * Setting value: '" + property + "' to '" + value + "' on doc '" + doc.getName() + "'");
 		doc.setPropertyValue(property, value);
 	}
 
@@ -39,7 +39,7 @@ public class PropertyReader {
 		if (value == null || value.toString().isEmpty()) {
 			return;
 		}
-		System.out.println("Setting value: '" + property + "' to '" + value.toString() + "' on doc '" + doc.getName() + "'");
+		System.out.println("   * Setting value: '" + property + "' to '" + value.toString() + "' on doc '" + doc.getName() + "'");
 		doc.setPropertyValue(property, value);
 	}
 

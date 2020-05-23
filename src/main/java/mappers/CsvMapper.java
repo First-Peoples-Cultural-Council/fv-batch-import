@@ -4,6 +4,12 @@
 package mappers;
 
 import common.ConsoleLogger;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.LinkedHashSet;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
 import mappers.firstvoices.Columns;
 import mappers.firstvoices.Properties;
 import mappers.propertyreaders.PropertyReader;
@@ -12,10 +18,6 @@ import org.nuxeo.client.NuxeoClient;
 import org.nuxeo.client.objects.Document;
 import org.nuxeo.client.objects.Documents;
 import reader.AbstractReader;
-
-import java.io.IOException;
-import java.util.*;
-import java.util.Map.Entry;
 
 /**
  * @author loopingz
@@ -68,15 +70,36 @@ public abstract class CsvMapper {
 
 	protected static String globalUsername;
 
-	public void setDialectID(String dialectID) {
-		this.dialectID = dialectID;
-	}
+  protected static String dialectID;
 
-	public static String getDialectID() {
-		return dialectID;
-	}
+  protected static Boolean localCategories;
 
-	protected static String dialectID;
+  protected static String sharedCategoriesID;
+
+
+  public void setDialectID(String dialectID) {
+    CsvMapper.dialectID = dialectID;
+  }
+
+  public static String getDialectID() {
+    return dialectID;
+  }
+
+  public void setLocalCategories(Boolean localCategories) {
+    CsvMapper.localCategories = localCategories;
+  }
+
+  public static Boolean isLocalCategories() {
+    return localCategories;
+  }
+
+  public void setSharedCategoriesID(String sharedCategoriesID) {
+    CsvMapper.sharedCategoriesID = sharedCategoriesID;
+  }
+
+  public static String getSharedCategoriesID() {
+    return sharedCategoriesID;
+  }
 
 	/**
 	 * By default not caching anything

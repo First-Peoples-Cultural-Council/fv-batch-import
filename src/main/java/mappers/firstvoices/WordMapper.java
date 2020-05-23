@@ -79,6 +79,8 @@ public class WordMapper extends CsvMapper {
 	protected Document createDocument(Document doc, Integer depth) throws IOException {
         Document result = getFromCache(doc);
 
+        System.out.println("Creating Document of type '" + doc.getType() + "': " + doc.getName());
+
 		if (!fakeCreation && result == null) {
 
 		    // Set some defaults for words if they are not defined
@@ -119,7 +121,7 @@ public class WordMapper extends CsvMapper {
 		return result;
 	}
 
-	// To upload duplicates comment out the code below this line, as well as CsvValidator line 88,  and -skipvalidation
+	// To upload duplicates comment out the code below this line, as well as CsvValidator line 96 and 122-123,  and -skipvalidation
     @Override
     protected void cacheDocument(Document doc) {
         cache.put(doc.getPropertyValue(Properties.TITLE), doc);

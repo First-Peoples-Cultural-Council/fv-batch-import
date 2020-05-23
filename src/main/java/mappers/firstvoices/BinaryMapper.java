@@ -72,7 +72,7 @@ public abstract class BinaryMapper extends DictionaryCachedMapper {
 
             // Set Properties that are derived from other properties, if _TITLE is not specified
             if (reader.getString(getPrefix() + "_" + Columns.TITLE).isEmpty()) {
-                System.out.println("Setting value: '" + Properties.TITLE + "' to '" + file.getName() + "'");
+                System.out.println("   * Setting value: '" + Properties.TITLE + "' to '" + file.getName() + "'");
                 doc.setPropertyValue(Properties.TITLE, file.getName());
             }
 
@@ -113,7 +113,7 @@ public abstract class BinaryMapper extends DictionaryCachedMapper {
 
         documents.get("current").setPropertyValue(linkKey, binaryIds);
 
-        System.out.println("Setting value: '" + linkKey + "' to doc: '" + binaryDoc.getTitle() + "'");
+        System.out.println("   * Setting value: '" + linkKey + "' to doc: '" + binaryDoc.getTitle() + "'");
 
         return binaryDoc;
     }
