@@ -40,10 +40,9 @@ public class CategoryMapper extends DictionaryCachedMapper {
       return "SELECT * FROM FVCategory WHERE ecm:ancestorId = '" + categoriesDirectoryId
           + "'AND ecm:isTrashed = 0 AND ecm:isVersion = 0 AND ecm:isProxy = 0";
     }
-    String sharedCategoriesID = getSharedCategoriesID();
 
     /* Else return query for shared categories */
-    return "SELECT * FROM FVCategory WHERE ecm:ancestorId = '" + sharedCategoriesID
+    return "SELECT * FROM FVCategory WHERE ecm:ancestorId = '" + getSharedCategoriesID()
         + "'AND ecm:isTrashed = 0 AND ecm:isVersion = 0 AND ecm:isProxy = 0";
 
   }

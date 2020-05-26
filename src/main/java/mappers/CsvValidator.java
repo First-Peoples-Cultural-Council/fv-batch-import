@@ -220,14 +220,14 @@ public class CsvValidator{
         if (documentsList.size() > 0) {
             Document categories_directory = documentsList.get(0);
             String categories_directory_id = categories_directory.getId();
-            categories = client.operation("Repository.Query").param("query", "SELECT * FROM FVCategory WHERE ecm:ancestorId = '" + categories_directory_id + "'AND ecm:isTrashed = 0 AND ecm:isVersion = 0")
+            categories = client.operation("Repository.Query").param("query", "SELECT * FROM FVCategory WHERE ecm:ancestorId = '" + categories_directory_id + "'AND ecm:isTrashed = 0 AND ecm:isVersion = 0 AND ecm:isProxy = 0")
                 .execute();
         }
 
-        words = client.operation("Repository.Query").param("query", "SELECT * FROM FVWord WHERE fva:dialect = '" + dialect +"' AND ecm:isTrashed = 0 AND ecm:isVersion = 0")
+        words = client.operation("Repository.Query").param("query", "SELECT * FROM FVWord WHERE fva:dialect = '" + dialect + "' AND ecm:isTrashed = 0 AND ecm:isVersion = 0")
                 .execute();
 
-        shared_categories = client.operation("Repository.Query").param("query", "SELECT * FROM FVCategory WHERE fva:dialect IS NULL AND ecm:isTrashed = 0 AND ecm:isVersion = 0")
+        shared_categories = client.operation("Repository.Query").param("query", "SELECT * FROM FVCategory WHERE fva:dialect IS NULL AND ecm:isTrashed = 0 AND ecm:isVersion = 0 AND ecm:isProxy = 0")
                 .execute();
 
 
