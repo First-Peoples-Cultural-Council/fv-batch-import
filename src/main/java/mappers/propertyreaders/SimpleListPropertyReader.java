@@ -35,10 +35,10 @@ public class SimpleListPropertyReader extends PropertyReader {
     return values;
   }
 //
-//	public String getJsonValue(AbstractReader reader) {
+//    public String getJsonValue(AbstractReader reader) {
 //
-//		return getValue(reader);
-//	}
+//        return getValue(reader);
+//    }
 
   public void read(Document document, AbstractReader reader) {
     setProperty(document, key, getValue(reader));

@@ -34,7 +34,8 @@ public class FirstVoicesMigrator extends AbstractMigrator {
   protected Map<String, Set<String>> existingWordsCache = new HashMap<String, Set<String>>();
   protected Map<String, String> contributorsCache = new HashMap<String, String>();
   protected Map<String, String> imagesCache = new HashMap<String, String>();
-  protected Map<String, Map<String, String>> existingPhrasesCache = new HashMap<String, Map<String, String>>();
+  protected Map<String, Map<String, String>> existingPhrasesCache = new HashMap<String,
+      Map<String, String>>();
 
   public FirstVoicesMigrator(CommandLine commandLine, AbstractReader reader) {
     super(reader);
@@ -145,7 +146,8 @@ public class FirstVoicesMigrator extends AbstractMigrator {
     // TODO Change it to the new returned columns
     Map<String, Document> docs = getOrCreateLanguageDocument(client, reader);
     System.out
-        .println("Get/Create Language: " + Long.valueOf(System.currentTimeMillis() - method_start));
+        .println(
+            "Get/Create Language: " + Long.valueOf(System.currentTimeMillis() - method_start));
     method_start = System.currentTimeMillis();
     if (checkWordCreated(importId, client, docs.get("Dictionary"))) {
       return;
@@ -640,7 +642,8 @@ public class FirstVoicesMigrator extends AbstractMigrator {
     File file = new File(binaryFilename);
     if (!file.exists()) {
       log.warning(
-          "Cant import non existing binary " + binaryFilename + " for record " + reader.printRow());
+          "Cant import non existing binary " + binaryFilename + " for record " + reader
+              .printRow());
       return null;
     }
     String binaryName = file.getName();

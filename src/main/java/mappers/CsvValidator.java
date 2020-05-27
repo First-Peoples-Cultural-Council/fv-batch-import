@@ -107,7 +107,8 @@ public class CsvValidator {
       int columnCount = 0;
       lineNumber++;
 
-      // Add to rows processed if not a duplicate --- Comment out line 96 and 98-102 if duplicates wanted
+      // Add to rows processed if not a duplicate --- Comment out line 96 and 98-102 if
+      // duplicates wanted
       if (!rowsProcessed.containsKey(nextLine[0])) {
         rowsProcessed.put(nextLine[0], nextLine);
       }
@@ -149,7 +150,8 @@ public class CsvValidator {
         if (t_or_f.contains(columnHeader) && !column.equals("")) {
           if (!TFVALUES.contains(column)) {
             addToInvalid("Invalid Types",
-                "Only true/false allowed, but found " + column + " in Column " + header[columnCount]
+                "Only true/false allowed, but found " + column + " in Column "
+                    + header[columnCount]
                     + ", " + "Line " + (lineNumber + 1));
           }
         }
@@ -163,7 +165,8 @@ public class CsvValidator {
               String title = m.group(1);
               int num = Integer.parseInt(m.group(2));
 
-//                      Check that the number of previously read files matches the number in the heading
+//                      Check that the number of previously read files matches the number in the
+//                      heading
 //                      Disable if Team is leaving out AUDIO_FILENAME intentionally
               if (files_read.get(title) != num - 1) {
                 addToInvalid("File number Mismatch",
@@ -232,8 +235,10 @@ public class CsvValidator {
           "Username must be filled in: line " + (line + 1) + ", " + user);
     }
 
-    //Document doc  = (Document) session.newRequest("Document.Fetch").set("value", "/FV/workspaces/Data/TestLanguageFamily/TestLanguage/TestDialect_1").execute();
-    //doc = (Document) session.newRequest("Document.GetUsersAndGroups").input(doc).set("permission", "edit").set("variable name", "usrs").execute();
+    //Document doc  = (Document) session.newRequest("Document.Fetch").set("value",
+    // "/FV/workspaces/Data/TestLanguageFamily/TestLanguage/TestDialect_1").execute();
+    //doc = (Document) session.newRequest("Document.GetUsersAndGroups").input(doc).set
+    // ("permission", "edit").set("variable name", "usrs").execute();
 
   }
 
@@ -266,7 +271,8 @@ public class CsvValidator {
         .execute();
 
     shared_categories = client.operation("Repository.Query").param("query",
-        "SELECT * FROM FVCategory WHERE fva:dialect IS NULL AND ecm:isTrashed = 0 AND ecm:isVersion = 0 AND ecm:isProxy = 0")
+        "SELECT * FROM FVCategory WHERE fva:dialect IS NULL AND ecm:isTrashed = 0 AND "
+            + "ecm:isVersion = 0 AND ecm:isProxy = 0")
         .execute();
 
 

@@ -162,23 +162,25 @@ public abstract class CsvMapper {
     return value.isEmpty();
   }
 
-  protected Document tagAndUpdateCreator(Document resultDoc, Document localDoc) throws IOException {
+  protected Document tagAndUpdateCreator(Document resultDoc, Document localDoc)
+      throws IOException {
     // Tag created document
     Document newResult = client.operation("Services.TagDocument").input(resultDoc)
         .param("tags", getTag()).execute();
 
-//		// Set username
-//		String username = (String) localDoc.getDirtyProperties().get(Properties.CREATOR);
-//		ArrayList<String> contributors = (ArrayList<String>) localDoc.getDirtyProperties().get(Properties.CONTRIBUTORS);
+//        // Set username
+//        String username = (String) localDoc.getDirtyProperties().get(Properties.CREATOR);
+//        ArrayList<String> contributors = (ArrayList<String>) localDoc.getDirtyProperties().get
+//        (Properties.CONTRIBUTORS);
 //
-//		// Update created document with creator / lastContributor (has to happen after creation)
-//		if (username != null) {
-//			resultDoc.setPropertyValue(Properties.CREATOR, username);
-//		}
+//        // Update created document with creator / lastContributor (has to happen after creation)
+//        if (username != null) {
+//            resultDoc.setPropertyValue(Properties.CREATOR, username);
+//        }
 //
-//		if (contributors != null) {
-//			resultDoc.setPropertyValue(Properties.CONTRIBUTORS, contributors);
-//		}
+//        if (contributors != null) {
+//            resultDoc.setPropertyValue(Properties.CONTRIBUTORS, contributors);
+//        }
 
     // Update creator and contributors fields
     if (!resultDoc.getDirtyProperties().isEmpty()) {
@@ -220,7 +222,8 @@ public abstract class CsvMapper {
 
   protected void publishDocument(Document doc) throws IOException {
     //doc.setPropertyValue("ecm:currentLifeCycleState", "Published");
-    //Document publishedDoc = (Document) client.newRequest("Document.Publish").input(doc).set("target", parent).execute();
+    //Document publishedDoc = (Document) client.newRequest("Document.Publish").input(doc).set
+    // ("target", parent).execute();
 
     try {
       client.operation("Document.FollowLifecycleTransition")
@@ -266,7 +269,7 @@ public abstract class CsvMapper {
     return propertyReaders;
   }
 
-	protected Document process(Map<String, Document> docs, NuxeoClient client, AbstractReader reader,
+  protected Document process(Map<String, Document> docs, NuxeoClient client, AbstractReader reader,
       Integer depth) throws IOException {
 
     if (getCSVReader() == null) {
@@ -309,7 +312,7 @@ public abstract class CsvMapper {
       mapper.process(docs, client, reader, depth + 1);
     }
     documents.put("current", currentDoc);
-//		doc = updateDocument(doc, depth);
+//        doc = updateDocument(doc, depth);
     ConsoleLogger.decreaseDepth();
     return doc;
   }

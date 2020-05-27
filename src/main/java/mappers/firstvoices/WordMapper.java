@@ -54,7 +54,8 @@ public class WordMapper extends CsvMapper {
     propertyReaders.add(new PropertyReader(Properties.TITLE, Columns.WORD));
     propertyReaders
         .add(new PartOfSpeechPropertyReader(Properties.PART_OF_SPEECH_ID, Columns.PART_OF_SPEECH));
-    propertyReaders.add(new SimpleListPropertyReader(Properties.ALTERNATE_SPELLINGS, spellingCols));
+    propertyReaders
+        .add(new SimpleListPropertyReader(Properties.ALTERNATE_SPELLINGS, spellingCols));
     propertyReaders.add(new SimpleListPropertyReader(Properties.CULTURAL_NOTE, culturalNoteCols));
     propertyReaders.add(new SimpleListPropertyReader(Properties.PLURAL, pluralCols));
     propertyReaders.add(new PropertyReader(Properties.PHONETIC_INFO, Columns.PHONETIC_INFO));
@@ -118,10 +119,12 @@ public class WordMapper extends CsvMapper {
       createdWords++;
       //cacheDocument(result);
 
-      // If the parent document exists in the section, go ahead and publish the current document to the section
-			/*if(documents.get("SECTION_" + parentKey) != null && "Enabled".equals(doc.getState())) {
-	    		publishDocument(result);
-			}*/
+      // If the parent document exists in the section, go ahead and publish the current document
+      // to the section
+            /*if(documents.get("SECTION_" + parentKey) != null && "Enabled".equals(doc.getState
+            ())) {
+                publishDocument(result);
+            }*/
     } else {
       throw new IOException("Skipped - Entry already exists in database.");
     }
@@ -132,7 +135,8 @@ public class WordMapper extends CsvMapper {
     return result;
   }
 
-  // To upload duplicates comment out the code below this line, as well as CsvValidator line 96 and 122-123,  and -skipvalidation
+  // To upload duplicates comment out the code below this line, as well as CsvValidator line 96
+  // and 122-123,  and -skipvalidation
   @Override
   protected void cacheDocument(Document doc) {
     cache.put(doc.getPropertyValue(Properties.TITLE), doc);

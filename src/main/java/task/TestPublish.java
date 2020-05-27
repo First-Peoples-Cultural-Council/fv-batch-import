@@ -63,7 +63,8 @@ public class TestPublish {
           Documents docs = client.operation("Repository.Query").schemas(
               "*")
               .param("query",
-                  "SELECT * FROM FVDialect WHERE  ecm:isProxy = 0 AND ecm:isCheckedInVersion = 0 AND ecm:currentLifeCycleState = 'Published' ORDER BY dc:title ASC")
+                  "SELECT * FROM FVDialect WHERE  ecm:isProxy = 0 AND ecm:isCheckedInVersion = 0"
+                      + " AND ecm:currentLifeCycleState = 'Published' ORDER BY dc:title ASC")
               .param("currentPageIndex", 0).param("pageSize", 100).execute();
 
           int i;
@@ -75,7 +76,8 @@ public class TestPublish {
               Documents words = client.operation("Repository.Query").schemas(
                   "*")
                   .param("query",
-                      "SELECT * FROM FVWord WHERE ecm:isProxy = 0 AND ecm:currentLifeCycleState = 'Enabled' AND fva:dialect = '"
+                      "SELECT * FROM FVWord WHERE ecm:isProxy = 0 AND ecm:currentLifeCycleState "
+                          + "= 'Enabled' AND fva:dialect = '"
                           + docs.getDocument(i).getId() + "' ORDER BY dc:title ASC")
                   .param("currentPageIndex", 0).execute();
 
@@ -108,7 +110,7 @@ public class TestPublish {
         }
 
         //if (results != null && results.size() > 0) {
-        //	System.out.println((int) results.get(0).get("COUNT(ecm:uuid)"));
+        //    System.out.println((int) results.get(0).get("COUNT(ecm:uuid)"));
         //}
       } catch (NuxeoClientException e) {
         e.printStackTrace();

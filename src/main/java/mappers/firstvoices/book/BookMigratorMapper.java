@@ -72,17 +72,19 @@ public class BookMigratorMapper extends DictionaryCachedMapper {
 
       cacheDocument(result);
 
-      // If the parent document exists in the section, go ahead and publish the current document to the section
+      // If the parent document exists in the section, go ahead and publish the current document
+      // to the section
       //if(documents.get("SECTION_" + parentKey) != null) {
       publishDocument(result);
       //}
     }
     // Book was found in the cache
-//		else {
-//			ConsoleLogger.out("Book found in cache: " + result.getId() + " - updating.");
-//			result = (Document) session.newRequest("Document.Update").input(result).param("properties", doc).execute();
-//			updatedBooks++;
-//		}
+//        else {
+//            ConsoleLogger.out("Book found in cache: " + result.getId() + " - updating.");
+//            result = (Document) session.newRequest("Document.Update").input(result).param
+//            ("properties", doc).execute();
+//            updatedBooks++;
+//        }
     if (depth == 1) {
       documents.put("main", result);
     }

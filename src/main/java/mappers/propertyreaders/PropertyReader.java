@@ -33,7 +33,8 @@ public class PropertyReader {
       return;
     }
     System.out.println(
-        "   * Setting value: '" + property + "' to '" + value + "' on doc '" + doc.getName() + "'");
+        "   * Setting value: '" + property + "' to '" + value + "' on doc '" + doc.getName()
+            + "'");
     doc.setPropertyValue(property, value);
   }
 

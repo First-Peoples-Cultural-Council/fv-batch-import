@@ -2,7 +2,6 @@ package task;
 
 import common.ConsoleLogger;
 import java.io.IOException;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -10,7 +9,6 @@ import mappers.CsvMapper;
 import mappers.CsvValidator;
 import mappers.firstvoices.BinaryMapper;
 import mappers.firstvoices.PhraseMapper;
-import org.apache.commons.cli.ParseException;
 import org.nuxeo.client.NuxeoClient;
 import org.nuxeo.client.objects.Document;
 import reader.AbstractReader;

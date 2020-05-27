@@ -13,7 +13,8 @@ import org.nuxeo.client.objects.Document;
 
 /**
  * @author cstuart
- * Class to migrate phrases from a CSV file (or potentially an Oracle database) into the FirstVoices system.
+ * Class to migrate phrases from a CSV file (or potentially an Oracle database) into the
+ * FirstVoices system.
  */
 public class PhraseMapper extends CsvMapper {
 

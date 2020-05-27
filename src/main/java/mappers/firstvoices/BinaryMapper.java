@@ -13,9 +13,9 @@ import reader.AbstractReader;
 public abstract class BinaryMapper extends DictionaryCachedMapper {
 
   protected static String dataPath;
-  protected String prefix = null;
   private final StorePropertyReader binaryPathReader;
   private final String linkKey;
+  protected String prefix = null;
 
   protected BinaryMapper(String type, Object column, String prefix, String linkKey) {
     super(type, column);
@@ -31,8 +31,10 @@ public abstract class BinaryMapper extends DictionaryCachedMapper {
     //propertyReaders.add(new PropertyReader(Properties.IMPORT_ID, prefix + "_" + Columns.ID));
     propertyReaders.add(new PropertyReader(Properties.TITLE, prefix + "_" + Columns.TITLE));
     propertyReaders.add(new PropertyReader(Properties.DESCR, prefix + "_" + Columns.DESCR));
-    //propertyReaders.add(new PropertyReader(Properties.MEDIA_STATUS, prefix + "_" + Columns.STATUS));
-    propertyReaders.add(new PropertyReader(Properties.MEDIA_SHARED, prefix + "_" + Columns.SHARED));
+    //propertyReaders.add(new PropertyReader(Properties.MEDIA_STATUS, prefix + "_" + Columns
+    // .STATUS));
+    propertyReaders
+        .add(new PropertyReader(Properties.MEDIA_SHARED, prefix + "_" + Columns.SHARED));
     propertyReaders.add(new PropertyReader(Properties.MEDIA_ACKNOWLEDGEMENT,
         prefix + "_" + Columns.ACKNOWLEDGEMENT));
     propertyReaders
@@ -48,7 +50,8 @@ public abstract class BinaryMapper extends DictionaryCachedMapper {
     subdocuments
         .add(new SourcesMapper(Properties.MEDIA_SOURCE, prefix + "_" + Columns.SOURCE + "_5"));
 
-    subdocuments.add(new SourcesMapper(Properties.MEDIA_RECORDER, prefix + "_" + Columns.RECORDER));
+    subdocuments
+        .add(new SourcesMapper(Properties.MEDIA_RECORDER, prefix + "_" + Columns.RECORDER));
     subdocuments
         .add(new SourcesMapper(Properties.MEDIA_RECORDER, prefix + "_" + Columns.RECORDER + "_2"));
     subdocuments

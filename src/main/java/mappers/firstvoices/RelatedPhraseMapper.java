@@ -45,7 +45,8 @@ public class RelatedPhraseMapper extends DictionaryCachedMapper {
     propertyReaders.add(new PropertyReader(Properties.IMPORT_ID, Columns.PHRASE_ID));
     propertyReaders.add(new PropertyReader(Properties.REFERENCE, Columns.PHRASE_REFERENCE));
     propertyReaders
-        .add(new PropertyReader(Properties.PHRASE_ACKNOWLEDGEMENT, Columns.PHRASE_ACKNOWLEDGEMENT));
+        .add(
+            new PropertyReader(Properties.PHRASE_ACKNOWLEDGEMENT, Columns.PHRASE_ACKNOWLEDGEMENT));
     propertyReaders.add(new TrueFalsePropertyReader(Properties.AVAILABLE_IN_CHILDRENS_ARCHIVE,
         Columns.AVAILABLE_IN_CHILDRENS_ARCHIVE));
     propertyReaders.add(new PropertyReader(Properties.STATUS_ID, Columns.PHRASE_STATUS));

@@ -35,7 +35,8 @@ public class TrueFalsePropertyReader extends PropertyReader {
     }
 
     System.out.println(
-        "   * Setting value: '" + property + "' to '" + value + "' on doc '" + doc.getName() + "'");
+        "   * Setting value: '" + property + "' to '" + value + "' on doc '" + doc.getName()
+            + "'");
     doc.setPropertyValue(property, value);
   }
 

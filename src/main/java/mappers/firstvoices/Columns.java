@@ -30,7 +30,8 @@ public final class Columns {
   public static final String DOMINANT_LANGUAGE_DEFINITION = "DEFINITION";
   public static final String DOMINANT_LANGUAGE_VALUE = "LITERAL_TRANSLATION";
   public static final String DOMINANT_LANGUAGE_SENTENCE_DEFINITION = "RELATED_PHRASE_DEFINITION";
-  public static final String DOMINANT_LANGUAGE_SENTENCE_VALUE = "RELATED_PHRASE_LITERAL_TRANSLATION";
+  public static final String DOMINANT_LANGUAGE_SENTENCE_VALUE =
+      "RELATED_PHRASE_LITERAL_TRANSLATION";
   public static final String CATEGORY_ID = "CATEGORY_ID";
   public static final String CATEGORY_NAME = "CATEGORY_NAME";
   public static final String CATEGORIES = "CATEGORIES";
