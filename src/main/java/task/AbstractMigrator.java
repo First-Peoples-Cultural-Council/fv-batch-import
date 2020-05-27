@@ -1,6 +1,7 @@
 /**
  *
  */
+
 package task;
 
 import com.beust.jcommander.JCommander;
@@ -27,9 +28,9 @@ import org.nuxeo.client.spi.NuxeoClientException;
 import reader.AbstractReader;
 import reader.CsvReader;
 
-/**
- * @author loopingz
- * TODO: Remove portions of code that are related to setting up the dialect/etc - some commented.
+/*
+@author loopingz
+TODO: Remove portions of code that are related to setting up the dialect/etc - some commented.
  */
 public abstract class AbstractMigrator {
 
@@ -46,7 +47,8 @@ public abstract class AbstractMigrator {
   @Parameter(names = {"-limit"}, description = "Limit the number of lines to process")
   protected static int limit = 0;
   @Parameter(names = {
-      "-dialect-id"}, description = "The GUID of the dialect to input the entries into", required = true)
+      "-dialect-id"}, description = "The GUID of the dialect to input the entries into",
+      required = true)
   protected static String dialectID;
   @Parameter(names = {
       "-language-path"}, description = "The path to the language rooted at /FV/Workspaces/Data/")
@@ -56,10 +58,12 @@ public abstract class AbstractMigrator {
   @Parameter(names = {"-data-path"}, description = "Path to media files")
   protected static String blobDataPath;
   @Parameter(names = {
-      "-skipValidation"}, description = "Allows you to skip the validation and process valid records")
+      "-skipValidation"}, description = "Allows you to skip the validation and process valid "
+      + "records")
   protected static Boolean skipValidation = false;
   @Parameter(names = {
-      "-localCategories"}, description = "Allows you to skip the validation and process valid records")
+      "-localCategories"}, description = "Allows you to skip the validation and process valid "
+      + "records")
   protected static Boolean localCategories = false;
   static Options options = new Options();
   protected int lines = 0;
@@ -79,7 +83,8 @@ public abstract class AbstractMigrator {
   protected Logger log = Logger.getLogger("Migrator");
   protected AbstractReader reader = null;
   protected Map<String, Document> folderDocumentsCache = new HashMap<String, Document>();
-  protected Map<String, Map<String, Document>> baseDocumentsCache = new HashMap<String, Map<String, Document>>();
+  protected Map<String, Map<String, Document>> baseDocumentsCache = new HashMap<String,
+      Map<String, Document>>();
   protected String familyDocumentType = "FVLanguageFamily";
   protected String languageDocumentType = "FVLanguage";
   protected String dialectDocumentType = "FVDialect";
@@ -201,17 +206,17 @@ public abstract class AbstractMigrator {
     return id.replace("/", "_");
   }
 
-  protected Map<String, Document> getOrCreateLanguageDocument(NuxeoClient client,
-      AbstractReader reader)
-      throws IOException {
-    return getOrCreateLanguageDocument(client, null, null, null);
-  }
-
   protected void setProperty(Document doc, String property, String value) {
     if (value == null || value.isEmpty()) {
       return;
     }
     doc.setPropertyValue(property, value);
+  }
+
+  protected Map<String, Document> getOrCreateLanguageDocument(NuxeoClient client,
+      AbstractReader reader)
+      throws IOException {
+    return getOrCreateLanguageDocument(client, null, null, null);
   }
 
   protected Map<String, Document> getOrCreateLanguageDocument(NuxeoClient client, String family,
@@ -240,25 +245,15 @@ public abstract class AbstractMigrator {
     try {
       if (!folderDocumentsCache.containsKey(key)) {
         dialectDoc = client.schemas("*").repository().fetchDocumentById(dialectID);
-
-				/*if(reader.getString("DIALECT_PUBLISHED").equals("1") && reader.getString("DIALECT_STATUS").equals("1")) {
-					sectionDialectDoc = (Document) client.newRequest("Document.Fetch").setHeader("*")
-						.set("value", sectionDataPath + key).execute();
-					folderDocumentsCache.put(sectionCachePrefix + key, sectionDialectDoc);
-				}*/
         folderDocumentsCache.put(key, dialectDoc);
 
       } else {
         dialectDoc = folderDocumentsCache.get(key);
-        sectionDialectDoc = folderDocumentsCache.get(sectionCachePrefix + key);
       }
 
     } catch (NuxeoClientException e) {
       e.printStackTrace();
     }
-
-    Documents dialectChildren = client.schemas("*").repository()
-        .fetchChildrenById(dialectDoc.getId());
 
     Map<String, Document> cache = new HashMap<String, Document>();
 
@@ -270,70 +265,20 @@ public abstract class AbstractMigrator {
 
     // Add Shared Categories to cache
     cache.put("Shared Categories",
-        client.schemas("*").repository().fetchDocumentByPath(sharedDataPath + "Shared Categories"));
+        client.schemas("*").repository()
+            .fetchDocumentByPath(sharedDataPath + "Shared Categories"));
 
     // Set sharedCategoriesID variable for use by FVWordMigrator
     sharedCategoriesID = cache.get("Shared Categories").getUid();
 
     // Add dialect children to cache
-    Iterator<Document> dialectChildrenIterator = dialectChildren.getDocuments().iterator();
+    assert dialectDoc != null;
+    Documents dialectChildren = client.schemas("*").repository()
+        .fetchChildrenById(dialectDoc.getId());
 
-    while (dialectChildrenIterator.hasNext()) {
-      Document dialectChild = dialectChildrenIterator.next();
+    for (Document dialectChild : dialectChildren.getDocuments()) {
       cache.put(dialectChild.getTitle(), dialectChild);
     }
-
-		/*Document sectionDictionary = null;
-		Document sectionContributors = null;
-		Document sectionResources = null;
-		Document sectionCategories = null;
-		Document sectionPhraseBooks = null;
-		Document sectionStoriesAndSongs = null;
-		Document sectionAlphabet = null;
-		Document sectionSharedData = (Document) client.newRequest("Document.Fetch").setHeader("*").set("value", sectionSharedDataPath).execute();
-
-		// If the dialect and its children should exist in the section, either publish them, or retrieve them if they already exist
-		if(reader.getString("DIALECT_PUBLISHED").equals("1")) {
-			// If the dialect is new, check if it should be published
-			if(isDialectNewlyCreated) {
-
-				try {
-					client.newRequest("Document.FollowLifecycleTransition")
-					.input(dialectDoc)
-					.set("value", "Publish")
-					.execute();
-
-				} catch (Exception e) {
-					System.out.println(e.getCause());
-				}
-			}
-			else {
-				// Fetch section dialect and its children
-				sectionDialectDoc = (Document) client.newRequest("Document.Fetch").setHeader("*").set("value", sectionDataPath + key).execute();
-				sectionDictionary = (Document) client.newRequest("Document.Fetch").setHeader("*").set("value", sectionDataPath + key + "/Dictionary").execute();
-				sectionContributors = (Document) client.newRequest("Document.Fetch").setHeader("*").set("value", sectionDataPath + key + "/Contributors").execute();
-				sectionResources = (Document) client.newRequest("Document.Fetch").setHeader("*").set("value", sectionDataPath + key + "/Resources").execute();
-				sectionCategories = (Document) client.newRequest("Document.Fetch").setHeader("*").set("value", sectionDataPath + key + "/Categories").execute();
-				sectionPhraseBooks = (Document) client.newRequest("Document.Fetch").setHeader("*").set("value", sectionDataPath + key + "/Phrase Books").execute();
-				sectionStoriesAndSongs = (Document) client.newRequest("Document.Fetch").setHeader("*").set("value", sectionDataPath + key + "/Stories & Songs").execute();
-				sectionAlphabet = (Document) client.newRequest("Document.Fetch").setHeader("*").set("value", sectionDataPath + key + "/Alphabet").execute();
-			}
-
-			// Cache section documents
-			cache.put(sectionCachePrefix + "Dialect", sectionDialectDoc);
-			cache.put(sectionCachePrefix + "Dictionary", sectionDictionary);
-			cache.put(sectionCachePrefix + "Contributors", sectionContributors);
-			cache.put(sectionCachePrefix + "Resources", sectionResources);
-			cache.put(sectionCachePrefix + "Categories", sectionCategories);
-			cache.put(sectionCachePrefix + "Phrase Books", sectionPhraseBooks);
-			cache.put(sectionCachePrefix + "Stories & Songs", sectionStoriesAndSongs);
-			cache.put(sectionCachePrefix + "Alphabet", sectionAlphabet);
-			cache.put(sectionCachePrefix + "Shared Data", sectionSharedData);
-		}
-		// Make private dialects so by blocking inheritance
-		else if (reader.getString("DIALECT_STATUS").equals("0") || reader.getString("DIALECT_STATUS").equals("2")) {
-			sectionDialectDoc = (Document) client.newRequest("Document.BlockPermissionInheritance").input(dialectDoc).set("acl","local").execute();
-		}*/
 
     baseDocumentsCache.put(cacheKey, cache);
     return cache;
