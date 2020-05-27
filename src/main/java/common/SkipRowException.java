@@ -9,10 +9,10 @@ package common;
  */
 public class SkipRowException extends RuntimeException {
 
-    private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-    public SkipRowException(String message) {
-		super(message);
-	}
+  public SkipRowException(String message) {
+    super(message);
+  }
 
 }

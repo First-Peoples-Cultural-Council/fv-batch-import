@@ -10,11 +10,12 @@ import java.util.LinkedHashSet;
  *
  */
 public class UniqueTranslationReader extends TranslationReader {
-	public UniqueTranslationReader(String language, Object column) {
-		super("fv:literal_translation", (PropertyReader) null);
-		LinkedHashSet<PropertyReader> set = new LinkedHashSet<>();
-		set.add(new PropertyReader("translation", column));
-		set.add(new StaticPropertyReader("language", language));
-		readers.add(new ComplexPropertyReader(column, set));
-	}
+
+  public UniqueTranslationReader(String language, Object column) {
+    super("fv:literal_translation", null);
+    LinkedHashSet<PropertyReader> set = new LinkedHashSet<>();
+    set.add(new PropertyReader("translation", column));
+    set.add(new StaticPropertyReader("language", language));
+    readers.add(new ComplexPropertyReader(column, set));
+  }
 }

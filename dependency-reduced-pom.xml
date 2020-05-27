@@ -35,6 +35,20 @@
           </execution>
         </executions>
       </plugin>
+      <plugin>
+        <artifactId>maven-checkstyle-plugin</artifactId>
+        <version>3.1.1</version>
+        <executions>
+          <execution>
+            <goals>
+              <goal>check</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <configLocation>https://raw.githubusercontent.com/First-Peoples-Cultural-Council/fv-checkstyle/master/java/java-fv-google-style-strict.xml</configLocation>
+        </configuration>
+      </plugin>
     </plugins>
   </build>
   <repositories>

@@ -3,11 +3,10 @@
  */
 package mappers.propertyreaders;
 
-import org.nuxeo.client.objects.Document;
-import reader.AbstractReader;
-
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
+import org.nuxeo.client.objects.Document;
+import reader.AbstractReader;
 
 /**
  * @author loopingz
@@ -15,38 +14,39 @@ import java.util.LinkedHashSet;
  */
 public class NewMultiValuedReader extends PropertyReader {
 
-	protected LinkedHashSet<PropertyReader> readers = null;
+  protected LinkedHashSet<PropertyReader> readers = null;
 
-	public NewMultiValuedReader(String key, PropertyReader reader) {
-		super(key, 0);
-		readers = new LinkedHashSet<>();
-		if (reader != null) {
-			readers.add(reader);
-		}
-	}
-	public NewMultiValuedReader(String key, LinkedHashSet<PropertyReader> readers) {
-		super(key, 0);
-		this.readers = readers;
-	}
+  public NewMultiValuedReader(String key, PropertyReader reader) {
+    super(key, 0);
+    readers = new LinkedHashSet<>();
+    if (reader != null) {
+      readers.add(reader);
+    }
+  }
 
-	public ArrayList<Object> getArrayValue(AbstractReader reader) {
+  public NewMultiValuedReader(String key, LinkedHashSet<PropertyReader> readers) {
+    super(key, 0);
+    this.readers = readers;
+  }
 
-		ArrayList<Object> multiValueList = new ArrayList<Object>();
+  public ArrayList<Object> getArrayValue(AbstractReader reader) {
 
-		Boolean first = true;
-		for (PropertyReader propertyReader : readers) {
-		    Object value = propertyReader.getValue(reader);
-		    if (value == null || value.toString().isEmpty() || value.equals("\"\"")) {
-		        continue;
-		    }
-			multiValueList.add(value);
-		}
+    ArrayList<Object> multiValueList = new ArrayList<Object>();
 
-		return multiValueList;
-	}
+    Boolean first = true;
+    for (PropertyReader propertyReader : readers) {
+      Object value = propertyReader.getValue(reader);
+      if (value == null || value.toString().isEmpty() || value.equals("\"\"")) {
+        continue;
+      }
+      multiValueList.add(value);
+    }
 
-	@Override
-	public void read(Document document, AbstractReader reader) {
-		setProperty(document, key, getArrayValue(reader));
-	}
+    return multiValueList;
+  }
+
+  @Override
+  public void read(Document document, AbstractReader reader) {
+    setProperty(document, key, getArrayValue(reader));
+  }
 }

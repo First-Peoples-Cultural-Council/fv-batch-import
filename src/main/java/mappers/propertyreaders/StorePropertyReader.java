@@ -3,27 +3,28 @@
  */
 package mappers.propertyreaders;
 
-import reader.AbstractReader;
 import org.nuxeo.client.objects.Document;
+import reader.AbstractReader;
 
 /**
  * @author dyona
  *
  */
 public class StorePropertyReader extends PropertyReader {
-    private String cacheValue = null;
 
-    public StorePropertyReader(Object column) {
-        super(null, column);
-    }
+  private String cacheValue = null;
 
-    @Override
-    public void read(Document document, AbstractReader reader) {
-        cacheValue = (String) getValue(reader);
-    }
+  public StorePropertyReader(Object column) {
+    super(null, column);
+  }
 
-    public String getCacheValue() {
-        return cacheValue;
-    }
+  @Override
+  public void read(Document document, AbstractReader reader) {
+    cacheValue = (String) getValue(reader);
+  }
+
+  public String getCacheValue() {
+    return cacheValue;
+  }
 
 }

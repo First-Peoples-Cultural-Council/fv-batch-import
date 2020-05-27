@@ -5,9 +5,9 @@ import mappers.firstvoices.Properties;
 
 public class CharacterAudioMapper extends BinaryMapper {
 
-    protected CharacterAudioMapper() {
-        super("FVAudio", "ID", "AUDIO", Properties.RELATED_AUDIO);
-        cacheProperty = Properties.TITLE;
-    }
+  protected CharacterAudioMapper() {
+    super("FVAudio", "ID", "AUDIO", Properties.RELATED_AUDIO);
+    cacheProperty = Properties.TITLE;
+  }
 
 }
