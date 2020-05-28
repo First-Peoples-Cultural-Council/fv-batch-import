@@ -1,7 +1,6 @@
 package mappers;
 
 import com.opencsv.CSVReader;
-import com.sun.tools.javac.comp.Check;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
