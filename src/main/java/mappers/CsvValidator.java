@@ -235,11 +235,6 @@ public class CsvValidator {
           "Username must be filled in: line " + (line + 1) + ", " + user);
     }
 
-    //Document doc  = (Document) session.newRequest("Document.Fetch").set("value",
-    // "/FV/workspaces/Data/TestLanguageFamily/TestLanguage/TestDialect_1").execute();
-    //doc = (Document) session.newRequest("Document.GetUsersAndGroups").input(doc).set
-    // ("permission", "edit").set("variable name", "usrs").execute();
-
   }
 
   private void getData(String dialect) throws IOException {
