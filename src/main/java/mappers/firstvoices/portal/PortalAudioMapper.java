@@ -1,6 +1,7 @@
 /**
  *
  */
+
 package mappers.firstvoices.portal;
 
 import mappers.firstvoices.BinaryMapper;
@@ -12,10 +13,10 @@ import mappers.firstvoices.Properties;
  */
 public class PortalAudioMapper extends BinaryMapper {
 
-    protected PortalAudioMapper() {
-        super("FVAudio", "DIALECT_ID", "AUDIO", "fv-portal:featured_audio");
-        cacheProperty = Properties.TITLE;
+  protected PortalAudioMapper() {
+    super("FVAudio", "DIALECT_ID", "AUDIO", "fv-portal:featured_audio");
+    cacheProperty = Properties.TITLE;
 
-    }
+  }
 
 }

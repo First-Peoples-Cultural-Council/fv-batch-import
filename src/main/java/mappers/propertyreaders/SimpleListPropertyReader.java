@@ -1,46 +1,42 @@
 /**
  *
  */
+
 package mappers.propertyreaders;
 
-import reader.AbstractReader;
-import org.nuxeo.client.objects.Document;
-
 import java.util.ArrayList;
+import org.nuxeo.client.objects.Document;
+import reader.AbstractReader;
 
 /**
  * @author loopingz
  *
  */
 public class SimpleListPropertyReader extends PropertyReader {
-	protected String[] columns;
 
-	public SimpleListPropertyReader(String key, String[] columns) {
-		super(key, columns[0]);
-		this.columns = columns;
-	}
+  protected String[] columns;
 
-	public ArrayList<Object> getValue(AbstractReader reader) {
+  public SimpleListPropertyReader(String key, String[] columns) {
+    super(key, columns[0]);
+    this.columns = columns;
+  }
 
-		ArrayList<Object> values = new ArrayList<>();
+  public ArrayList<Object> getValue(AbstractReader reader) {
 
-		for (int i = 0; i < columns.length; ++i) {
-			String value = reader.getString(columns[i]).replace(",", "\\,");
+    ArrayList<Object> values = new ArrayList<>();
 
-			if (value != null && !value.isEmpty() && !value.equals("")) {
-				values.add(value);
-			}
-		}
+    for (String s : columns) {
+      String value = reader.getString(s).replace(",", "\\,");
 
-		return values;
-	}
-//
-//	public String getJsonValue(AbstractReader reader) {
-//
-//		return getValue(reader);
-//	}
+      if (value != null && !value.isEmpty() && !value.equals("")) {
+        values.add(value);
+      }
+    }
 
-	public void read(Document document, AbstractReader reader) {
-		setProperty(document, key, getValue(reader));
-	}
+    return values;
+  }
+
+  public void read(Document document, AbstractReader reader) {
+    setProperty(document, key, getValue(reader));
+  }
 }

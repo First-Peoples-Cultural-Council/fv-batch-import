@@ -1,6 +1,7 @@
 /**
  *
  */
+
 package mappers.firstvoices;
 
 import java.io.IOException;
@@ -16,6 +17,13 @@ import org.nuxeo.client.objects.Documents;
  *
  */
 public class CategoryMapper extends DictionaryCachedMapper {
+
+  public CategoryMapper() {
+    super("FVCategory", Columns.CATEGORIES);
+    parentKey = "Categories";
+    cacheProperty = Properties.TITLE;
+    propertyReaders.add(new PropertyReader(Properties.WORD_CATEGORIES, Columns.CATEGORIES));
+  }
 
   @Override
   protected String getCacheQuery() {
@@ -49,13 +57,6 @@ public class CategoryMapper extends DictionaryCachedMapper {
 
   private void updateMainDocumentReference(ArrayList<String> docIDList) {
     documents.get("current").setPropertyValue(Properties.WORD_CATEGORIES, docIDList);
-  }
-
-  public CategoryMapper() {
-    super("FVCategory", Columns.CATEGORIES);
-    parentKey = "Categories";
-    cacheProperty = Properties.TITLE;
-    propertyReaders.add(new PropertyReader(Properties.WORD_CATEGORIES, Columns.CATEGORIES));
   }
 
   @Override
