@@ -1,5 +1,5 @@
-/**
- *
+/*
+
  */
 
 package mappers.firstvoices;
@@ -69,40 +69,38 @@ public class WordMapper extends CsvMapper {
         Columns.ALTERNATE_SPELLING + "_4",
         Columns.ALTERNATE_SPELLING + "_5"};
 
-    propertyReaders.add(new
-        PropertyReader(Properties.TITLE, Columns.WORD));
-    propertyReaders.add(new
-        PartOfSpeechPropertyReader(Properties.PART_OF_SPEECH_ID, Columns.PART_OF_SPEECH));
-    propertyReaders.add(new
-        SimpleListPropertyReader(Properties.ALTERNATE_SPELLINGS, spellingCols));
-    propertyReaders.add(new
-        SimpleListPropertyReader(Properties.CULTURAL_NOTE, culturalNoteCols));
-    propertyReaders.add(new
-        SimpleListPropertyReader(Properties.PLURAL, pluralCols));
-    propertyReaders.add(new
-        PropertyReader(Properties.PHONETIC_INFO, Columns.PHONETIC_INFO));
-    propertyReaders.add(new
-        PropertyReader(Properties.ASSIGNED_USR_ID, Columns.ASSIGNED_USR_ID));
-    propertyReaders.add(new
-        PropertyReader(Properties.CHANGE_DTTM, Columns.CHANGE_DTTM));
-    propertyReaders.add(new
-        PropertyReader(Properties.IMPORT_ID, Columns.WORD_ID));
-    propertyReaders.add(new
-        PropertyReader(Properties.REFERENCE, Columns.REFERENCE));
-    propertyReaders.add(new
-        PropertyReader(Properties.ACKNOWLEDGEMENT, Columns.ACKNOWLEDGEMENT));
-    propertyReaders.add(new
-        TrueFalsePropertyReader(Properties.AVAILABLE_IN_CHILDRENS_ARCHIVE,
-        Columns.AVAILABLE_IN_CHILDRENS_ARCHIVE));
-    propertyReaders.add(new
-        TrueFalsePropertyReader(Properties.AVAILABLE_IN_GAMES, Columns.AVAILABLE_IN_GAMES));
-    propertyReaders.add(new
-        PropertyReader(Properties.STATUS_ID, Columns.WORD_STATUS));
-    propertyReaders.add(new
-        TranslationReader(Properties.TRANSLATION, Columns.DOMINANT_LANGUAGE,
-        literalTranslationCols));
-    propertyReaders.add(new
-        TranslationReader(Properties.DEFINITION, Columns.DOMINANT_LANGUAGE, definitionCols));
+    propertyReaders.add(new PropertyReader(
+        Properties.TITLE, Columns.WORD));
+    propertyReaders.add(new PartOfSpeechPropertyReader(
+        Properties.PART_OF_SPEECH_ID, Columns.PART_OF_SPEECH));
+    propertyReaders.add(new TranslationReader(
+        Properties.TRANSLATION, Columns.DOMINANT_LANGUAGE, literalTranslationCols));
+    propertyReaders.add(new TranslationReader(
+        Properties.DEFINITION, Columns.DOMINANT_LANGUAGE, definitionCols));
+    propertyReaders.add(new SimpleListPropertyReader(
+        Properties.ALTERNATE_SPELLINGS, spellingCols));
+    propertyReaders.add(new SimpleListPropertyReader(
+        Properties.CULTURAL_NOTE, culturalNoteCols));
+    propertyReaders.add(new SimpleListPropertyReader(
+        Properties.PLURAL, pluralCols));
+    propertyReaders.add(new PropertyReader(
+        Properties.PHONETIC_INFO, Columns.PHONETIC_INFO));
+    propertyReaders.add(new PropertyReader(
+        Properties.ASSIGNED_USR_ID, Columns.ASSIGNED_USR_ID));
+    propertyReaders.add(new PropertyReader(
+        Properties.CHANGE_DTTM, Columns.CHANGE_DTTM));
+    propertyReaders.add(new PropertyReader(
+        Properties.IMPORT_ID, Columns.WORD_ID));
+    propertyReaders.add(new PropertyReader(
+        Properties.REFERENCE, Columns.REFERENCE));
+    propertyReaders.add(new PropertyReader(
+        Properties.ACKNOWLEDGEMENT, Columns.ACKNOWLEDGEMENT));
+    propertyReaders.add(new PropertyReader(
+        Properties.STATUS_ID, Columns.WORD_STATUS));
+    propertyReaders.add(new TrueFalsePropertyReader(
+        Properties.AVAILABLE_IN_CHILDRENS_ARCHIVE, Columns.AVAILABLE_IN_CHILDRENS_ARCHIVE));
+    propertyReaders.add(new TrueFalsePropertyReader(
+        Properties.AVAILABLE_IN_GAMES, Columns.AVAILABLE_IN_GAMES));
 
     subdocuments.add(new RelatedPhraseMapper());
     subdocuments.add(new CategoryMapper());
