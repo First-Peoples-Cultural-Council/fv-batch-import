@@ -1,6 +1,7 @@
 /**
  *
  */
+
 package mappers.firstvoices;
 
 import java.io.IOException;
@@ -37,43 +38,71 @@ public class WordMapper extends CsvMapper {
 
   private void setupProperties() {
 
-    String[] definitionCols = {Columns.DOMINANT_LANGUAGE_DEFINITION,
-        Columns.DOMINANT_LANGUAGE_DEFINITION + "_2", Columns.DOMINANT_LANGUAGE_DEFINITION + "_3",
-        Columns.DOMINANT_LANGUAGE_DEFINITION + "_4", Columns.DOMINANT_LANGUAGE_DEFINITION + "_5"};
-    String[] literalTranslationCols = {Columns.DOMINANT_LANGUAGE_VALUE,
-        Columns.DOMINANT_LANGUAGE_VALUE + "_2", Columns.DOMINANT_LANGUAGE_VALUE + "_3",
-        Columns.DOMINANT_LANGUAGE_VALUE + "_4", Columns.DOMINANT_LANGUAGE_VALUE + "_5"};
-    String[] culturalNoteCols = {Columns.CULTURAL_NOTE, Columns.CULTURAL_NOTE + "_2",
-        Columns.CULTURAL_NOTE + "_3", Columns.CULTURAL_NOTE + "_4", Columns.CULTURAL_NOTE + "_5"};
-    String[] pluralCols = {Columns.PLURAL, Columns.PLURAL + "_2", Columns.PLURAL + "_3",
-        Columns.PLURAL + "_4", Columns.PLURAL + "_5"};
-    String[] spellingCols = {Columns.ALTERNATE_SPELLING, Columns.ALTERNATE_SPELLING + "_2",
-        Columns.ALTERNATE_SPELLING + "_3", Columns.ALTERNATE_SPELLING + "_4",
+    String[] definitionCols = {
+        Columns.DOMINANT_LANGUAGE_DEFINITION,
+        Columns.DOMINANT_LANGUAGE_DEFINITION + "_2",
+        Columns.DOMINANT_LANGUAGE_DEFINITION + "_3",
+        Columns.DOMINANT_LANGUAGE_DEFINITION + "_4",
+        Columns.DOMINANT_LANGUAGE_DEFINITION + "_5"};
+    String[] literalTranslationCols = {
+        Columns.DOMINANT_LANGUAGE_VALUE,
+        Columns.DOMINANT_LANGUAGE_VALUE + "_2",
+        Columns.DOMINANT_LANGUAGE_VALUE + "_3",
+        Columns.DOMINANT_LANGUAGE_VALUE + "_4",
+        Columns.DOMINANT_LANGUAGE_VALUE + "_5"};
+    String[] culturalNoteCols = {
+        Columns.CULTURAL_NOTE,
+        Columns.CULTURAL_NOTE + "_2",
+        Columns.CULTURAL_NOTE + "_3",
+        Columns.CULTURAL_NOTE + "_4",
+        Columns.CULTURAL_NOTE + "_5"};
+    String[] pluralCols = {
+        Columns.PLURAL,
+        Columns.PLURAL + "_2",
+        Columns.PLURAL + "_3",
+        Columns.PLURAL + "_4",
+        Columns.PLURAL + "_5"};
+    String[] spellingCols = {
+        Columns.ALTERNATE_SPELLING,
+        Columns.ALTERNATE_SPELLING + "_2",
+        Columns.ALTERNATE_SPELLING + "_3",
+        Columns.ALTERNATE_SPELLING + "_4",
         Columns.ALTERNATE_SPELLING + "_5"};
 
-    propertyReaders.add(new PropertyReader(Properties.TITLE, Columns.WORD));
-    propertyReaders
-        .add(new PartOfSpeechPropertyReader(Properties.PART_OF_SPEECH_ID, Columns.PART_OF_SPEECH));
-    propertyReaders
-        .add(new SimpleListPropertyReader(Properties.ALTERNATE_SPELLINGS, spellingCols));
-    propertyReaders.add(new SimpleListPropertyReader(Properties.CULTURAL_NOTE, culturalNoteCols));
-    propertyReaders.add(new SimpleListPropertyReader(Properties.PLURAL, pluralCols));
-    propertyReaders.add(new PropertyReader(Properties.PHONETIC_INFO, Columns.PHONETIC_INFO));
-    propertyReaders.add(new PropertyReader(Properties.ASSIGNED_USR_ID, Columns.ASSIGNED_USR_ID));
-    propertyReaders.add(new PropertyReader(Properties.CHANGE_DTTM, Columns.CHANGE_DTTM));
-    propertyReaders.add(new PropertyReader(Properties.IMPORT_ID, Columns.WORD_ID));
-    propertyReaders.add(new PropertyReader(Properties.REFERENCE, Columns.REFERENCE));
-    propertyReaders.add(new PropertyReader(Properties.ACKNOWLEDGEMENT, Columns.ACKNOWLEDGEMENT));
-    propertyReaders.add(new TrueFalsePropertyReader(Properties.AVAILABLE_IN_CHILDRENS_ARCHIVE,
+    propertyReaders.add(new
+        PropertyReader(Properties.TITLE, Columns.WORD));
+    propertyReaders.add(new
+        PartOfSpeechPropertyReader(Properties.PART_OF_SPEECH_ID, Columns.PART_OF_SPEECH));
+    propertyReaders.add(new
+        SimpleListPropertyReader(Properties.ALTERNATE_SPELLINGS, spellingCols));
+    propertyReaders.add(new
+        SimpleListPropertyReader(Properties.CULTURAL_NOTE, culturalNoteCols));
+    propertyReaders.add(new
+        SimpleListPropertyReader(Properties.PLURAL, pluralCols));
+    propertyReaders.add(new
+        PropertyReader(Properties.PHONETIC_INFO, Columns.PHONETIC_INFO));
+    propertyReaders.add(new
+        PropertyReader(Properties.ASSIGNED_USR_ID, Columns.ASSIGNED_USR_ID));
+    propertyReaders.add(new
+        PropertyReader(Properties.CHANGE_DTTM, Columns.CHANGE_DTTM));
+    propertyReaders.add(new
+        PropertyReader(Properties.IMPORT_ID, Columns.WORD_ID));
+    propertyReaders.add(new
+        PropertyReader(Properties.REFERENCE, Columns.REFERENCE));
+    propertyReaders.add(new
+        PropertyReader(Properties.ACKNOWLEDGEMENT, Columns.ACKNOWLEDGEMENT));
+    propertyReaders.add(new
+        TrueFalsePropertyReader(Properties.AVAILABLE_IN_CHILDRENS_ARCHIVE,
         Columns.AVAILABLE_IN_CHILDRENS_ARCHIVE));
-    propertyReaders.add(
-        new TrueFalsePropertyReader(Properties.AVAILABLE_IN_GAMES, Columns.AVAILABLE_IN_GAMES));
-    propertyReaders.add(new PropertyReader(Properties.STATUS_ID, Columns.WORD_STATUS));
-
-    propertyReaders.add(new TranslationReader(Properties.TRANSLATION, Columns.DOMINANT_LANGUAGE,
+    propertyReaders.add(new
+        TrueFalsePropertyReader(Properties.AVAILABLE_IN_GAMES, Columns.AVAILABLE_IN_GAMES));
+    propertyReaders.add(new
+        PropertyReader(Properties.STATUS_ID, Columns.WORD_STATUS));
+    propertyReaders.add(new
+        TranslationReader(Properties.TRANSLATION, Columns.DOMINANT_LANGUAGE,
         literalTranslationCols));
-    propertyReaders.add(
-        new TranslationReader(Properties.DEFINITION, Columns.DOMINANT_LANGUAGE, definitionCols));
+    propertyReaders.add(new
+        TranslationReader(Properties.DEFINITION, Columns.DOMINANT_LANGUAGE, definitionCols));
 
     subdocuments.add(new RelatedPhraseMapper());
     subdocuments.add(new CategoryMapper());
@@ -85,6 +114,7 @@ public class WordMapper extends CsvMapper {
     subdocuments.add(new PictureMapper(2));
     subdocuments.add(new VideoMapper());
     subdocuments.add(new VideoMapper(2));
+
   }
 
   @Override
@@ -111,20 +141,9 @@ public class WordMapper extends CsvMapper {
 
       tagAndUpdateCreator(result, doc);
 
-      // Set the document state based on the fvl:status_id
-      // For now disable setting a document state.
-      //result = setDocumentState(result);
-
       createdObjects++;
       createdWords++;
-      //cacheDocument(result);
 
-      // If the parent document exists in the section, go ahead and publish the current document
-      // to the section
-            /*if(documents.get("SECTION_" + parentKey) != null && "Enabled".equals(doc.getState
-            ())) {
-                publishDocument(result);
-            }*/
     } else {
       throw new IOException("Skipped - Entry already exists in database.");
     }
@@ -136,7 +155,7 @@ public class WordMapper extends CsvMapper {
   }
 
   // To upload duplicates comment out the code below this line, as well as CsvValidator line 96
-  // and 122-123,  and -skipvalidation
+  // and 122-123,  and -skipValidation
   @Override
   protected void cacheDocument(Document doc) {
     cache.put(doc.getPropertyValue(Properties.TITLE), doc);
@@ -162,6 +181,5 @@ public class WordMapper extends CsvMapper {
             + "'";
     loadCache(query);
 
-    return;
   }
 }

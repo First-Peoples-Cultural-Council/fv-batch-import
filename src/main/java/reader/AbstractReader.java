@@ -1,6 +1,7 @@
 /**
  *
  */
+
 package reader;
 
 import java.text.Normalizer;
@@ -49,7 +50,8 @@ public abstract class AbstractReader {
 
   public abstract String getString(String id);
 
+  public abstract String getString(Integer col);
+
   public abstract Integer getInt(String id);
 
-  public abstract String getString(Integer col);
 }

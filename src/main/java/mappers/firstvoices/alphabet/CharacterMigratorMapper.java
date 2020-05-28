@@ -24,7 +24,6 @@ public class CharacterMigratorMapper extends DictionaryCachedMapper {
     propertyReaders.add(new PropertyReader("fvcharacter:fuzzy_latin_match", "LATIN"));
 
     subdocuments.add(new AudioMapper());
-//        subdocuments.add(new CharacterSampleWordMapper());
 
   }
 
@@ -45,11 +44,10 @@ public class CharacterMigratorMapper extends DictionaryCachedMapper {
       cacheDocument(result);
 
       // Characters should be enabled, at the very least
-      client.operation("Document.FollowLifecycleTransition").param("value", "Enable").input(result)
-          .execute();
-    }
-    // If the character document already exists, skip it
-    else {
+      client.operation("Document.FollowLifecycleTransition")
+          .param("value", "Enable").input(result).execute();
+    } else {
+      // If the character document already exists, skip it
       existingCharacters++;
     }
 

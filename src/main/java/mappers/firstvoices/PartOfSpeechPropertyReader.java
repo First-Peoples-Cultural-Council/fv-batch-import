@@ -153,11 +153,12 @@ public class PartOfSpeechPropertyReader extends PropertyReader {
       case "46":
       case "transitive_verb":
         return "transitive_verb";
+      case "":
+        return "";
       default:
         // Note: To use a part of speech that is NOT in the list, return reader.getString(column);
         System.out.println("Could not retrieve Nuxeo part of speech value");
-      case "":
-        return "";
+        return "error";
     }
   }
 

@@ -1,6 +1,7 @@
 /**
  *
  */
+
 package mappers.propertyreaders;
 
 import java.util.ArrayList;
@@ -9,9 +10,10 @@ import org.nuxeo.client.objects.Document;
 import reader.AbstractReader;
 
 /**
- * @author loopingz
- * Read/Set array of property
- */
+ @author loopingz
+ Read/Set array of property
+*/
+
 public class NewMultiValuedReader extends PropertyReader {
 
   protected LinkedHashSet<PropertyReader> readers = null;

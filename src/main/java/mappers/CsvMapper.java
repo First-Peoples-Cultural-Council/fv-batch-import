@@ -1,6 +1,7 @@
 /**
  *
  */
+
 package mappers;
 
 import common.ConsoleLogger;
@@ -148,16 +149,6 @@ public abstract class CsvMapper {
     return id.replace("/", "_");
   }
 
-  public Document process(Map<String, Document> docs, NuxeoClient client, AbstractReader reader)
-      throws IOException {
-    documents = new HashMap<String, Document>();
-    for (Entry<String, Document> entry : docs.entrySet()) {
-      documents.put(entry.getKey(), entry.getValue());
-    }
-    Document doc = process(docs, client, reader, 1);
-    return doc;
-  }
-
   protected Boolean skipValue(String value) {
     return value.isEmpty();
   }
@@ -167,20 +158,6 @@ public abstract class CsvMapper {
     // Tag created document
     Document newResult = client.operation("Services.TagDocument").input(resultDoc)
         .param("tags", getTag()).execute();
-
-//        // Set username
-//        String username = (String) localDoc.getDirtyProperties().get(Properties.CREATOR);
-//        ArrayList<String> contributors = (ArrayList<String>) localDoc.getDirtyProperties().get
-//        (Properties.CONTRIBUTORS);
-//
-//        // Update created document with creator / lastContributor (has to happen after creation)
-//        if (username != null) {
-//            resultDoc.setPropertyValue(Properties.CREATOR, username);
-//        }
-//
-//        if (contributors != null) {
-//            resultDoc.setPropertyValue(Properties.CONTRIBUTORS, contributors);
-//        }
 
     // Update creator and contributors fields
     if (!resultDoc.getDirtyProperties().isEmpty()) {
@@ -253,11 +230,11 @@ public abstract class CsvMapper {
       if (doc.getState().equalsIgnoreCase("New") || doc.getState().equalsIgnoreCase("Disabled")) {
         doc = enableDocument(doc);
       }
-    }
     // Document is disabled
-    else if (doc.getPropertyValue("fvl:status_id") != null && doc.getPropertyValue("fvl:status_id")
-        .equals("2")) {
-      if (doc.getState().equalsIgnoreCase("New") || doc.getState().equalsIgnoreCase("Disabled")) {
+    } else if (doc.getPropertyValue("fvl:status_id") != null
+        && doc.getPropertyValue("fvl:status_id").equals("2")) {
+      if (doc.getState().equalsIgnoreCase("New")
+          || doc.getState().equalsIgnoreCase("Disabled")) {
         doc = enableDocument(doc);
       }
       doc = disableDocument(doc);
@@ -267,6 +244,15 @@ public abstract class CsvMapper {
 
   public Set<PropertyReader> getPropertyReaders() {
     return propertyReaders;
+  }
+
+  public Document process(Map<String, Document> docs, NuxeoClient client, AbstractReader reader)
+      throws IOException {
+    documents = new HashMap<String, Document>();
+    for (Entry<String, Document> entry : docs.entrySet()) {
+      documents.put(entry.getKey(), entry.getValue());
+    }
+    return process(docs, client, reader, 1);
   }
 
   protected Document process(Map<String, Document> docs, NuxeoClient client, AbstractReader reader,
@@ -312,7 +298,6 @@ public abstract class CsvMapper {
       mapper.process(docs, client, reader, depth + 1);
     }
     documents.put("current", currentDoc);
-//        doc = updateDocument(doc, depth);
     ConsoleLogger.decreaseDepth();
     return doc;
   }

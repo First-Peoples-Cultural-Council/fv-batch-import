@@ -55,14 +55,10 @@ public class PortalMigratorMapper extends DictionaryCachedMapper {
       createdPortals++;
       cacheDocument(result);
 
-      // If the parent document exists in the section, go ahead and publish the current document
-      // to the section
-      //if(documents.get("SECTION_" + parentKey) != null) {
       publishDocument(result);
-      //}
-    }
-    // Portal was found in the cache
-    else {
+
+      // Portal was found in the cache
+    } else {
       ConsoleLogger.out("Portal found in cache: " + result.getId() + " - updating.");
       result = client.operation("Document.Update").input(result).param("properties", doc)
           .execute();

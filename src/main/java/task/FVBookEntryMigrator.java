@@ -124,18 +124,12 @@ public class FVBookEntryMigrator extends AbstractMigrator {
       sectionBookDocumentCache = new HashMap<String, Document>();
       cacheSectionBookDocuments(client);
     }
-    Document sectionParentBookDoc = sectionBookDocumentCache
-        .get(reader.getString("SENTRY_BOOK_ID"));
-//        if(sectionParentBookDoc == null) {
-//            throw new SkipRowException("Skipping...missing parent Book document in section.");
-//        }
-
-    return sectionParentBookDoc;
+    return sectionBookDocumentCache.get(reader.getString("SENTRY_BOOK_ID"));
   }
 
-  protected Map<String, Document> cacheBookDocuments(NuxeoClient client) throws IOException {
+  protected void cacheBookDocuments(NuxeoClient client) throws IOException {
     Integer page = 0;
-    Integer pageSize = 1000;
+    int pageSize = 1000;
     System.out.println("Loading Book document cache...");
     String query = "SELECT * FROM FVBook WHERE ecm:isTrashed = 0 AND ecm:path STARTSWITH "
         + "'/FV/Workspaces'";
@@ -156,13 +150,12 @@ public class FVBookEntryMigrator extends AbstractMigrator {
     }
     ConsoleLogger.out("Caching " + bookDocumentCache.size() + " Book documents");
 
-    return bookDocumentCache;
   }
 
-  protected Map<String, Document> cacheSectionBookDocuments(NuxeoClient client)
+  protected void cacheSectionBookDocuments(NuxeoClient client)
       throws IOException {
     Integer page = 0;
-    Integer pageSize = 1000;
+    int pageSize = 1000;
     System.out.println("Loading section Book document cache...");
     String query = "SELECT * FROM FVBook WHERE ecm:isTrashed = 0 AND ecm:path STARTSWITH "
         + "'/FV/sections'";
@@ -183,7 +176,6 @@ public class FVBookEntryMigrator extends AbstractMigrator {
     }
     ConsoleLogger.out("Caching " + sectionBookDocumentCache.size() + " section Book documents");
 
-    return sectionBookDocumentCache;
   }
 
 }

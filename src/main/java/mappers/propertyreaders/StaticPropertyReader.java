@@ -1,6 +1,7 @@
 /**
  *
  */
+
 package mappers.propertyreaders;
 
 import reader.AbstractReader;

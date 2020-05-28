@@ -1,6 +1,7 @@
 package mappers;
 
 import com.opencsv.CSVReader;
+import com.sun.tools.javac.comp.Check;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -26,12 +27,15 @@ import org.nuxeo.client.objects.Repository;
 
 public class CsvValidator {
 
-  protected static final ArrayList<String> TFVALUES = new ArrayList<String>() {{
-    add("1");
-    add("0");
-    add("true");
-    add("false");
-  }};
+  protected static final ArrayList<String> TFVALUES = new ArrayList<String>() {
+    {
+      add("1");
+      add("0");
+      add("true");
+      add("false");
+    }
+  };
+
   private static final String[] POS_VALUES = new String[]{"basic", "verb", "noun", "pronoun",
       "adjective", "adverb", "preposition", "conjunction",
       "interjection", "particle", "advanced", "pronoun_personal", "pronoun_reflexive",
@@ -50,12 +54,12 @@ public class CsvValidator {
       "question_word", "tense_aspect"};
   private static final Set<String> POS = new HashSet<>(Arrays.asList(POS_VALUES));
   protected HashMap<String, ArrayList<String>> invalid = new HashMap<>();
-  protected List<String> t_or_f = new ArrayList<>();
+  protected List<String> trueOrFalse = new ArrayList<>();
   protected InputStreamReader fileReader;
   protected CSVReader csvReader;
   protected NuxeoClient client;
   protected Documents categories = null;
-  protected Documents shared_categories;
+  protected Documents sharedCategories;
   protected Documents words;
 
 
@@ -73,10 +77,10 @@ public class CsvValidator {
         .authentication(nuxeoUser, nuxeoPassword)
         .connect();
 
-    t_or_f.add("INCLUDE_IN_GAMES");
-    t_or_f.add("CHILD_FRIENDLY");
-    t_or_f.add("_SHARED_WITH_OTHER_DIALECTS");
-    t_or_f.add("_CHILD_FOCUSED");
+    trueOrFalse.add("INCLUDE_IN_GAMES");
+    trueOrFalse.add("CHILD_FRIENDLY");
+    trueOrFalse.add("_SHARED_WITH_OTHER_DIALECTS");
+    trueOrFalse.add("_CHILD_FOCUSED");
 
     // If path to language is given as a parameter then get the ID and set dialectID to that ID
     if (languagePath != null) {
@@ -96,14 +100,14 @@ public class CsvValidator {
 
     String[] fileTypes = {"AUDIO", "VIDEO", "IMG"};
     String[] nextLine;
-    Map<String, Integer> files_read = new HashMap<>();
+    Map<String, Integer> filesRead = new HashMap<>();
     int lineNumber = 0;
     String columnHeader;
 
     Map<String, String[]> rowsProcessed = new TreeMap<String, String[]>();
 
     while ((nextLine = csvReader.readNext()) != null) {
-      files_read.clear();
+      filesRead.clear();
       int columnCount = 0;
       lineNumber++;
 
@@ -111,9 +115,9 @@ public class CsvValidator {
       // duplicates wanted
       if (!rowsProcessed.containsKey(nextLine[0])) {
         rowsProcessed.put(nextLine[0], nextLine);
-      }
+
       // This is a duplicate within the CSV file - mark as such
-      else {
+      } else {
         addToInvalid("Duplicates",
             "Cannot upload duplicate words in CSV: line " + (lineNumber + 1) + ", " + nextLine[0]);
       }
@@ -147,7 +151,7 @@ public class CsvValidator {
           checkCategoryExists(column, lineNumber);
         }
 
-        if (t_or_f.contains(columnHeader) && !column.equals("")) {
+        if (trueOrFalse.contains(columnHeader) && !column.equals("")) {
           if (!TFVALUES.contains(column)) {
             addToInvalid("Invalid Types",
                 "Only true/false allowed, but found " + column + " in Column "
@@ -165,25 +169,21 @@ public class CsvValidator {
               String title = m.group(1);
               int num = Integer.parseInt(m.group(2));
 
-//                      Check that the number of previously read files matches the number in the
-//                      heading
-//                      Disable if Team is leaving out AUDIO_FILENAME intentionally
-              if (files_read.get(title) != num - 1) {
+              /* Check that the number of previously read files matches the number in the
+              heading. Disable if Team is leaving out AUDIO_FILENAME intentionally */
+              if (filesRead.get(title) != num - 1) {
                 addToInvalid("File number Mismatch",
                     header[columnCount] + " is given without other number files: line " + (
                         lineNumber + 1) + ", " + column);
               } else {
-                files_read.put(title, num);
+                filesRead.put(title, num);
               }
             }
           } else {
-            files_read
+            filesRead
                 .put(header[columnCount].substring(0, header[columnCount].indexOf("FILENAME")), 1);
           }
         }
-//                Disable part of speech look-up since it's hardcoded
-//                if(headerTemp.equals("PART_OF_SPEECH"))
-//                    checkPartsOfSpeech(word, lineNumber);
 
         if (columnHeader.equals("USERNAME")) {
           checkUserExists(column, lineNumber);
@@ -202,10 +202,10 @@ public class CsvValidator {
 
   private void checkFileExists(String path, String header, int line, String word) {
     File temp = new File(path.trim());
-    File temp_with_mp3 = new File(path.replace("wav", "mp3"));
+    File tempWithMp3 = new File(path.replace("wav", "mp3"));
 
     if (!temp.exists()) {
-      if (temp_with_mp3.exists()) {
+      if (tempWithMp3.exists()) {
         addToInvalid("Audio Issues",
             "Wrong extension for file " + word + " in Column " + header + ", " + "Line " + (line
                 + 1));
@@ -245,32 +245,35 @@ public class CsvValidator {
   private void getData(String dialect) throws IOException {
 
     // Get the directory id for the dialect categories
-    Documents dialect_categories_directory = client.operation("Repository.Query")
-        .param("query", "SELECT * FROM FVCategories " +
-            "WHERE fva:dialect = '" + dialect + "' " +
-            "AND ecm:path STARTSWITH '/FV/Workspaces/' " +
-            "AND dc:title = 'Categories' " +
-            "AND ecm:isTrashed = 0 " +
-            "AND ecm:isVersion = 0")
+    Documents dialectCategoriesDirectory = client.operation("Repository.Query")
+        .param("query", "SELECT * FROM FVCategories "
+            + "WHERE fva:dialect = '" + dialect + "' "
+            + "AND ecm:path STARTSWITH '/FV/Workspaces/' "
+            + "AND dc:title = 'Categories' "
+            + "AND ecm:isTrashed = 0 "
+            + "AND ecm:isVersion = 0")
         .execute();
-    List<Document> documentsList = dialect_categories_directory.streamEntries()
+    List<Document> documentsList = dialectCategoriesDirectory.streamEntries()
         .collect(Collectors.toList());
 
     if (documentsList.size() > 0) {
-      Document categories_directory = documentsList.get(0);
-      String categories_directory_id = categories_directory.getId();
+      Document categoriesDirectory = documentsList.get(0);
+      String categoriesDirectoryId = categoriesDirectory.getId();
       categories = client.operation("Repository.Query").param("query",
-          "SELECT * FROM FVCategory WHERE ecm:ancestorId = '" + categories_directory_id
-              + "'AND ecm:isTrashed = 0 AND ecm:isVersion = 0 AND ecm:isProxy = 0")
+          "SELECT * FROM FVCategory WHERE ecm:ancestorId = '" + categoriesDirectoryId
+              + "'AND ecm:isTrashed = 0 "
+              + "AND ecm:isVersion = 0 "
+              + "AND ecm:isProxy = 0 "
+              + "AND ecm:isProxy = 0")
           .execute();
     }
 
     words = client.operation("Repository.Query").param("query",
         "SELECT * FROM FVWord WHERE fva:dialect = '" + dialect
-            + "' AND ecm:isTrashed = 0 AND ecm:isVersion = 0")
+            + "' AND ecm:isTrashed = 0 AND ecm:isVersion = 0 AND ecm:isProxy = 0")
         .execute();
 
-    shared_categories = client.operation("Repository.Query").param("query",
+    sharedCategories = client.operation("Repository.Query").param("query",
         "SELECT * FROM FVCategory WHERE fva:dialect IS NULL AND ecm:isTrashed = 0 AND "
             + "ecm:isVersion = 0 AND ecm:isProxy = 0")
         .execute();
@@ -300,7 +303,7 @@ public class CsvValidator {
             }
           }
 
-          for (Document d : shared_categories.getDocuments()) {
+          for (Document d : sharedCategories.getDocuments()) {
             String title = d.getTitle();
             if (word.contentEquals(title)) {
               match = true;
@@ -323,7 +326,7 @@ public class CsvValidator {
         }
       }
 
-      for (Document d : shared_categories.getDocuments()) {
+      for (Document d : sharedCategories.getDocuments()) {
         String title = d.getTitle();
         if (w.contentEquals(title)) {
           match = true;

@@ -1,6 +1,7 @@
 /**
  *
  */
+
 package mappers.inuktitut;
 
 import java.util.Arrays;

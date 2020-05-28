@@ -1,6 +1,7 @@
 /**
  *
  */
+
 package mappers.propertyreaders;
 
 import java.util.ArrayList;
@@ -24,8 +25,8 @@ public class SimpleListPropertyReader extends PropertyReader {
 
     ArrayList<Object> values = new ArrayList<>();
 
-    for (int i = 0; i < columns.length; ++i) {
-      String value = reader.getString(columns[i]).replace(",", "\\,");
+    for (String s : columns) {
+      String value = reader.getString(s).replace(",", "\\,");
 
       if (value != null && !value.isEmpty() && !value.equals("")) {
         values.add(value);
@@ -34,11 +35,6 @@ public class SimpleListPropertyReader extends PropertyReader {
 
     return values;
   }
-//
-//    public String getJsonValue(AbstractReader reader) {
-//
-//        return getValue(reader);
-//    }
 
   public void read(Document document, AbstractReader reader) {
     setProperty(document, key, getValue(reader));

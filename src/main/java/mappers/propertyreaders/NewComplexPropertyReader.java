@@ -1,6 +1,7 @@
 /**
  *
  */
+
 package mappers.propertyreaders;
 
 import java.util.HashMap;
@@ -9,9 +10,10 @@ import org.nuxeo.client.objects.Document;
 import reader.AbstractReader;
 
 /**
- * @author loopingz
- * Read a complex property
- */
+ @author loopingz
+ Read a complex property
+*/
+
 public class NewComplexPropertyReader extends PropertyReader {
 
   protected LinkedHashSet<PropertyReader> readers = null;

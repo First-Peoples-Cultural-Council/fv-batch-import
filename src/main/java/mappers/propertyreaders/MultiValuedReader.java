@@ -1,6 +1,7 @@
 /**
  *
  */
+
 package mappers.propertyreaders;
 
 import java.util.ArrayList;
@@ -8,9 +9,10 @@ import java.util.LinkedHashSet;
 import reader.AbstractReader;
 
 /**
- * @author loopingz
- * Read/Set array of property
- */
+ @author loopingz
+ Read/Set array of property
+*/
+
 public class MultiValuedReader extends JsonPropertyReader {
 
   protected LinkedHashSet<PropertyReader> readers = null;

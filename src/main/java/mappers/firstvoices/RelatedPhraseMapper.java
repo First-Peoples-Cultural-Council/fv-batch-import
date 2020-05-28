@@ -1,6 +1,7 @@
 /**
  *
  */
+
 package mappers.firstvoices;
 
 import java.io.IOException;
@@ -12,8 +13,8 @@ import mappers.propertyreaders.TrueFalsePropertyReader;
 import org.nuxeo.client.objects.Document;
 
 /**
- * @author loopingz
- * Class to migrate RELATED_PHRASES from a CSV file into the FirstVoices system.
+ @author loopingz
+ Class to migrate RELATED_PHRASES from a CSV file into the FirstVoices system.
  */
 public class RelatedPhraseMapper extends DictionaryCachedMapper {
 

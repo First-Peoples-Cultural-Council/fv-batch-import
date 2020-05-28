@@ -1,6 +1,7 @@
 /**
  *
  */
+
 package task;
 
 import common.CsvLogWriter;

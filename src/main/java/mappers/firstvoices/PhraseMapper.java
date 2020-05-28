@@ -1,6 +1,7 @@
 /**
  *
  */
+
 package mappers.firstvoices;
 
 import java.util.Map;
@@ -12,9 +13,9 @@ import mappers.propertyreaders.TrueFalsePropertyReader;
 import org.nuxeo.client.objects.Document;
 
 /**
- * @author cstuart
- * Class to migrate phrases from a CSV file (or potentially an Oracle database) into the
- * FirstVoices system.
+ @author cstuart
+ Class to migrate phrases from a CSV file (or potentially an Oracle database) into the
+ FirstVoices system.
  */
 public class PhraseMapper extends CsvMapper {
 

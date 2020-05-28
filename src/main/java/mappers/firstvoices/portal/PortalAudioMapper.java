@@ -1,6 +1,7 @@
 /**
  *
  */
+
 package mappers.firstvoices.portal;
 
 import mappers.firstvoices.BinaryMapper;

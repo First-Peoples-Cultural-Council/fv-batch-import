@@ -107,8 +107,6 @@ public class FirstVoicesMigrator extends AbstractMigrator {
   @Override
   protected void processRow(NuxeoClient client) throws IOException {
 
-    //System.out.println("|--------- ******************** ---------|");
-
     long start = System.currentTimeMillis();
     String wordValue = reader.getString("WORD_VALUE");
     String wordId = wordValue.replace("/", "");
@@ -118,10 +116,6 @@ public class FirstVoicesMigrator extends AbstractMigrator {
       wordId = wordValue.replace("/", "") + "." + ++i;
     }
     wordIds.add(wordId);
-
-    String importId = reader.getString("WORD_ID");
-    String dominantLanguageDefinition = reader.getString("DOMINANT_LANGUAGE_DEFINITION");
-    String dominantLanguageWordValue = reader.getString("DOMINANT_LANGUAGE_WORD_VALUE");
 
     // Dominant language
     String dominantLanguage = reader.getString("DOMINANT_LANGUAGE");
@@ -134,27 +128,21 @@ public class FirstVoicesMigrator extends AbstractMigrator {
           dominantLanguage.substring(0, 1).toUpperCase() + dominantLanguage.substring(1);
     }
 
-    // Phrase related strings
-    String phraseTitle = reader.getString("ABORIGINAL_LANGUAGE_SENTENCE");
-    String phraseTranslation = reader.getString("DOMINANT_LANGUAGE_SENTENCE");
-
-    // String PART_OF_SPEECH = reader.getString
-    // ("DESCR").toLowerCase();
-    int partOfSpeechId = reader.getInt("PART_OF_SPEECH_ID");
-    int categoryId = reader.getInt("CATEGORY_ID");
-    long method_start = System.currentTimeMillis();
+    long methodStart = System.currentTimeMillis();
     // TODO Change it to the new returned columns
     Map<String, Document> docs = getOrCreateLanguageDocument(client, reader);
     System.out
-        .println(
-            "Get/Create Language: " + Long.valueOf(System.currentTimeMillis() - method_start));
-    method_start = System.currentTimeMillis();
+        .println("Get/Create Language: " + Long.valueOf(System.currentTimeMillis() - methodStart));
+
+    methodStart = System.currentTimeMillis();
+    String importId = reader.getString("WORD_ID");
     if (checkWordCreated(importId, client, docs.get("Dictionary"))) {
       return;
     }
     System.out
-        .println("CheckWordCreated: " + Long.valueOf(System.currentTimeMillis() - method_start));
-    method_start = System.currentTimeMillis();
+        .println("CheckWordCreated: " + Long.valueOf(System.currentTimeMillis() - methodStart));
+
+    methodStart = System.currentTimeMillis();
     wordCount++;
     System.out.println(
         "Processing Word #" + wordCount + "/" + lines + " | Value: " + wordValue + " | New Id: "
@@ -166,7 +154,10 @@ public class FirstVoicesMigrator extends AbstractMigrator {
 
     setProperty(word, "dc:title", wordValue);
 
+    int partOfSpeechId = reader.getInt("PART_OF_SPEECH_ID");
     setProperty(word, "fv-word:part_of_speech", transformPartOfSpeech(partOfSpeechId));
+
+    int categoryId = reader.getInt("CATEGORY_ID");
     setProperty(word, "fv-word:categories", transformWordCategory(categoryId));
 
     setProperty(word, "fv:cultural_note", reader.getString("CULTURAL_NOTE"));
@@ -175,35 +166,43 @@ public class FirstVoicesMigrator extends AbstractMigrator {
     setProperty(word, "fvl:change_date", reader.getString("CHANGE_DTTM"));
 
     setProperty(word, "fvl:import_id", importId);
-    method_start = System.currentTimeMillis();
 
+    methodStart = System.currentTimeMillis();
     setProperty(word, "fv:source",
         processWordSources(reader.getString("CONTRIBUTER"), client, docs.get("Contributors")));
     System.out
-        .println("Process source: " + Long.valueOf(System.currentTimeMillis() - method_start));
+        .println("Process source: " + Long.valueOf(System.currentTimeMillis() - methodStart));
 
     setProperty(word, "fv:reference", reader.getString("REFERENCE"));
     setProperty(word, "fv:available_in_childrens_archive",
         reader.getString("AVAILABLE_IN_CHILDRENS_ARCHIVE"));
 
-    method_start = System.currentTimeMillis();
+    methodStart = System.currentTimeMillis();
     setProperty(word, "fv:related_pictures",
         processWordImages(reader, client, docs.get("Resources"), docs.get("Contributors")));
-    System.out.println("ProcessImage: " + Long.valueOf(System.currentTimeMillis() - method_start));
-    method_start = System.currentTimeMillis();
+    System.out.println("ProcessImage: " + Long.valueOf(System.currentTimeMillis() - methodStart));
+
+    methodStart = System.currentTimeMillis();
     setProperty(word, "fv:related_audio",
         processWordAudio(reader, client, docs.get("Resources"), docs.get("Contributors")));
-    System.out.println("ProcessAudio: " + Long.valueOf(System.currentTimeMillis() - method_start));
-    method_start = System.currentTimeMillis();
+    System.out.println("ProcessAudio: " + Long.valueOf(System.currentTimeMillis() - methodStart));
+
+    methodStart = System.currentTimeMillis();
     setProperty(word, "fv:related_videos",
         processWordVideo(reader, client, docs.get("Resources"), docs.get("Contributors")));
-    System.out.println("ProcessVideo: " + Long.valueOf(System.currentTimeMillis() - method_start));
+    System.out.println("ProcessVideo: " + Long.valueOf(System.currentTimeMillis() - methodStart));
+
+    String phraseTitle = reader.getString("ABORIGINAL_LANGUAGE_SENTENCE");
+    String phraseTranslation = reader.getString("DOMINANT_LANGUAGE_SENTENCE");
 
     setProperty(word, "fv-word:related_phrases",
         processWordSamplePhrase(phraseTitle, phraseTranslation, dominantLanguage, client,
             docs.get("Dictionary")));
     System.out.println(
-        "ProcessWordSamplePhrase: " + Long.valueOf(System.currentTimeMillis() - method_start));
+        "ProcessWordSamplePhrase: " + Long.valueOf(System.currentTimeMillis() - methodStart));
+
+    String dominantLanguageWordValue = reader.getString("DOMINANT_LANGUAGE_WORD_VALUE");
+    String dominantLanguageDefinition = reader.getString("DOMINANT_LANGUAGE_DEFINITION");
 
     // Create literal translation(s)
     if (!dominantLanguageWordValue.isEmpty()) {
@@ -212,7 +211,6 @@ public class FirstVoicesMigrator extends AbstractMigrator {
           "[{\"language\": \"" + dominantLanguage + "\", \"translation\": \""
               + dominantLanguageWordValue + "\"}]");
     }
-
     // Create definition(s)
     if (!dominantLanguageDefinition.isEmpty()) {
       setProperty(word,
@@ -220,8 +218,8 @@ public class FirstVoicesMigrator extends AbstractMigrator {
               + dominantLanguageDefinition + "\"}]");
     }
 
-    /**
-     * Create Word
+    /*
+     Create Word
      */
     // Need to handle existing doc
     word = client.operation("Document.Create").schemas("*")
@@ -530,25 +528,24 @@ public class FirstVoicesMigrator extends AbstractMigrator {
   }
 
   /*
-   * Process the "CONTRIBUTERS" string from the migrated word data. Split on
+   * Process the "CONTRIBUTORS" string from the migrated word data. Split on
    * commas, then check each segment to see if a matching FVContributor
    * already exists within Nuxeo, or if it needs to be created. Return a
    * comma-separated list of ID references to FVContributor documents.
    */
   public String processWordSources(String migratedSources, NuxeoClient client,
       Document contributorsFolder) {
-    String sourcesList = "";
+    StringBuilder sourcesList = new StringBuilder();
 
     if (migratedSources != null && !migratedSources.isEmpty()) {
-      // System.out.println("CONTRIBUTER: [" + migratedSources + "]");
       String[] sourcesArray = migratedSources.split("/\\s*");
 
       // Check if Contributor already exists within Nuxeo. If it does,
       // reference it. If not, create a new one.
-      for (int i = 0; i < sourcesArray.length; i++) {
-        String source = sourcesArray[i].trim();
+      for (String s : sourcesArray) {
+        String source = s.trim();
         if (contributorsCache.containsKey(source)) {
-          sourcesList += contributorsCache.get(source) + ",";
+          sourcesList.append(contributorsCache.get(source)).append(",");
           continue;
         }
         try {
@@ -573,24 +570,25 @@ public class FirstVoicesMigrator extends AbstractMigrator {
                 .param("name", newContributorDocument.getId())
                 .param("properties", newContributorDocument)
                 .execute();
-          }
-          // Contributor already exists. Retrieve its ID and add it to
-          // the list of Sources for the current Word
-          else {
+            /*
+             Contributor already exists. Retrieve its ID and add it to
+             the list of Sources for the current Word
+            */
+          } else {
             contributor = existingContributorDocs.getDocument(0);
           }
-          sourcesList += contributor.getId() + ",";
+          sourcesList.append(contributor.getId()).append(",");
           contributorsCache.put(source, contributor.getId());
         } catch (NuxeoClientException e) {
           e.printStackTrace();
         }
       }
-      if (sourcesList.endsWith(",")) {
-        sourcesList = sourcesList.substring(0, sourcesList.length() - 1);
+      if (sourcesList.toString().endsWith(",")) {
+        sourcesList = new StringBuilder(sourcesList.substring(0, sourcesList.length() - 1));
       }
     }
     // System.out.println("sourcesList: [" + sourcesList + "]");
-    return sourcesList;
+    return sourcesList.toString();
   }
 
   protected String processWordAudio(AbstractReader reader, NuxeoClient client,
@@ -620,12 +618,6 @@ public class FirstVoicesMigrator extends AbstractMigrator {
     String binaryFilename = reader.getString(prefix + "_FILENAME");
     String binaryId = reader.getString(prefix + "_ID");
     String binaryStatus = reader.getString(prefix + "_STATUS");
-
-    String binaryDesc = reader.getString(prefix + "_DESCR");
-    String binaryIsShared = reader.getString(prefix + "_SHARED");
-    String binaryRecorder = reader.getString(prefix + "_RECORDER");
-    String binaryUserId = reader.getString(prefix + "_USER_ID");
-    String binaryContributor = reader.getString(prefix + "_CONTRIBUTOR");
 
     if (binaryFilename == null || binaryId == null || binaryStatus == null || binaryFilename
         .isEmpty()
@@ -666,6 +658,12 @@ public class FirstVoicesMigrator extends AbstractMigrator {
         }
       }
     }
+
+    String binaryContributor = reader.getString(prefix + "_CONTRIBUTOR");
+    String binaryDesc = reader.getString(prefix + "_DESCR");
+    String binaryIsShared = reader.getString(prefix + "_SHARED");
+    String binaryRecorder = reader.getString(prefix + "_RECORDER");
+    String binaryUserId = reader.getString(prefix + "_USER_ID");
 
     Document binaryDoc = Document.createWithName(getId(id), profile);
     binaryDoc.setPropertyValue("dc:title", binaryName);
@@ -747,9 +745,9 @@ public class FirstVoicesMigrator extends AbstractMigrator {
             .param("name", newPhraseDocument.getId()).param("properties", newPhraseDocument)
             .execute();
         existingPhrasesCache.get(dictionaryFolder.getId()).put(phraseTitle, phrase.getId());
-      }
-      // Phrase already exists
-      else {
+
+        // Phrase already exists
+      } else {
         System.out.println("Existing FVPhrase found in Nuxeo: " + phraseTitle);
         phrase = existingPhraseDocs.getDocument(0);
       }

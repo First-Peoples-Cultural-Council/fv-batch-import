@@ -1,6 +1,7 @@
 /**
  *
  */
+
 package mappers.firstvoices;
 
 import common.ConsoleLogger;
@@ -107,7 +108,6 @@ public class SourcesMapper extends CsvMapper {
 
   @Override
   protected Document createDocument(Document doc, Integer depth) throws IOException {
-//        String title = (String) doc.getDirtyProperties().get(Properties.TITLE);
     String title = doc.getPropertyValue("dc:title");
     String value = "";
     Document remoteDoc = null;

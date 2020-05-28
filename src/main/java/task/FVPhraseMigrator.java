@@ -14,10 +14,12 @@ import org.nuxeo.client.objects.Document;
 import reader.AbstractReader;
 import reader.CsvReader;
 
-/**
- * @author cstuart dyona Class to migrate phrases from a CSV file (or potentially an Oracle
- * database) into the FirstVoices system.
- */
+/*
+ @author cstuart dyona
+ Class to migrate phrases from a CSV file (or potentially an Oracle database) into the
+ FirstVoices system.
+*/
+
 public class FVPhraseMigrator extends AbstractMigrator {
 
   protected CsvMapper mapper = null;

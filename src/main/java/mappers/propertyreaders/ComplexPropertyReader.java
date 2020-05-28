@@ -1,16 +1,18 @@
 /**
  *
  */
+
 package mappers.propertyreaders;
 
 import java.util.LinkedHashSet;
 import org.nuxeo.client.objects.Document;
 import reader.AbstractReader;
 
-/**
- * @author loopingz
- * Read a complex property
- */
+/*
+@author loopingz
+Read a complex property
+*/
+
 public class ComplexPropertyReader extends JsonPropertyReader {
 
   protected LinkedHashSet<PropertyReader> readers = null;

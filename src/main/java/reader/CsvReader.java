@@ -1,6 +1,7 @@
 /**
  *
  */
+
 package reader;
 
 import com.opencsv.CSVReader;
@@ -81,14 +82,6 @@ public class CsvReader extends AbstractReader {
     return cleanString(current[col]);
   }
 
-  protected Integer getIndex(String id) {
-    int index = headers.indexOf(id);
-    if (index >= current.length || index < 0) {
-      throw new RuntimeException("Index out of bound: " + id);
-    }
-    return index;
-  }
-
   @Override
   public String getString(String id) {
     // Escaping "
@@ -98,6 +91,16 @@ public class CsvReader extends AbstractReader {
       return "";
     }
   }
+
+  protected Integer getIndex(String id) {
+    int index = headers.indexOf(id);
+    if (index >= current.length || index < 0) {
+      throw new RuntimeException("Index out of bound: " + id);
+    }
+    return index;
+  }
+
+
 
   @Override
   public Integer getInt(String id) {
