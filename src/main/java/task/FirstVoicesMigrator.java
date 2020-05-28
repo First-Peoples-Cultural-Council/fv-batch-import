@@ -37,6 +37,9 @@ public class FirstVoicesMigrator extends AbstractMigrator {
   protected Map<String, Map<String, String>> existingPhrasesCache = new HashMap<String,
       Map<String, String>>();
 
+  // Variable used for timing full word creation
+  private long start;
+
   public FirstVoicesMigrator(CommandLine commandLine, AbstractReader reader) {
     super(reader);
     cmd = commandLine;
@@ -107,7 +110,7 @@ public class FirstVoicesMigrator extends AbstractMigrator {
   @Override
   protected void processRow(NuxeoClient client) throws IOException {
 
-    long start = System.currentTimeMillis();
+    start = System.currentTimeMillis();
     String wordValue = reader.getString("WORD_VALUE");
     String wordId = wordValue.replace("/", "");
     // Computing the wordId
