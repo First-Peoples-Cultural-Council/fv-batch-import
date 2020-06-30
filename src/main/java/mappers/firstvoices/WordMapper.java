@@ -154,10 +154,14 @@ public class WordMapper extends CsvMapper {
 
   // To upload duplicates comment out the code below this line, as well as CsvValidator line 96
   // and 122-123,  and -skipValidation
-  @Override
-  protected void cacheDocument(Document doc) {
-    cache.put(doc.getPropertyValue(Properties.TITLE), doc);
-  }
+//  @Override
+//  protected void cacheDocument(Document doc) {
+//    cache.put(doc.getPropertyValue(Properties.TITLE), doc);
+//  }
+
+  public Map<String, Document> getCache() {
+    return cache;
+  };
 
   @Override
   protected Document getFromCache(Document doc) {
@@ -175,7 +179,7 @@ public class WordMapper extends CsvMapper {
     }
     cache = new HashMap<String, Document>();
     String query =
-        "SELECT * FROM FVWord WHERE ecm:isTrashed = 0 AND fva:dialect = '" + getDialectID()
+        "SELECT * FROM FVWord WHERE ecm:isTrashed = 0 AND ecm:isProxy = 0 AND ecm:isVersion = 0 AND fva:dialect = '" + getDialectID()
             + "'";
     loadCache(query);
 

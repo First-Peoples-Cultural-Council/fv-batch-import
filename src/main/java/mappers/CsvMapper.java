@@ -6,6 +6,8 @@ package mappers;
 
 import common.ConsoleLogger;
 import java.io.IOException;
+import java.time.Duration;
+import java.time.Instant;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
@@ -306,11 +308,15 @@ public abstract class CsvMapper {
     return null;
   }
 
-  protected void loadCache(String query) throws IOException {
+  protected void loadCache(String query) {
     Integer page = 0;
     Integer pageSize = 1000;
-    System.out.println("Loading cache...");
+
+    Instant start = Instant.now();
+
     while (true) {
+      System.out.println("Loading cache...");
+
       Documents docs = client.schemas("*").operation("Repository.Query")
           .param("query", query)
           .param("currentPageIndex", page)
@@ -318,14 +324,27 @@ public abstract class CsvMapper {
           .execute();
 
       for (int i = 0; i < docs.size(); i++) {
-        cacheDocument(docs.getDocument(i));
+        if (docs.getDocument(i).getPath().contains(".trashed")) {
+          client.repository().deleteDocument(docs.getDocument(i));
+        } else {
+          cacheDocument(docs.getDocument(i));
+        }
       }
       if (docs.size() < pageSize) {
         break;
       }
       page++;
+
+      double totalPages = Math.ceil((Integer) docs.getTotalSize() / pageSize.floatValue());
+
+      System.out.println("Page " + page + "/" + totalPages + " complete.");
+
+      System.out.println("Total size of cache: " + docs.getTotalSize());
     }
-    System.out.println("Caching Complete.");
+
+    Instant end = Instant.now();
+
+    System.out.println("Caching complete in " + Duration.between(start, end).getSeconds() + " seconds");
   }
 
   protected AbstractReader getCSVReader() {

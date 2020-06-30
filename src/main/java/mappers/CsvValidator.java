@@ -59,7 +59,7 @@ public class CsvValidator {
   protected NuxeoClient client;
   protected Documents categories = null;
   protected Documents sharedCategories;
-  protected Documents words;
+  protected Map<String, Document> wordsCache;
 
 
   public CsvValidator(String nuxeoUrl, String nuxeoUser, String nuxeoPassword, String csvFile,
@@ -91,6 +91,10 @@ public class CsvValidator {
     getData(dialectID);
   }
 
+  public void setWordCache(Map<String, Document> cache) {
+    wordsCache = cache;
+  }
+
   public HashMap<String, ArrayList<String>> validate(String path, int limit) throws IOException {
     String[] header = csvReader.readNext();
     LinkedList<String> headerList = new LinkedList<String>(Arrays.asList(header));
@@ -109,17 +113,6 @@ public class CsvValidator {
       filesRead.clear();
       int columnCount = 0;
       lineNumber++;
-
-      // Add to rows processed if not a duplicate --- Comment out line 96 and 98-102 if
-      // duplicates wanted
-      if (!rowsProcessed.containsKey(nextLine[0])) {
-        rowsProcessed.put(nextLine[0], nextLine);
-
-      // This is a duplicate within the CSV file - mark as such
-      } else {
-        addToInvalid("Duplicates",
-            "Cannot upload duplicate words in CSV: line " + (lineNumber + 1) + ", " + nextLine[0]);
-      }
 
       // Review column values for each row
       for (String column : nextLine) {
@@ -140,10 +133,21 @@ public class CsvValidator {
           }
         }
 
-        // Disable if duplicate words need to be added as well as WordMapper line 123 and below
+        // Disable if duplicate words need to be added as well as WordMapper "cacheDocument" method and below
         // This checks for duplicates against the remote DB, not within the CSV
         if (columnHeader.equals("WORD")) {
           checkWordDuplicate(column, lineNumber);
+
+          // Add to rows processed if not a duplicate --- Comment out line 96 and 98-102 if
+          // duplicates wanted
+          if (!rowsProcessed.containsKey(nextLine[columnCount])) {
+            rowsProcessed.put(nextLine[columnCount], nextLine);
+
+            // This is a duplicate within the CSV file - mark as such
+          } else {
+            addToInvalid("Duplicates",
+                "Cannot upload duplicate words in CSV: line " + (lineNumber + 1) + ", " + nextLine[columnCount]);
+          }
         }
 
         if (columnHeader.equals("CATEGORIES") && categories != null) {
@@ -262,11 +266,6 @@ public class CsvValidator {
           .execute();
     }
 
-    words = client.operation("Repository.Query").param("query",
-        "SELECT * FROM FVWord WHERE fva:dialect = '" + dialect
-            + "' AND ecm:isTrashed = 0 AND ecm:isVersion = 0 AND ecm:isProxy = 0")
-        .execute();
-
     sharedCategories = client.operation("Repository.Query").param("query",
         "SELECT * FROM FVCategory WHERE fva:dialect IS NULL AND ecm:isTrashed = 0 AND "
             + "ecm:isVersion = 0 AND ecm:isProxy = 0")
@@ -343,10 +342,10 @@ public class CsvValidator {
    * @param line
    */
   private void checkWordDuplicate(String word, int line) {
-    for (Document d : words.getDocuments()) {
-      if (d.getTitle().equals(word)) {
+    for (Map.Entry<String, Document> wordsCacheEntry : wordsCache.entrySet()) {
+      if (wordsCacheEntry.getValue().getTitle().equals(word)) {
         addToInvalid("Duplicates",
-            "Cannot upload duplicate words: line " + (line + 1) + ", " + d.getTitle());
+            "Cannot upload duplicate words: line " + (line + 1) + ", " + wordsCacheEntry.getValue().getTitle());
       }
     }
   }

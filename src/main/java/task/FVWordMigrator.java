@@ -20,7 +20,7 @@ import reader.CsvReader;
  */
 public class FVWordMigrator extends AbstractMigrator {
 
-  protected CsvMapper mapper = null;
+  protected WordMapper mapper = null;
 
   protected FVWordMigrator(AbstractReader reader, String[] argv) {
     super(reader);
@@ -55,6 +55,9 @@ public class FVWordMigrator extends AbstractMigrator {
 
     CsvValidator csvVal = new CsvValidator(url, username, password, csvFile, dialectID,
         languagePath);
+
+    csvVal.setWordCache(wordMigrator.mapper.getCache());
+
     HashMap<String, ArrayList<String>> valid = csvVal.validate(blobDataPath, limit);
 
     if (valid.isEmpty() || skipValidation) {
