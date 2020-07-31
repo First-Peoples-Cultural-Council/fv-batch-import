@@ -344,7 +344,8 @@ public abstract class CsvMapper {
 
     Instant end = Instant.now();
 
-    System.out.println("Caching complete in " + Duration.between(start, end).getSeconds() + " seconds");
+    System.out.println("Caching complete in " + Duration.between(start, end).getSeconds()
+        + " seconds");
   }
 
   protected AbstractReader getCSVReader() {

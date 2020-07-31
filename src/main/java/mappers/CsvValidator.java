@@ -133,7 +133,8 @@ public class CsvValidator {
           }
         }
 
-        // Disable if duplicate words need to be added as well as WordMapper "cacheDocument" method and below
+        // Disable if duplicate words need to be added as well as
+        // WordMapper "cacheDocument" method and below
         // This checks for duplicates against the remote DB, not within the CSV
         if (columnHeader.equals("WORD")) {
           checkWordDuplicate(column, lineNumber);
@@ -146,7 +147,8 @@ public class CsvValidator {
             // This is a duplicate within the CSV file - mark as such
           } else {
             addToInvalid("Duplicates",
-                "Cannot upload duplicate words in CSV: line " + (lineNumber + 1) + ", " + nextLine[columnCount]);
+                "Cannot upload duplicate words in CSV: line " + (lineNumber + 1)
+                    + ", " + nextLine[columnCount]);
           }
         }
 
@@ -345,7 +347,8 @@ public class CsvValidator {
     for (Map.Entry<String, Document> wordsCacheEntry : wordsCache.entrySet()) {
       if (wordsCacheEntry.getValue().getTitle().equals(word)) {
         addToInvalid("Duplicates",
-            "Cannot upload duplicate words: line " + (line + 1) + ", " + wordsCacheEntry.getValue().getTitle());
+            "Cannot upload duplicate words: line " + (line + 1)
+                + ", " + wordsCacheEntry.getValue().getTitle());
       }
     }
   }
