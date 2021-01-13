@@ -35,8 +35,6 @@ public abstract class CsvMapper {
   protected static String tag;
   protected static String globalUsername;
   protected static String dialectID;
-  protected static Boolean localCategories;
-  protected static String sharedCategoriesID;
   /**
    * Complete the document model from those property
    */
@@ -90,22 +88,6 @@ public abstract class CsvMapper {
 
   public void setDialectID(String dialectID) {
     CsvMapper.dialectID = dialectID;
-  }
-
-  public static Boolean isLocalCategories() {
-    return localCategories;
-  }
-
-  public static String getSharedCategoriesID() {
-    return sharedCategoriesID;
-  }
-
-  public void setSharedCategoriesID(String sharedCategoriesID) {
-    CsvMapper.sharedCategoriesID = sharedCategoriesID;
-  }
-
-  public void setLocalCategories(Boolean localCategories) {
-    CsvMapper.localCategories = localCategories;
   }
 
   /**

@@ -34,7 +34,6 @@ public class FVWordMigrator extends AbstractMigrator {
     mapper = new WordMapper();
     mapper.setFakeCreation(false);
     mapper.setDialectID(dialectID);
-    mapper.setLocalCategories(localCategories);
 
     // Setup output of errors and log to path of data/csv file
     if (csvFile != null) {
@@ -44,12 +43,11 @@ public class FVWordMigrator extends AbstractMigrator {
 
   public static void main(String[] argv)
       throws Exception {
-    AbstractReader reader = null;
 
-    FVWordMigrator wordMigrator = new FVWordMigrator(reader, argv);
+    FVWordMigrator wordMigrator = new FVWordMigrator(null, argv);
 
     if (csvFile != null && !csvFile.isEmpty()) {
-      reader = new CsvReader(csvFile);
+      AbstractReader reader = new CsvReader(csvFile);
       wordMigrator.setReader(reader);
     }
 
@@ -57,7 +55,7 @@ public class FVWordMigrator extends AbstractMigrator {
         languagePath);
     HashMap<String, ArrayList<String>> valid = csvVal.validate(blobDataPath, limit);
 
-    if (valid.isEmpty() || skipValidation) {
+    if (valid.isEmpty() || Boolean.TRUE.equals(skipValidation)) {
       wordMigrator.process(url, username, password, "/" + domain + "/Workspaces/");
     } else {
       csvVal.printInvalidEntries();
@@ -71,11 +69,8 @@ public class FVWordMigrator extends AbstractMigrator {
     Map<String, Document> docs = getOrCreateLanguageDocument(client, reader);
     docs.put("parent", docs.get("Dictionary"));
 
-    // Set sharedCategoriesID for use by CategoryMapper
-    mapper.setSharedCategoriesID(sharedCategoriesID);
-
     try {
-      Document wordDoc = mapper.process(docs, client, reader);
+      mapper.process(docs, client, reader);
     } catch (IOException e) {
       // File not found
       logWriter.writeLine(reader.getRow(), e.getMessage());

@@ -58,7 +58,6 @@ public class CsvValidator {
   protected CSVReader csvReader;
   protected NuxeoClient client;
   protected Documents categories = null;
-  protected Documents sharedCategories;
   protected Documents words;
 
 
@@ -236,7 +235,7 @@ public class CsvValidator {
 
   }
 
-  private void getData(String dialect) throws IOException {
+  private void getData(String dialect) {
 
     // Get the directory id for the dialect categories
     Documents dialectCategoriesDirectory = client.operation("Repository.Query")
@@ -250,7 +249,7 @@ public class CsvValidator {
     List<Document> documentsList = dialectCategoriesDirectory.streamEntries()
         .collect(Collectors.toList());
 
-    if (documentsList.size() > 0) {
+    if (!documentsList.isEmpty()) {
       Document categoriesDirectory = documentsList.get(0);
       String categoriesDirectoryId = categoriesDirectory.getId();
       categories = client.operation("Repository.Query").param("query",
@@ -267,16 +266,10 @@ public class CsvValidator {
             + "' AND ecm:isTrashed = 0 AND ecm:isVersion = 0 AND ecm:isProxy = 0")
         .execute();
 
-    sharedCategories = client.operation("Repository.Query").param("query",
-        "SELECT * FROM FVCategory WHERE fva:dialect IS NULL AND ecm:isTrashed = 0 AND "
-            + "ecm:isVersion = 0 AND ecm:isProxy = 0")
-        .execute();
-
-
   }
 
   private void checkCategoryExists(String w, int line) {
-    Boolean match = false;
+    boolean match = false;
     String[] temp;
 
     if (w.contains(",")) {
@@ -296,15 +289,6 @@ public class CsvValidator {
               break;
             }
           }
-
-          for (Document d : sharedCategories.getDocuments()) {
-            String title = d.getTitle();
-            if (word.contentEquals(title)) {
-              match = true;
-              break;
-            }
-          }
-
           if (!match) {
             addToInvalid("Missing Categories",
                 "Only existing categories allowed: " + word + " in line " + (line + 1));
@@ -313,14 +297,6 @@ public class CsvValidator {
       }
     } else if (!w.isEmpty()) {
       for (Document d : categories.getDocuments()) {
-        String title = d.getTitle();
-        if (w.contentEquals(title)) {
-          match = true;
-          break;
-        }
-      }
-
-      for (Document d : sharedCategories.getDocuments()) {
         String title = d.getTitle();
         if (w.contentEquals(title)) {
           match = true;

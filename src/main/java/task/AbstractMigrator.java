@@ -61,10 +61,6 @@ public abstract class AbstractMigrator {
       "-skipValidation"}, description = "Allows you to skip the validation and process valid "
       + "records")
   protected static Boolean skipValidation = false;
-  @Parameter(names = {
-      "-localCategories"}, description = "Allows you to skip the validation and process valid "
-      + "records")
-  protected static Boolean localCategories = false;
   static Options options = new Options();
   protected int lines = 0;
   protected int wordCount = 0;
@@ -90,8 +86,6 @@ public abstract class AbstractMigrator {
   protected String dialectDocumentType = "FVDialect";
   protected CsvLogWriter logWriter = null;
   protected boolean isDialectNewlyCreated = false;
-  protected String sharedCategoriesID = null;
-
 
   protected AbstractMigrator(AbstractReader reader) {
     this.reader = reader;
@@ -262,14 +256,6 @@ public abstract class AbstractMigrator {
 
     // Add SharedData directory to cache
     cache.put("Shared Data", client.schemas("*").repository().fetchDocumentByPath(sharedDataPath));
-
-    // Add Shared Categories to cache
-    cache.put("Shared Categories",
-        client.schemas("*").repository()
-            .fetchDocumentByPath(sharedDataPath + "Shared Categories"));
-
-    // Set sharedCategoriesID variable for use by FVWordMigrator
-    sharedCategoriesID = cache.get("Shared Categories").getUid();
 
     // Add dialect children to cache
     assert dialectDoc != null;

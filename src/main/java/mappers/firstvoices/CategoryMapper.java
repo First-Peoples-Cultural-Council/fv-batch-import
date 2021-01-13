@@ -28,9 +28,6 @@ public class CategoryMapper extends DictionaryCachedMapper {
   @Override
   protected String getCacheQuery() {
 
-    Boolean useLocal = isLocalCategories();
-
-    /* For Local Dialect categories add running parameter localCategories */
     Documents dialectCategoriesDirectory = client.operation("Repository.Query")
         .param("query", "SELECT * FROM FVCategories "
             + "WHERE fva:dialect = '" + getDialectID() + "' "
@@ -42,16 +39,14 @@ public class CategoryMapper extends DictionaryCachedMapper {
     List<Document> documentsList = dialectCategoriesDirectory.streamEntries().collect(
         Collectors.toList());
 
-    if (documentsList.size() > 0 && useLocal) {
+    if (!documentsList.isEmpty()) {
       Document categoriesDirectory = documentsList.get(0);
       String categoriesDirectoryId = categoriesDirectory.getId();
       return "SELECT * FROM FVCategory WHERE ecm:ancestorId = '" + categoriesDirectoryId
           + "'AND ecm:isTrashed = 0 AND ecm:isVersion = 0 AND ecm:isProxy = 0";
     }
-
-    /* Else return query for shared categories */
-    return "SELECT * FROM FVCategory WHERE ecm:ancestorId = '" + getSharedCategoriesID()
-        + "'AND ecm:isTrashed = 0 AND ecm:isVersion = 0 AND ecm:isProxy = 0";
+    /* Else return null */
+    return null;
 
   }
 
