@@ -1,7 +1,3 @@
-/**
- *
- */
-
 package reader;
 
 import java.text.Normalizer;
@@ -23,7 +19,7 @@ public abstract class AbstractReader {
 
   public abstract String[] getRow();
 
-  protected String cleanString(String value) {
+  public String cleanString(String value) {
     if (value == null) {
       return "";
     }
