@@ -1,7 +1,3 @@
-/**
- *
- */
-
 package mappers.firstvoices;
 
 import java.io.IOException;
@@ -22,7 +18,21 @@ public class CategoryMapper extends DictionaryCachedMapper {
     super("FVCategory", Columns.CATEGORIES);
     parentKey = "Categories";
     cacheProperty = Properties.TITLE;
-    propertyReaders.add(new PropertyReader(Properties.WORD_CATEGORIES, Columns.CATEGORIES));
+    propertyReaders.add(new PropertyReader(Properties.WORD_CATEGORIES, Columns.CATEGORIES, true));
+  }
+
+  @Override
+  protected String getCachedProperty(Document doc, boolean fromDirty) {
+    String cachedProperty;
+
+    if (fromDirty) {
+      cachedProperty = (String) doc.getDirtyProperties().get(cacheProperty);
+    } else {
+      cachedProperty = doc.getPropertyValue(cacheProperty);
+    }
+
+    // For categories, we can normalize to lowercase
+    return (cachedProperty == null) ? null : cachedProperty.toLowerCase();
   }
 
   @Override

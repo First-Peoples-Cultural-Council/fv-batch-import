@@ -1,7 +1,3 @@
-/**
- *
- */
-
 package mappers.firstvoices;
 
 import common.ConsoleLogger;
@@ -17,7 +13,7 @@ import org.nuxeo.client.objects.Document;
  */
 public abstract class DictionaryCachedMapper extends CsvMapper {
 
-  private static Map<String, Map<String, Document>> cache = null;
+  protected static Map<String, Map<String, Document>> cache = null;
   protected String prefix = "";
   protected String currentCacheId = null;
   protected String cacheProperty = Properties.TITLE;
@@ -27,6 +23,13 @@ public abstract class DictionaryCachedMapper extends CsvMapper {
   }
 
   protected abstract String getCacheQuery();
+
+  protected String getCachedProperty(Document doc, boolean fromDirty) {
+    if (fromDirty) {
+      return (String) doc.getDirtyProperties().get(cacheProperty);
+    }
+    return doc.getPropertyValue(cacheProperty);
+  }
 
   @Override
   protected boolean preCreate() {
@@ -39,7 +42,7 @@ public abstract class DictionaryCachedMapper extends CsvMapper {
     if (!cache.containsKey(currentCacheId)) {
       return null;
     }
-    String cacheKey = (String) doc.getDirtyProperties().get(cacheProperty);
+    String cacheKey = getCachedProperty(doc, true);
     if (cacheKey != null && cache.get(currentCacheId).containsKey(cacheKey)) {
       return cache.get(currentCacheId).get(cacheKey);
     }
@@ -52,7 +55,7 @@ public abstract class DictionaryCachedMapper extends CsvMapper {
 
   @Override
   protected void cacheDocument(Document doc) {
-    cache.get(getInstanceCacheKey()).put(doc.getPropertyValue(cacheProperty), doc);
+    cache.get(getInstanceCacheKey()).put(getCachedProperty(doc, false), doc);
   }
 
   @Override

@@ -1,7 +1,3 @@
-/**
- *
- */
-
 package mappers.propertyreaders;
 
 import org.nuxeo.client.objects.Document;
@@ -15,10 +11,17 @@ public class PropertyReader {
 
   protected Object column;
   protected String key;
+  protected boolean ignoreCase = false;
 
   public PropertyReader(String key, Object column) {
     this.column = column;
     this.key = key;
+  }
+
+  public PropertyReader(String key, Object column, boolean ignoreCase) {
+    this.column = column;
+    this.key = key;
+    this.ignoreCase = ignoreCase;
   }
 
   public String getKey() {
@@ -26,6 +29,10 @@ public class PropertyReader {
   }
 
   public Object getValue(AbstractReader reader) {
+    if (ignoreCase) {
+      return reader.getString(column).toLowerCase();
+    }
+
     return reader.getString(column);
   }
 
