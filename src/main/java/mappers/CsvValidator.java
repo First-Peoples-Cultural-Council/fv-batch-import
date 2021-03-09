@@ -261,7 +261,7 @@ public class CsvValidator {
           .execute();
     }
 
-    words = client.operation("Repository.Query").param("query",
+    words = client.timeout(120).operation("Repository.Query").param("query",
         "SELECT * FROM FVWord WHERE fva:dialect = '" + dialect
             + "' AND ecm:isTrashed = 0 AND ecm:isVersion = 0 AND ecm:isProxy = 0")
         .execute();
