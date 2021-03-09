@@ -3,6 +3,7 @@ target/
 **/.DS_Store
 .project
 Desktop.ini
+data/
 .vscode
 .idea
 .settings
