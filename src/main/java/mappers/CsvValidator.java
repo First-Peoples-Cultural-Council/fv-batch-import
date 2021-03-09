@@ -61,6 +61,9 @@ public class CsvValidator {
   protected Documents words;
 
 
+  /**
+   * Validates CSV prior to processing.
+   */
   public CsvValidator(String nuxeoUrl, String nuxeoUser, String nuxeoPassword, String csvFile,
       String dialectID, String languagePath) throws IOException {
     if (csvFile != null && !csvFile.isEmpty()) {
@@ -90,6 +93,9 @@ public class CsvValidator {
     getData(dialectID);
   }
 
+  /**
+   * Perform the actual validation.
+   */
   public HashMap<String, ArrayList<String>> validate(String path, int limit) throws IOException {
     String[] header = csvReader.readNext();
     LinkedList<String> headerList = new LinkedList<String>(Arrays.asList(header));
@@ -215,18 +221,17 @@ public class CsvValidator {
     if (!temp.exists()) {
       if (tempWithMp3.exists()) {
         addToInvalid("Audio Issues",
-            "Recoverable error. Wrong or missing extension for file " + word + " in Column " + header + ", " + "Line " + (line
-                + 1));
+            "Recoverable error. Wrong or missing extension for file "
+                + word + " in Column " + header + ", " + "Line " + (line + 1));
       } else if (tempWithWav.exists()) {
         addToInvalid("Audio Issues",
-            "Recoverable error. Wrong or missing extension for file " + word + " in Column " + header + ", " + "Line " + (line
-                + 1));
+            "Recoverable error. Wrong or missing extension for file "
+                + word + " in Column " + header + ", " + "Line " + (line + 1));
       } else if (tempWithNoSpaces.exists()) {
         addToInvalid("Audio Issues",
-            "Recoverable error. Spaces in file name " + word + " in Column " + header + ", " + "Line " + (line
-                + 1));
-      }
-      else {
+            "Recoverable error. Spaces in file name "
+                + word + " in Column " + header + ", " + "Line " + (line + 1));
+      } else {
         addToInvalid("Audio Issues",
             "Missing file " + word + " in Column " + header + ", " + "Line " + (line + 1));
       }
@@ -332,10 +337,7 @@ public class CsvValidator {
   }
 
   /**
-   * This will check against the words that already exist in the FirstVoices database
-   *
-   * @param word
-   * @param line
+   * This will check against the words that already exist in the FirstVoices database.
    */
   private void checkWordDuplicate(String word, int line) {
     for (Document d : words.getDocuments()) {
@@ -361,6 +363,10 @@ public class CsvValidator {
     invalid.put(key, currentValuesInKey);
   }
 
+  /**
+   * Outputs invalid entries.
+   * If an entry has "Recoverable", the script should be able to handle it.
+   */
   public void printInvalidEntries() {
     for (Map.Entry<String, ArrayList<String>> entry : invalid.entrySet()) {
       System.out.println(entry.getKey());
