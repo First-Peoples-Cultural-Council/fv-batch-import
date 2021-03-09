@@ -137,8 +137,7 @@ public abstract class BinaryMapper extends DictionaryCachedMapper {
           file = fileWithoutLeadingSpaces;
         } else if (fileWithNoSpaces.exists()) {
           file = fileWithNoSpaces;
-        }
-        else {
+        } else {
           throw new IOException(binaryFileRelativePath + " File not found");
         }
       }
