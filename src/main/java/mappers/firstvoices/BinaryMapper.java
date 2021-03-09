@@ -96,14 +96,28 @@ public abstract class BinaryMapper extends DictionaryCachedMapper {
         binaryFileRelativePath = binaryFileRelativePath.substring(1);
       }
 
+      String filenameNoExtension =
+          binaryFileRelativePath.substring(0, binaryFileRelativePath.indexOf("."));
+
       String binaryFileFullPath = getDataPath() + binaryFileRelativePath;
-      binaryFileFullPath.replace("/", "_");
+      binaryFileFullPath = binaryFileFullPath.replace("/", "_");
 
       File file = new File(binaryFileFullPath);
 
       if (binaryFileRelativePath.equals("") || !file.exists()) {
-        throw new IOException(binaryFileRelativePath + " File not found");
-        //return null;
+        String fileWithMp3Extension = getDataPath() + filenameNoExtension + ".mp3";
+        File mp3File = new File(fileWithMp3Extension.replace("/", "_"));
+
+        String fileWithWavExtension = getDataPath() + filenameNoExtension + ".wav";
+        File wavFile = new File(fileWithWavExtension.replace("/", "_"));
+
+        if (mp3File.exists()) {
+          file = mp3File;
+        } else if (wavFile.exists()) {
+          file = wavFile;
+        } else {
+          throw new IOException(binaryFileRelativePath + " File not found");
+        }
       }
 
       // Get CSV Reader

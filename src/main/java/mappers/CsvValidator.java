@@ -200,14 +200,20 @@ public class CsvValidator {
 
   private void checkFileExists(String path, String header, int line, String word) {
     File temp = new File(path.trim());
-    File tempWithMp3 = new File(path.replace("wav", "mp3"));
+    File tempWithMp3 = new File(path.substring(0, path.indexOf(".")) + ".mp3");
+    File tempWithWav = new File(path.substring(0, path.indexOf(".")) + ".wav");
 
     if (!temp.exists()) {
       if (tempWithMp3.exists()) {
         addToInvalid("Audio Issues",
-            "Wrong extension for file " + word + " in Column " + header + ", " + "Line " + (line
+            "Recoverable error. Wrong or missing extension for file " + word + " in Column " + header + ", " + "Line " + (line
                 + 1));
-      } else {
+      } else if (tempWithWav.exists()) {
+        addToInvalid("Audio Issues",
+            "Recoverable error. Wrong or missing extension for file " + word + " in Column " + header + ", " + "Line " + (line
+                + 1));
+      }
+      else {
         addToInvalid("Audio Issues",
             "Missing file " + word + " in Column " + header + ", " + "Line " + (line + 1));
       }
