@@ -199,9 +199,18 @@ public class CsvValidator {
   }
 
   private void checkFileExists(String path, String header, int line, String word) {
-    File temp = new File(path.trim());
-    File tempWithMp3 = new File(path.substring(0, path.indexOf(".")) + ".mp3");
-    File tempWithWav = new File(path.substring(0, path.indexOf(".")) + ".wav");
+    File temp = new File(path.trim().replace("/ ", "/"));
+
+    int extensionPosition = path.indexOf(".");
+
+    if (extensionPosition != -1) {
+      // A file extension exists, trim to get filename without extension
+      path = path.substring(0, extensionPosition);
+    }
+
+    File tempWithMp3 = new File(path + ".mp3");
+    File tempWithWav = new File(path + ".wav");
+    File tempWithNoSpaces = new File(path.replace(" ", ""));
 
     if (!temp.exists()) {
       if (tempWithMp3.exists()) {
@@ -211,6 +220,10 @@ public class CsvValidator {
       } else if (tempWithWav.exists()) {
         addToInvalid("Audio Issues",
             "Recoverable error. Wrong or missing extension for file " + word + " in Column " + header + ", " + "Line " + (line
+                + 1));
+      } else if (tempWithNoSpaces.exists()) {
+        addToInvalid("Audio Issues",
+            "Recoverable error. Spaces in file name " + word + " in Column " + header + ", " + "Line " + (line
                 + 1));
       }
       else {

@@ -91,31 +91,54 @@ public abstract class BinaryMapper extends DictionaryCachedMapper {
       // Wait to create the source first
 
       String binaryFileRelativePath = binaryPathReader.getCacheValue();
+
       // Remove leading slash on filename
       if (binaryFileRelativePath.startsWith("/")) {
         binaryFileRelativePath = binaryFileRelativePath.substring(1);
       }
 
-      String filenameNoExtension =
-          binaryFileRelativePath.substring(0, binaryFileRelativePath.indexOf("."));
+      // Replace slash with underscore
+      binaryFileRelativePath = binaryFileRelativePath.replace("/", "_");
+
+      // Extract filename with no extension
+      String filenameNoExtension = binaryFileRelativePath;
+      int extensionPosition = binaryFileRelativePath.indexOf(".");
+
+      if (extensionPosition != -1) {
+        // A file extension exists, trim to get filename without extension
+        filenameNoExtension =
+            binaryFileRelativePath.substring(0, extensionPosition);
+      }
 
       String binaryFileFullPath = getDataPath() + binaryFileRelativePath;
-      binaryFileFullPath = binaryFileFullPath.replace("/", "_");
 
       File file = new File(binaryFileFullPath);
 
       if (binaryFileRelativePath.equals("") || !file.exists()) {
-        String fileWithMp3Extension = getDataPath() + filenameNoExtension + ".mp3";
-        File mp3File = new File(fileWithMp3Extension.replace("/", "_"));
+        // Attempt mp3 file
+        File mp3File = new File(getDataPath() + filenameNoExtension + ".mp3");
 
-        String fileWithWavExtension = getDataPath() + filenameNoExtension + ".wav";
-        File wavFile = new File(fileWithWavExtension.replace("/", "_"));
+        // Attempt wav file
+        File wavFile = new File(getDataPath() + filenameNoExtension + ".wav");
+
+        // Attempt file with trimmed spaces
+        File fileWithoutLeadingSpaces =
+            new File(getDataPath() + binaryFileRelativePath.trim());
+
+        // Attempt file with NO spaces
+        File fileWithNoSpaces =
+            new File(getDataPath() + binaryFileRelativePath.replace(" ", ""));
 
         if (mp3File.exists()) {
           file = mp3File;
         } else if (wavFile.exists()) {
           file = wavFile;
-        } else {
+        } else if (fileWithoutLeadingSpaces.exists()) {
+          file = fileWithoutLeadingSpaces;
+        } else if (fileWithNoSpaces.exists()) {
+          file = fileWithNoSpaces;
+        }
+        else {
           throw new IOException(binaryFileRelativePath + " File not found");
         }
       }
