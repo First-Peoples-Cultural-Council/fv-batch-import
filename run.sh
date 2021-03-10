@@ -4,21 +4,7 @@
 echo "Running against base url: ${BASE_URL} with workspace id ${SITE_WORKSPACE_GUID}"
 
 for i in ./data/${SITE_WORKSPACE_GUID}/*${MIGRATOR_KEYWORD}*.csv; do
-
-    echo "Processing file ${i}...";
-
-    java -Xmx1g -jar target/fv-batch-import-*.jar \
-    -url "${BASE_URL}" \
-    -username ${JENKINS_PROD_USERNAME} \
-    -domain FV \
-    -dialect-id ${SITE_WORKSPACE_GUID} \
-    -csv-file \
-    $i \
-    -data-path \
-    data/${SITE_WORKSPACE_GUID}/files/ \
-    ${SKIP_VALIDATION_PARAM} \
-    -password \
-    ${JENKINS_PROD_PASSWORD}
-
+    echo "Processing file ${i} (${SKIP_VALIDATION_PARAM}) ...";
+    java -Xmx1g -jar target/fv-batch-import-*.jar -url "${BASE_URL}" -username ${JENKINS_PROD_USERNAME} -domain FV -dialect-id ${SITE_WORKSPACE_GUID} -csv-file $i -data-path data/${SITE_WORKSPACE_GUID}/files/ ${SKIP_VALIDATION_PARAM} -password ${JENKINS_PROD_PASSWORD}
     echo "${i} Completed."
 done
