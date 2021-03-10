@@ -12,7 +12,6 @@ import java.io.File;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.logging.FileHandler;
 import java.util.logging.Logger;
@@ -185,6 +184,9 @@ public abstract class AbstractMigrator {
     } catch (IOException e) {
       // TODO Auto-generated catch block
       e.printStackTrace();
+
+      // Exit with error
+      System.exit(1);
     } finally {
       if (client != null) {
         client.disconnect();
@@ -193,6 +195,9 @@ public abstract class AbstractMigrator {
         // Save row to another CSV
         logWriter.close();
       }
+
+      // Exit with 0 (success)
+      System.exit(0);
     }
   }
 

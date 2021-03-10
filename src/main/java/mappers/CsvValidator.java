@@ -351,6 +351,15 @@ public class CsvValidator {
   public void close() throws IOException {
     csvReader.close();
     client.disconnect();
+
+    if (invalid.size() == 0) {
+      // Exit with 0 (success)
+      System.exit(0);
+    } else {
+      // Exit with 1 (failed)
+      System.exit(1);
+    }
+
   }
 
   private void addToInvalid(String key, String errorValue) {
