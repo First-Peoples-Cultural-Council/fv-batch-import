@@ -36,7 +36,8 @@ public class PhraseBookMapper extends RelatedPhraseMapper {
   @Override
   protected Document createDocument(Document doc, Integer depth) throws IOException {
 
-    String[] categories = doc.getPropertyValue("fv-phrase:phrase_books").toString().split(",");
+    // Split multiple phrase books using pipe (|) since they may have commas in them
+    String[] categories = doc.getPropertyValue("fv-phrase:phrase_books").toString().split("\\|");
     ArrayList<String> categoryIDs = new ArrayList<>();
 
     for (String category : categories) {
