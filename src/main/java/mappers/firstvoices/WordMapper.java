@@ -175,7 +175,10 @@ public class WordMapper extends CsvMapper {
     }
     cache = new HashMap<String, Document>();
     String query =
-        "SELECT * FROM FVWord WHERE ecm:isTrashed = 0 AND fva:dialect = '" + getDialectID()
+        "SELECT * FROM FVWord WHERE ecm:isTrashed = 0 "
+            + "AND ecm:isProxy = 0 "
+            + "AND ecm:isVersion = 0 "
+            + "AND fva:dialect = '" + getDialectID()
             + "'";
     loadCache(query);
 

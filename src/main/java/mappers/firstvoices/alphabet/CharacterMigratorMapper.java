@@ -60,6 +60,6 @@ public class CharacterMigratorMapper extends DictionaryCachedMapper {
   @Override
   protected String getCacheQuery() {
     return "SELECT * FROM FVCharacter WHERE ecm:parentId='" + documents.get(parentKey).getId()
-        + "' AND ecm:isTrashed = 0";
+        + "' AND ecm:isTrashed = 0 AND ecm:isProxy = 0 AND ecm:isVersion = 0";
   }
 }

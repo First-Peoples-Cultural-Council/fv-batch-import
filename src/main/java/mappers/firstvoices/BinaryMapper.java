@@ -198,7 +198,9 @@ public abstract class BinaryMapper extends DictionaryCachedMapper {
   @Override
   protected String getCacheQuery() {
     return "SELECT * FROM " + type + " WHERE ecm:parentId='" + documents.get("Resources").getId()
-        + "' AND ecm:isTrashed = 0";
+        + "' AND ecm:isTrashed = 0"
+        + " AND ecm:isProxy = 0"
+        + " AND ecm:isVersion = 0";
   }
 
 }

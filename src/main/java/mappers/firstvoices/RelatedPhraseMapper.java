@@ -88,7 +88,7 @@ public class RelatedPhraseMapper extends DictionaryCachedMapper {
   @Override
   protected String getCacheQuery() {
     return "SELECT * FROM FVPhrase WHERE ecm:parentId='" + documents.get("Dictionary").getId()
-        + "' AND ecm:isTrashed = 0";
+        + "' AND ecm:isTrashed = 0 AND ecm:isVersion = 0 AND ecm:isProxy = 0";
   }
 
   @Override

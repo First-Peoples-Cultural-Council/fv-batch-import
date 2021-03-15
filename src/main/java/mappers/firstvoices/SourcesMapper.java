@@ -94,7 +94,7 @@ public class SourcesMapper extends CsvMapper {
   protected String getCacheQuery() {
     // Include all contributors from Dialect
     return "SELECT * FROM FVContributor WHERE ecm:parentId='" + documents.get("Contributors")
-        .getId() + "' AND ecm:isTrashed = 0";
+        .getId() + "' AND ecm:isTrashed = 0 AND ecm:isVersion = 0 AND ecm:isProxy = 0";
   }
 
   private void updateMainDocumentReference(String linkKey, ArrayList<String> sourcesIds) {
