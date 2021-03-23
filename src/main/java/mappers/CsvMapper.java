@@ -70,6 +70,15 @@ public abstract class CsvMapper {
   protected Boolean fakeCreation = false;
   protected AbstractReader csvReader = null;
 
+  public enum UpdateStrategy {
+    FILL_EMPTY
+  }
+
+  /**
+   * How to handle existing records
+   * Can be an ENUM eventually
+   */
+  public UpdateStrategy updateStrategy = null;
 
   protected CsvMapper(String type, Object column) {
     this.type = type;
@@ -104,6 +113,10 @@ public abstract class CsvMapper {
 
   public void setFakeCreation(Boolean fakeCreation) {
     this.fakeCreation = fakeCreation;
+  }
+
+  public void setUpdateStrategy(UpdateStrategy updateStrategy) {
+    this.updateStrategy = updateStrategy;
   }
 
   /**

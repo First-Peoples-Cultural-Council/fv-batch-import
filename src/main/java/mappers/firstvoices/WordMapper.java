@@ -142,7 +142,23 @@ public class WordMapper extends CsvMapper {
       createdObjects++;
       createdWords++;
 
-    } else {
+    } else if (updateStrategy.equals(UpdateStrategy.FILL_EMPTY)) { // updateStrategy.equals(UpdateStrategy.FILL_EMPTY)
+      System.out.println("Result exists and update strategy to fill empty. Proceeding...");
+
+      Document finalResult = result;
+
+      doc.getProperties().forEach((k, v) -> {
+        if (finalResult.getPropertyValue(k) == null ||
+            String.valueOf(finalResult.getPropertyValue(k)).equals("")) {
+          finalResult.setPropertyValue(k, v);
+          System.out.println("Field " + k + " was updated to `" + v + "`");
+        }
+      });
+
+      client.repository().updateDocument(finalResult);
+      System.out.println("Existing entry " + finalResult.getTitle() + " was updated.");
+    }
+    else {
       throw new IOException("Skipped - Entry already exists in database.");
     }
 
