@@ -186,6 +186,12 @@ public abstract class CsvMapper {
         createdWords++;
       }
       cacheDocument(result);
+    } else if (updateStrategy.equals(UpdateStrategy.FILL_EMPTY)) {
+      fillEmptyStrategy(doc, result);
+    } else if (updateStrategy.equals(UpdateStrategy.DANGEROUS_OVERWRITE)) {
+      dangerousOverwriteStrategy(doc, result);
+    } else if (updateStrategy.equals(UpdateStrategy.OVERWRITE_AUDIO)) {
+      overwriteAudioStrategy(doc, result);
     } else {
       System.out.println("Result exists. Skipping.");
     }
@@ -325,6 +331,54 @@ public abstract class CsvMapper {
       page++;
     }
     System.out.println("Caching Complete.");
+  }
+
+  protected void fillEmptyStrategy(Document doc, Document result) {
+    System.out.println("Result exists and update strategy to fill empty. Proceeding...");
+
+    Document finalResult = result;
+
+    doc.getProperties().forEach((k, v) -> {
+      Object currentValue = finalResult.getPropertyValue(k);
+      if (isPropertyValueEmpty(currentValue)
+          && !isPropertyValueEmpty(v)) {
+        finalResult.setPropertyValue(k, v);
+        System.out.println("Field " + k + " was updated to `" + v + "`");
+      }
+    });
+
+    if (!finalResult.getDirtyProperties().isEmpty()) {
+      client.repository().updateDocument(finalResult);
+      System.out.println("-----> Existing entry " + finalResult.getTitle() + " was updated.");
+    }
+  }
+
+  protected void dangerousOverwriteStrategy(Document doc, Document result) {
+    System.out.println("Result exists and update strategy to overwrite. Proceeding...");
+
+    Document finalResult = result;
+
+    doc.getProperties().forEach((k, v) -> {
+      finalResult.setPropertyValue(k, v);
+      System.out.println("Field " + k + " was updated to `" + v + "`");
+    });
+
+    if (!finalResult.getDirtyProperties().isEmpty()) {
+      client.repository().updateDocument(finalResult);
+      System.out.println("-----> Existing entry " + finalResult.getTitle() + " was updated.");
+    }
+  }
+
+  protected void overwriteAudioStrategy(Document doc, Document result) {
+    System.out.println("Result exists and update strategy to overwrite audio. Proceeding...");
+    /// Update audio
+    Document finalResult = result;
+    Object relatedAudio = doc.getDirtyProperties().get("fv:related_audio");
+
+    if (!isPropertyValueEmpty(relatedAudio)) {
+      finalResult.setPropertyValue("fv:related_audio", relatedAudio);
+      client.repository().updateDocument(finalResult);
+    }
   }
 
   protected AbstractReader getCSVReader() {
