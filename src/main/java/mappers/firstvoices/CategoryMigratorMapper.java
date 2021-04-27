@@ -51,8 +51,10 @@ public class CategoryMigratorMapper extends CsvMapper {
       return;
     }
     cache = new HashMap<String, Document>();
-    String query = "SELECT * FROM FVCategory WHERE ecm:isTrashed = 0 AND ecm:isVersion = 0 AND ecm:isProxy = 0 AND ecm:path STARTSWITH "
-        + "'/FV/Workspaces'";
+    String query = "SELECT * FROM FVCategory WHERE ecm:isTrashed = 0 "
+        + "AND ecm:isVersion = 0 "
+        + "AND ecm:isProxy = 0 "
+        + "AND ecm:path STARTSWITH '/FV/Workspaces'";
     loadCache(query);
   }
 

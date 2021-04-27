@@ -148,8 +148,7 @@ public class WordMapper extends CsvMapper {
       dangerousOverwriteStrategy(doc, result);
     } else if (updateStrategy.equals(UpdateStrategy.OVERWRITE_AUDIO)) {
       overwriteAudioStrategy(doc, result);
-    }
-    else {
+    } else {
       throw new IOException("Skipped - Entry already exists in database.");
     }
 

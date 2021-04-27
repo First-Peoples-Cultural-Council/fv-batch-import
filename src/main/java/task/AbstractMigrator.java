@@ -64,7 +64,7 @@ public abstract class AbstractMigrator {
   protected static Boolean skipValidation = false;
 
   @Parameter(names = {
-      "-updateStrategy"}, description = "Allows you to overwrite audio, fill empty, or overwrite everything")
+      "-updateStrategy"}, description = "Overwrite audio, fill empty, or overwrite everything")
   protected static UpdateStrategy updateStrategy = UpdateStrategy.DEFAULT;
 
   static Options options = new Options();
