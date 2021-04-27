@@ -89,9 +89,9 @@ Available update strategies:
     
 DEFAULT: Create records; will not create duplicates.
 
-FILL_EMPTY: Update records but will only populate empty fields with new values.
+FILL_EMPTY: Update records but will only populate existing fields that are empty with new values.
 
-DANGEROUS_OVERWRITE: Will overwrite ALL fields whether empty or not with new values.
+DANGEROUS_OVERWRITE: Will overwrite ALL existing fields whether empty or not with new values.
 
 OVERWRITE_AUDIO: Will update the audio on existing entries, and nothing else.
 
