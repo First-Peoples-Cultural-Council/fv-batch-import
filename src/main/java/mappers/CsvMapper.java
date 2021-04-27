@@ -8,6 +8,7 @@ import common.ConsoleLogger;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
@@ -70,6 +71,18 @@ public abstract class CsvMapper {
   protected Boolean fakeCreation = false;
   protected AbstractReader csvReader = null;
 
+  public enum UpdateStrategy {
+    DEFAULT, // Create the records; will reject duplicates
+    FILL_EMPTY, // Will update empty values to new values on existing entries
+    DANGEROUS_OVERWRITE, // Will OVERWRITE all values on existing entries
+    OVERWRITE_AUDIO // Will update audio on existing entries
+  }
+
+  /**
+   * How to handle existing records
+   * Can be an ENUM eventually
+   */
+  public UpdateStrategy updateStrategy = null;
 
   protected CsvMapper(String type, Object column) {
     this.type = type;
@@ -104,6 +117,10 @@ public abstract class CsvMapper {
 
   public void setFakeCreation(Boolean fakeCreation) {
     this.fakeCreation = fakeCreation;
+  }
+
+  public void setUpdateStrategy(UpdateStrategy updateStrategy) {
+    this.updateStrategy = updateStrategy;
   }
 
   /**
@@ -169,6 +186,12 @@ public abstract class CsvMapper {
         createdWords++;
       }
       cacheDocument(result);
+    } else if (updateStrategy.equals(UpdateStrategy.FILL_EMPTY)) {
+      fillEmptyStrategy(doc, result);
+    } else if (updateStrategy.equals(UpdateStrategy.DANGEROUS_OVERWRITE)) {
+      dangerousOverwriteStrategy(doc, result);
+    } else if (updateStrategy.equals(UpdateStrategy.OVERWRITE_AUDIO)) {
+      overwriteAudioStrategy(doc, result);
     } else {
       System.out.println("Result exists. Skipping.");
     }
@@ -310,6 +333,54 @@ public abstract class CsvMapper {
     System.out.println("Caching Complete.");
   }
 
+  protected void fillEmptyStrategy(Document doc, Document result) {
+    System.out.println("Result exists and update strategy to fill empty. Proceeding...");
+
+    Document finalResult = result;
+
+    doc.getProperties().forEach((k, v) -> {
+      Object currentValue = finalResult.getPropertyValue(k);
+      if (isPropertyValueEmpty(currentValue)
+          && !isPropertyValueEmpty(v)) {
+        finalResult.setPropertyValue(k, v);
+        System.out.println("Field " + k + " was updated to `" + v + "`");
+      }
+    });
+
+    if (!finalResult.getDirtyProperties().isEmpty()) {
+      client.repository().updateDocument(finalResult);
+      System.out.println("-----> Existing entry " + finalResult.getTitle() + " was updated.");
+    }
+  }
+
+  protected void dangerousOverwriteStrategy(Document doc, Document result) {
+    System.out.println("Result exists and update strategy to overwrite. Proceeding...");
+
+    Document finalResult = result;
+
+    doc.getProperties().forEach((k, v) -> {
+      finalResult.setPropertyValue(k, v);
+      System.out.println("Field " + k + " was updated to `" + v + "`");
+    });
+
+    if (!finalResult.getDirtyProperties().isEmpty()) {
+      client.repository().updateDocument(finalResult);
+      System.out.println("-----> Existing entry " + finalResult.getTitle() + " was updated.");
+    }
+  }
+
+  protected void overwriteAudioStrategy(Document doc, Document result) {
+    System.out.println("Result exists and update strategy to overwrite audio. Proceeding...");
+    /// Update audio
+    Document finalResult = result;
+    Object relatedAudio = doc.getDirtyProperties().get("fv:related_audio");
+
+    if (!isPropertyValueEmpty(relatedAudio)) {
+      finalResult.setPropertyValue("fv:related_audio", relatedAudio);
+      client.repository().updateDocument(finalResult);
+    }
+  }
+
   protected AbstractReader getCSVReader() {
     return csvReader;
   }
@@ -334,5 +405,19 @@ public abstract class CsvMapper {
     globalUsername = username;
   }
 
+  public boolean isPropertyValueEmpty(Object propertyValue) {
+    if (propertyValue == null) {
+      return true;
+    }
 
+    if (propertyValue instanceof String) {
+      return String.valueOf(propertyValue).equals("");
+    }
+
+    if (propertyValue instanceof List<?>) {
+      return ((List<?>) propertyValue).isEmpty();
+    }
+
+    return false;
+  }
 }

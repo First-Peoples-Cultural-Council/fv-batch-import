@@ -142,6 +142,12 @@ public class WordMapper extends CsvMapper {
       createdObjects++;
       createdWords++;
 
+    } else if (updateStrategy.equals(UpdateStrategy.FILL_EMPTY)) {
+      fillEmptyStrategy(doc, result);
+    } else if (updateStrategy.equals(UpdateStrategy.DANGEROUS_OVERWRITE)) {
+      dangerousOverwriteStrategy(doc, result);
+    } else if (updateStrategy.equals(UpdateStrategy.OVERWRITE_AUDIO)) {
+      overwriteAudioStrategy(doc, result);
     } else {
       throw new IOException("Skipped - Entry already exists in database.");
     }
@@ -178,8 +184,7 @@ public class WordMapper extends CsvMapper {
         "SELECT * FROM FVWord WHERE ecm:isTrashed = 0 "
             + "AND ecm:isProxy = 0 "
             + "AND ecm:isVersion = 0 "
-            + "AND fva:dialect = '" + getDialectID()
-            + "'";
+            + "AND fva:dialect = '" + getDialectID() + "' ORDER BY dc:created";
     loadCache(query);
 
   }

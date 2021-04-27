@@ -81,3 +81,18 @@ The optional "-language-path" parameter will override the "-dialect-id" paramete
 
 -skipValidation = "Allows you to skip the validation and process valid records")
     protected static Boolean skipValidation = false;
+
+-updateStrategy = "Allows you to process the batches in different ways, beyond just creating (see below)"
+    protected static UpdateStrategy updateStrategy = UpdateStrategy.DEFAULT;
+    
+Available update strategies: 
+    
+DEFAULT: Create records; will not create duplicates.
+
+FILL_EMPTY: Update records but will only populate existing fields that are empty with new values.
+
+DANGEROUS_OVERWRITE: Will overwrite ALL existing fields whether empty or not with new values.
+
+OVERWRITE_AUDIO: Will update the audio on existing entries, and nothing else.
+
+Note: Updates are based on the word/phrase matching EXACTLY. So "dog" will update the *first* record for "dog" that is in the DB.

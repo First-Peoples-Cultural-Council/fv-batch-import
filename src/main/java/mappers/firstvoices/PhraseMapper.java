@@ -4,6 +4,8 @@
 
 package mappers.firstvoices;
 
+import java.io.IOException;
+import java.util.HashMap;
 import java.util.Map;
 import mappers.CsvMapper;
 import mappers.propertyreaders.PropertyReader;
@@ -91,5 +93,36 @@ public class PhraseMapper extends CsvMapper {
     subdocuments.add(new PictureMapper(2));
     subdocuments.add(new VideoMapper());
     subdocuments.add(new VideoMapper(2));
+  }
+
+  @Override
+  protected Document getFromCache(Document doc) {
+    String cacheKey = doc.getPropertyValue("dc:title");
+    if (cache.containsKey(cacheKey)) {
+      return cache.get(cacheKey);
+    }
+    return null;
+  }
+
+  // To upload duplicates comment out the code below this line, as well as CsvValidator line 96
+  // and 122-123,  and -skipValidation
+  @Override
+  protected void cacheDocument(Document doc) {
+    cache.put(doc.getPropertyValue(Properties.TITLE), doc);
+  }
+
+  @Override
+  public void buildCache() throws IOException {
+    if (cache != null) {
+      return;
+    }
+    cache = new HashMap<String, Document>();
+    String query =
+        "SELECT * FROM FVPhrase WHERE ecm:isTrashed = 0 "
+            + "AND ecm:isProxy = 0 "
+            + "AND ecm:isVersion = 0 "
+            + "AND fva:dialect = '" + getDialectID() + "' ORDER BY dc:created";
+    loadCache(query);
+
   }
 }

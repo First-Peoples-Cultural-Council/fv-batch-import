@@ -36,6 +36,7 @@ public class FVPhraseMigrator extends AbstractMigrator {
     mapper = new PhraseMapper();
     mapper.setFakeCreation(false);
     mapper.setDialectID(dialectID);
+    mapper.setUpdateStrategy(updateStrategy);
 
     // Setup output of errors and log to path of data/csv file
     if (csvFile != null) {
