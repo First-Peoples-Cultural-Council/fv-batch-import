@@ -8,6 +8,7 @@ import common.ConsoleLogger;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
@@ -71,7 +72,10 @@ public abstract class CsvMapper {
   protected AbstractReader csvReader = null;
 
   public enum UpdateStrategy {
-    FILL_EMPTY
+    DEFAULT, // Create the records; will reject duplicates
+    FILL_EMPTY, // Will update empty values to new values on existing entries
+    DANGEROUS_OVERWRITE, // Will OVERWRITE all values on existing entries
+    OVERWRITE_AUDIO // Will update audio on existing entries
   }
 
   /**
@@ -347,5 +351,19 @@ public abstract class CsvMapper {
     globalUsername = username;
   }
 
+  public boolean isPropertyValueEmpty(Object propertyValue) {
+    if (propertyValue == null) {
+      return true;
+    }
 
+    if (propertyValue instanceof String) {
+      return String.valueOf(propertyValue).equals("");
+    }
+
+    if (propertyValue instanceof List<?>) {
+      return ((List<?>) propertyValue).isEmpty();
+    }
+
+    return false;
+  }
 }

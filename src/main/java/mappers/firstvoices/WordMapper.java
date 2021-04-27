@@ -142,21 +142,49 @@ public class WordMapper extends CsvMapper {
       createdObjects++;
       createdWords++;
 
-    } else if (updateStrategy.equals(UpdateStrategy.FILL_EMPTY)) { // updateStrategy.equals(UpdateStrategy.FILL_EMPTY)
+    } else if (updateStrategy.equals(UpdateStrategy.FILL_EMPTY)) {
       System.out.println("Result exists and update strategy to fill empty. Proceeding...");
 
       Document finalResult = result;
 
       doc.getProperties().forEach((k, v) -> {
-        if (finalResult.getPropertyValue(k) == null ||
-            String.valueOf(finalResult.getPropertyValue(k)).equals("")) {
+        Object currentValue = finalResult.getPropertyValue(k);
+        if (isPropertyValueEmpty(currentValue)
+            && !isPropertyValueEmpty(v)) {
           finalResult.setPropertyValue(k, v);
           System.out.println("Field " + k + " was updated to `" + v + "`");
         }
       });
 
-      client.repository().updateDocument(finalResult);
-      System.out.println("Existing entry " + finalResult.getTitle() + " was updated.");
+      if (!finalResult.getDirtyProperties().isEmpty()) {
+        client.repository().updateDocument(finalResult);
+        System.out.println("-----> Existing entry " + finalResult.getTitle() + " was updated.");
+      }
+    } else if (updateStrategy.equals(UpdateStrategy.DANGEROUS_OVERWRITE)) {
+      System.out.println("Result exists and update strategy to overwrite. Proceeding...");
+
+      Document finalResult = result;
+
+      doc.getProperties().forEach((k, v) -> {
+        finalResult.setPropertyValue(k, v);
+        System.out.println("Field " + k + " was updated to `" + v + "`");
+      });
+
+      if (!finalResult.getDirtyProperties().isEmpty()) {
+        client.repository().updateDocument(finalResult);
+        System.out.println("-----> Existing entry " + finalResult.getTitle() + " was updated.");
+      }
+    } else if (updateStrategy.equals(UpdateStrategy.OVERWRITE_AUDIO)) {
+
+      System.out.println("Result exists and update strategy to overwrite audio. Proceeding...");
+      /// Update audio
+      Document finalResult = result;
+      Object relatedAudio = doc.getDirtyProperties().get("fv:related_audio");
+
+      if (!isPropertyValueEmpty(relatedAudio)) {
+        finalResult.setPropertyValue("fv:related_audio", relatedAudio);
+        client.repository().updateDocument(finalResult);
+      }
     }
     else {
       throw new IOException("Skipped - Entry already exists in database.");

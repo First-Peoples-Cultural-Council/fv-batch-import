@@ -16,6 +16,7 @@ import java.util.Map;
 import java.util.logging.FileHandler;
 import java.util.logging.Logger;
 import mappers.CsvMapper;
+import mappers.CsvMapper.UpdateStrategy;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.nuxeo.client.NuxeoClient;
@@ -56,10 +57,16 @@ public abstract class AbstractMigrator {
   protected static String csvFile;
   @Parameter(names = {"-data-path"}, description = "Path to media files")
   protected static String blobDataPath;
+
   @Parameter(names = {
       "-skipValidation"}, description = "Allows you to skip the validation and process valid "
       + "records")
   protected static Boolean skipValidation = false;
+
+  @Parameter(names = {
+      "-updateStrategy"}, description = "Allows you to overwrite audio, fill empty, or overwrite everything")
+  protected static UpdateStrategy updateStrategy = UpdateStrategy.DEFAULT;
+
   static Options options = new Options();
   protected int lines = 0;
   protected int wordCount = 0;

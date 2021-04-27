@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import mappers.CsvMapper;
-import mappers.CsvMapper.UpdateStrategy;
 import mappers.CsvValidator;
 import mappers.firstvoices.BinaryMapper;
 import mappers.firstvoices.WordMapper;
@@ -35,7 +34,7 @@ public class FVWordMigrator extends AbstractMigrator {
     mapper = new WordMapper();
     mapper.setFakeCreation(false);
     mapper.setDialectID(dialectID);
-    mapper.setUpdateStrategy(UpdateStrategy.FILL_EMPTY);
+    mapper.setUpdateStrategy(updateStrategy);
 
     // Setup output of errors and log to path of data/csv file
     if (csvFile != null) {

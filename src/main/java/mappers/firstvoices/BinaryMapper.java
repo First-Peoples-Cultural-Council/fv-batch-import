@@ -3,6 +3,7 @@ package mappers.firstvoices;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import mappers.propertyreaders.PropertyReader;
 import mappers.propertyreaders.StorePropertyReader;
 import org.nuxeo.client.objects.Document;
@@ -24,7 +25,7 @@ public abstract class BinaryMapper extends DictionaryCachedMapper {
 
     parentKey = "Resources";
     this.linkKey = linkKey;
-    cacheProperty = prefix + "_" + Columns.FILENAME;
+    cacheProperty = String.valueOf(Columns.FILENAME);
 
     binaryPathReader = new StorePropertyReader(prefix + "_" + Columns.FILENAME);
     propertyReaders.add(binaryPathReader);
@@ -201,6 +202,30 @@ public abstract class BinaryMapper extends DictionaryCachedMapper {
         + "' AND ecm:isTrashed = 0"
         + " AND ecm:isProxy = 0"
         + " AND ecm:isVersion = 0";
+  }
+
+  @Override
+  protected String getCachedProperty(Document doc, boolean fromDirty) {
+    HashMap<String, String> fileContent = doc.getPropertyValue("file:content");
+
+    if (fromDirty) {
+      // Return file name read from CSV as key
+      return binaryPathReader.getCacheValue();
+    }
+
+    if (fileContent != null && fileContent.containsKey("name")) {
+      String cacheKey = fileContent.get("name");
+
+      if (cacheKey != null && !cacheKey.equals("")) {
+        return cacheKey;
+      }
+    }
+
+    return null;
+  }
+
+  protected String getInstanceCacheKey() {
+    return getClass().getName() + documents.get("Resources").getId();
   }
 
 }
