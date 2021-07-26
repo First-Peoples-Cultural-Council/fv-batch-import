@@ -73,6 +73,7 @@ public abstract class CsvMapper {
 
   public enum UpdateStrategy {
     DEFAULT, // Create the records; will reject duplicates
+    ALLOW_DUPLICATES, // Create the records; will process duplicates
     FILL_EMPTY, // Will update empty values to new values on existing entries
     DANGEROUS_OVERWRITE, // Will OVERWRITE all values on existing entries
     OVERWRITE_AUDIO // Will update audio on existing entries

@@ -4,6 +4,8 @@
 
 package mappers.firstvoices;
 
+import static mappers.CsvMapper.UpdateStrategy.ALLOW_DUPLICATES;
+
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -158,15 +160,19 @@ public class WordMapper extends CsvMapper {
     return result;
   }
 
-  // To upload duplicates comment out the code below this line, as well as CsvValidator line 96
-  // and 122-123,  and -skipValidation
   @Override
   protected void cacheDocument(Document doc) {
-    cache.put(doc.getPropertyValue(Properties.TITLE), doc);
+    if (!updateStrategy.equals(ALLOW_DUPLICATES)) {
+      cache.put(doc.getPropertyValue(Properties.TITLE), doc);
+    }
   }
 
   @Override
   protected Document getFromCache(Document doc) {
+    if (updateStrategy.equals(ALLOW_DUPLICATES)) {
+      return null;
+    }
+
     String cacheKey = doc.getPropertyValue("dc:title");
     if (cache.containsKey(cacheKey)) {
       return cache.get(cacheKey);
@@ -176,7 +182,7 @@ public class WordMapper extends CsvMapper {
 
   @Override
   public void buildCache() throws IOException {
-    if (cache != null) {
+    if (cache != null || updateStrategy.equals(ALLOW_DUPLICATES)) {
       return;
     }
     cache = new HashMap<String, Document>();
