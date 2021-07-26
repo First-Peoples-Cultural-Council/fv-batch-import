@@ -287,6 +287,9 @@ public abstract class CsvMapper {
     }
     Document currentDoc = documents.get("current");
     for (CsvMapper mapper : subdocuments) {
+      // Apply the update strategy to all mappers
+      mapper.setUpdateStrategy(updateStrategy);
+
       if (!mapper.preCreate()) {
         continue;
       }
