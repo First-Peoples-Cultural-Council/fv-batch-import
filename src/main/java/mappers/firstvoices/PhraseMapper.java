@@ -62,7 +62,7 @@ public class PhraseMapper extends CsvMapper {
         Columns.ALTERNATE_SPELLING + "_5"};
 
     propertyReaders.add(new PropertyReader(
-        Properties.TITLE, Columns.PHRASE));
+        Properties.TITLE, Columns.PHRASE, true, true));
     propertyReaders.add(new TranslationReader(
         Properties.TRANSLATION, Columns.DOMINANT_LANGUAGE, literalTranslationCols));
     propertyReaders.add(new TranslationReader(

@@ -12,6 +12,7 @@ public class PropertyReader {
   protected Object column;
   protected String key;
   protected boolean ignoreCase = false;
+  protected boolean stripNewLines = false;
 
   public PropertyReader(String key, Object column) {
     this.column = column;
@@ -24,16 +25,29 @@ public class PropertyReader {
     this.ignoreCase = ignoreCase;
   }
 
+  public PropertyReader(String key, Object column, boolean ignoreCase, boolean stripNewLines) {
+    this.column = column;
+    this.key = key;
+    this.ignoreCase = ignoreCase;
+    this.stripNewLines = stripNewLines;
+  }
+
   public String getKey() {
     return key;
   }
 
   public Object getValue(AbstractReader reader) {
+    String value = reader.getString(column);
+
     if (ignoreCase) {
-      return reader.getString(column).toLowerCase();
+      value = value.toLowerCase();
     }
 
-    return reader.getString(column);
+    if (stripNewLines) {
+      value = value.replace("<br />", "");
+    }
+
+    return value;
   }
 
   protected void setProperty(Document doc, String property, String value) {
