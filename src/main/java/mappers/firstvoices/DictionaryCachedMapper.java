@@ -1,5 +1,7 @@
 package mappers.firstvoices;
 
+import static mappers.CsvMapper.UpdateStrategy.ALLOW_DUPLICATES;
+
 import common.ConsoleLogger;
 import java.io.IOException;
 import java.util.HashMap;
@@ -38,6 +40,10 @@ public abstract class DictionaryCachedMapper extends CsvMapper {
 
   @Override
   protected Document getFromCache(Document doc) {
+    if (updateStrategy.equals(ALLOW_DUPLICATES)) {
+      return null;
+    }
+
     currentCacheId = getInstanceCacheKey();
     if (!cache.containsKey(currentCacheId)) {
       return null;
@@ -55,11 +61,17 @@ public abstract class DictionaryCachedMapper extends CsvMapper {
 
   @Override
   protected void cacheDocument(Document doc) {
-    cache.get(getInstanceCacheKey()).put(getCachedProperty(doc, false), doc);
+    if (!updateStrategy.equals(ALLOW_DUPLICATES)) {
+      cache.get(getInstanceCacheKey()).put(getCachedProperty(doc, false), doc);
+    }
   }
 
   @Override
   public void buildCache() throws IOException {
+    if (updateStrategy.equals(ALLOW_DUPLICATES)) {
+      return;
+    }
+
     if (cache == null) {
       cache = new HashMap<String, Map<String, Document>>();
     }
