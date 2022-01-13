@@ -25,20 +25,28 @@ public class WordMapper extends CsvMapper {
 
   protected static Map<String, Document> cache = null;
 
+  /**
+   * This constructor is meant for testing
+   * @param client
+   */
   public WordMapper(NuxeoClient client) {
     super("FVWord", Columns.WORD);
     this.client = client;
 
-    setupProperties();
+    setupProperties(false);
   }
 
-  public WordMapper() {
+  public WordMapper(Boolean createCategoryPolicy) {
     super("FVWord", Columns.WORD);
 
-    setupProperties();
+    // Set policy on word mapper
+    this.setCreateCategoryPolicy(createCategoryPolicy);
+
+    // Pass policy to Category mapper
+    setupProperties(createCategoryPolicy);
   }
 
-  private void setupProperties() {
+  private void setupProperties(Boolean createCategoryPolicy) {
 
     String[] definitionCols = {
         Columns.DOMINANT_LANGUAGE_DEFINITION,
@@ -104,8 +112,12 @@ public class WordMapper extends CsvMapper {
     propertyReaders.add(new TrueFalsePropertyReader(
         Properties.AVAILABLE_IN_GAMES, Columns.AVAILABLE_IN_GAMES));
 
+    // Set create category policy from word mapper
+    CategoryMapper categoryMapper = new CategoryMapper();
+    categoryMapper.setCreateCategoryPolicy(createCategoryPolicy);
+
     subdocuments.add(new RelatedPhraseMapper());
-    subdocuments.add(new CategoryMapper());
+    subdocuments.add(categoryMapper);
     subdocuments.add(new SourcesMapper());
     subdocuments.add(new AudioMapper());
     subdocuments.add(new AudioMapper(2));

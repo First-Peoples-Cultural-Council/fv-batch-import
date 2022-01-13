@@ -18,7 +18,7 @@ public class CategoryMapper extends DictionaryCachedMapper {
     super("FVCategory", Columns.CATEGORIES);
     parentKey = "Categories";
     cacheProperty = Properties.TITLE;
-    propertyReaders.add(new PropertyReader(Properties.WORD_CATEGORIES, Columns.CATEGORIES, true));
+    propertyReaders.add(new PropertyReader(Properties.WORD_CATEGORIES, Columns.CATEGORIES, false));
   }
 
   @Override
@@ -67,7 +67,7 @@ public class CategoryMapper extends DictionaryCachedMapper {
   @Override
   protected Document createDocument(Document doc, Integer depth) throws IOException {
 
-    String[] categories = doc.getPropertyValue("fv-word:categories").toString().split(",");
+    String[] categories = doc.getPropertyValue(Properties.WORD_CATEGORIES).toString().split(",");
     ArrayList<String> categoryIDs = new ArrayList<>();
 
     for (String category : categories) {
@@ -77,18 +77,32 @@ public class CategoryMapper extends DictionaryCachedMapper {
       // Nuxeo will convert / to _ - convert it back for lookup
       trimmedCategory = trimmedCategory.replace("_", "/");
 
-      Document fakeLookupDoc = Document.createWithName(trimmedCategory, "FVCategory");
-      fakeLookupDoc.setPropertyValue("dc:title", trimmedCategory);
+      Document categoryDoc = Document.createWithName(trimmedCategory, "FVCategory");
+      categoryDoc.setPropertyValue("dc:title", trimmedCategory);
 
-      Document cachedDoc = getFromCache(fakeLookupDoc);
+      Document cachedDoc = getFromCache(categoryDoc);
 
       if (cachedDoc != null) {
         System.out
             .println("Found category in database. Adding '" + trimmedCategory + "' to array ");
         categoryIDs.add(cachedDoc.getId());
       } else {
-        System.out.println("Could not find category " + trimmedCategory);
-        throw new IOException("Could not find category " + trimmedCategory);
+
+        if (Boolean.TRUE.equals(createCategoryPolicy)) {
+          // Create new category if option exists
+          Document createdCategory = super.createDocument(categoryDoc, depth);
+
+          // Add to list of IDs to attach to main document
+          categoryIDs.add(createdCategory.getId());
+
+          // Cache for future use
+          cacheDocument(createdCategory);
+
+          System.out.println("Could not find category " + trimmedCategory + ". Creating new category...");
+        } else {
+          // Category not found AND policy not set to create new
+          throw new IOException("Could not find category " + trimmedCategory);
+        }
       }
 
     }

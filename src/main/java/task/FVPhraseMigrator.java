@@ -56,7 +56,7 @@ public class FVPhraseMigrator extends AbstractMigrator {
     }
 
     CsvValidator csvVal = new CsvValidator(url, username, password, csvFile, dialectID,
-        languagePath);
+        languagePath, Boolean.FALSE);
     HashMap<String, ArrayList<String>> valid = csvVal.validate(blobDataPath, limit);
 
     if (valid.isEmpty() || skipValidation) {

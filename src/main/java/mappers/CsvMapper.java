@@ -71,6 +71,8 @@ public abstract class CsvMapper {
   protected Boolean fakeCreation = false;
   protected AbstractReader csvReader = null;
 
+  protected Boolean createCategoryPolicy;
+
   public enum UpdateStrategy {
     DEFAULT, // Create the records; will reject duplicates
     ALLOW_DUPLICATES, // Create the records; will process duplicates
@@ -122,6 +124,10 @@ public abstract class CsvMapper {
 
   public void setUpdateStrategy(UpdateStrategy updateStrategy) {
     this.updateStrategy = updateStrategy;
+  }
+
+  public void setCreateCategoryPolicy(boolean createCategoryPolicy) {
+    this.createCategoryPolicy = createCategoryPolicy;
   }
 
   /**
@@ -177,7 +183,7 @@ public abstract class CsvMapper {
 
       result = Document.createWithName(doc.getName(), doc.getType());
       result.setProperties(doc.getProperties());
-      result = client.repository().schemas("")
+      result = client.repository().schemas("dublincore")
           .createDocumentByPath(documents.get(parentKey).getPath(), result);
 
       tagAndUpdateCreator(result, doc);
