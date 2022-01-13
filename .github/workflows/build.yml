@@ -37,3 +37,11 @@ jobs:
       # Build only the backend if changes are made to the backend and not frontend
       - name: Build backend with Maven
         run: mvn clean install
+        
+      # Store the built artifacts
+      - name: Archive production artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: store-jar
+          path: |
+            target/fv-batch-import-*.jar
