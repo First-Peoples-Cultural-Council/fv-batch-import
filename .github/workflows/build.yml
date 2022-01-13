@@ -38,7 +38,7 @@ jobs:
       - name: Build backend with Maven
         run: mvn clean install
         
-      # Store the built artifacts
+      # Store the built artifact jar
       - name: Archive production artifacts
         uses: actions/upload-artifact@v2
         with:
