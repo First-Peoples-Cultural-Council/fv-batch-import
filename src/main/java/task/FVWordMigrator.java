@@ -31,7 +31,7 @@ public class FVWordMigrator extends AbstractMigrator {
     // Set binary mapper data path
     BinaryMapper.setDataPath(blobDataPath);
 
-    mapper = new WordMapper();
+    mapper = new WordMapper(createCategoryPolicy);
     mapper.setFakeCreation(false);
     mapper.setDialectID(dialectID);
     mapper.setUpdateStrategy(updateStrategy);
@@ -53,7 +53,7 @@ public class FVWordMigrator extends AbstractMigrator {
     }
 
     CsvValidator csvVal = new CsvValidator(url, username, password, csvFile, dialectID,
-        languagePath);
+        languagePath, createCategoryPolicy);
     HashMap<String, ArrayList<String>> valid = csvVal.validate(blobDataPath, limit);
 
     if (valid.isEmpty() || Boolean.TRUE.equals(skipValidation)) {

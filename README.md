@@ -82,6 +82,9 @@ The optional "-language-path" parameter will override the "-dialect-id" paramete
 -skipValidation = "Allows you to skip the validation and process valid records")
     protected static Boolean skipValidation = false;
 
+-createCategories = "Allows you to create new categories if they are not found"
+    protected static Boolean createCategoryPolicy = false;
+
 -updateStrategy = "Allows you to process the batches in different ways, beyond just creating (see below)"
     protected static UpdateStrategy updateStrategy = UpdateStrategy.DEFAULT;
     

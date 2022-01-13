@@ -64,6 +64,11 @@ public abstract class AbstractMigrator {
   protected static Boolean skipValidation = false;
 
   @Parameter(names = {
+      "-createCategories"}, description = "Allows you to create new categories that do not exist "
+      + "records")
+  protected static Boolean createCategoryPolicy = false;
+
+  @Parameter(names = {
       "-updateStrategy"}, description = "Overwrite audio, fill empty, or overwrite everything")
   protected static UpdateStrategy updateStrategy = UpdateStrategy.DEFAULT;
 

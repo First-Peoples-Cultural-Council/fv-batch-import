@@ -59,13 +59,17 @@ public class CsvValidator {
   protected NuxeoClient client;
   protected Documents categories = null;
   protected Documents words;
+  protected Boolean createCategoryPolicy = Boolean.FALSE;
 
 
   /**
    * Validates CSV prior to processing.
    */
   public CsvValidator(String nuxeoUrl, String nuxeoUser, String nuxeoPassword, String csvFile,
-      String dialectID, String languagePath) throws IOException {
+      String dialectID, String languagePath, Boolean createCategoryPolicy) throws IOException {
+
+    this.createCategoryPolicy = createCategoryPolicy;
+
     if (csvFile != null && !csvFile.isEmpty()) {
       fileReader = new InputStreamReader(new FileInputStream(csvFile), StandardCharsets.UTF_8);
       csvReader = new CSVReader(fileReader, ',', '"', '\0');
@@ -151,7 +155,7 @@ public class CsvValidator {
           checkWordDuplicate(column, lineNumber);
         }
 
-        if (columnHeader.equals("CATEGORIES") && categories != null) {
+        if (columnHeader.equals("CATEGORIES") && categories != null && Boolean.FALSE.equals(createCategoryPolicy)) {
           checkCategoryExists(column, lineNumber);
         }
 
@@ -314,8 +318,8 @@ public class CsvValidator {
             }
           }
           if (!match) {
-            addToInvalid("Missing Categories",
-                "Only existing categories allowed: " + word + " in line " + (line + 1));
+            addToInvalid("Missing Categories (if desired, use the -createCategories option to create them)",
+                "Category not found in DB `" + word + "` in line " + (line + 1) + ", check for spaces and typos");
           }
         }
       }
@@ -329,9 +333,9 @@ public class CsvValidator {
       }
 
       if (!match) {
-        addToInvalid("Missing Categories",
-            "Only existing categories allowed. Check for spaces between categories: " + w
-                + " in line " + (line + 1));
+        addToInvalid("Missing Categories (if desired, use the -createCategories option to create them)",
+            "Category not found in DB `" + w
+                + "` in line " + (line + 1) + ", check for spaces and typos");
       }
     }
   }
