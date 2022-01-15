@@ -283,6 +283,12 @@ public abstract class AbstractMigrator {
       cache.put(dialectChild.getTitle(), dialectChild);
     }
 
+    if (cache.containsKey("Dictionary.new")) {
+      // If Dictionary.new is present in FVDialect - the migrator will import there
+      cache.replace("Dictionary", cache.get("Dictionary.new"));
+      cache.remove("Dictionary.new");
+    }
+
     baseDocumentsCache.put(cacheKey, cache);
     return cache;
   }
