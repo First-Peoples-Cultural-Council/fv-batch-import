@@ -221,6 +221,12 @@ public abstract class AbstractMigrator {
     if (value == null || value.isEmpty()) {
       return;
     }
+
+    // try to find the type
+    Map<String, Object> documentProperties = doc.getProperties();
+    Object matchedProperty = documentProperties.get(property);
+    System.out.println("Found type for property " + property + ": " + matchedProperty.getClass());
+
     doc.setPropertyValue(property, value);
   }
 

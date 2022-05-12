@@ -6,6 +6,8 @@ package mappers.propertyreaders;
 
 import org.nuxeo.client.objects.Document;
 
+import java.util.Locale;
+
 /**
  * @author loopingz
  *
@@ -17,28 +19,21 @@ public class TrueFalsePropertyReader extends PropertyReader {
   }
 
   protected void setProperty(Document doc, String property, String value) {
-    if (value == null) {
-      value = "true";
-    }
+    boolean realValue = true;
 
-    switch (value) {
-      case "1":
-        value = "true";
-        break;
-
+    switch (value.toLowerCase(Locale.ROOT)) {
+      case "false":
       case "0":
-        value = "false";
+        realValue = false;
         break;
-
       default:
-        value = "true";
-        break;
+        realValue = true;
     }
 
     System.out.println(
         "   * Setting value: '" + property + "' to '" + value + "' on doc '" + doc.getName()
             + "'");
-    doc.setPropertyValue(property, value);
+    doc.setPropertyValue(property, realValue);
   }
 
   protected void setProperty(Document doc, String property, Object value) {

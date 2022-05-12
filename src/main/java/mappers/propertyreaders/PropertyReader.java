@@ -1,7 +1,8 @@
 package mappers.propertyreaders;
 
-import org.nuxeo.client.objects.Document;
 import reader.AbstractReader;
+import java.util.Map;
+import org.nuxeo.client.objects.Document;
 
 /**
  * @author loopingz
@@ -54,6 +55,15 @@ public class PropertyReader {
     if (value == null || value.isEmpty()) {
       return;
     }
+
+    Map<String, Object> documentProperties = doc.getProperties();
+    Object matchedProperty = documentProperties.get(property);
+    if (matchedProperty != null) {
+      System.out.println("Type for " + property + " is " + matchedProperty.getClass());
+    } else {
+      System.out.println("Cannot find property: " + property);
+    }
+
     System.out.println(
         "   * Setting value: '" + property + "' to '" + value + "' on doc '" + doc.getName()
             + "'");
@@ -64,6 +74,16 @@ public class PropertyReader {
     if (value == null || value.toString().isEmpty()) {
       return;
     }
+
+    Map<String, Object> documentProperties = doc.getProperties();
+    Object matchedProperty = documentProperties.get(property);
+    if (matchedProperty != null) {
+      System.out.println("Type for " + property + " is " + matchedProperty.getClass());
+    } else {
+      System.out.printf("Cannot find property: " + property);
+    }
+
+
     System.out.println(
         "   * Setting value: '" + property + "' to '" + value.toString() + "' on doc '" + doc
             .getName() + "'");

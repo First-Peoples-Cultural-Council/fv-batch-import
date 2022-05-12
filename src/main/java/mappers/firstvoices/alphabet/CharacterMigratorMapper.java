@@ -4,6 +4,7 @@ import java.io.IOException;
 import mappers.firstvoices.AudioMapper;
 import mappers.firstvoices.DictionaryCachedMapper;
 import mappers.firstvoices.Properties;
+import mappers.propertyreaders.IntegerPropertyReader;
 import mappers.propertyreaders.PropertyReader;
 import org.nuxeo.client.objects.Document;
 
@@ -20,7 +21,7 @@ public class CharacterMigratorMapper extends DictionaryCachedMapper {
 
     propertyReaders.add(new PropertyReader(Properties.TITLE, "CHAR"));
     propertyReaders.add(new PropertyReader("fvcharacter:upper_case_character", "CHAR_UPPER_CASE"));
-    propertyReaders.add(new PropertyReader("fvcharacter:alphabet_order", "ORDER"));
+    propertyReaders.add(new IntegerPropertyReader("fvcharacter:alphabet_order", "ORDER"));
     propertyReaders.add(new PropertyReader("fvcharacter:fuzzy_latin_match", "LATIN"));
 
     subdocuments.add(new AudioMapper());

@@ -41,30 +41,14 @@
               <transformers>
                 <transformer
                   implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                  <mainClass>task/FVWordMigrator</mainClass>
+                  <mainClass>task/FVCharacterMigrator</mainClass>
                 </transformer>
               </transformers>
             </configuration>
           </execution>
         </executions>
       </plugin>
-      <plugin>
-        <artifactId>maven-checkstyle-plugin</artifactId>
-        <configuration>
-          <configLocation>
-            https://raw.githubusercontent.com/First-Peoples-Cultural-Council/fv-checkstyle/master/java/java-fv-google-style-strict.xml
-          </configLocation>
-        </configuration>
-        <executions>
-          <execution>
-            <goals>
-              <goal>check</goal>
-            </goals>
-          </execution>
-        </executions>
-        <groupId>org.apache.maven.plugins</groupId>
-        <version>3.1.1</version>
-      </plugin>
+
     </plugins>
   </build>
   <repositories>
@@ -80,8 +64,8 @@
       </snapshots>
     </repository>
     <repository>
-      <id>public</id>
-      <url>https://maven.nuxeo.org/nexus/content/groups/public</url>
+      <id>public-eu</id>
+      <url>https://maven-eu.nuxeo.org/nexus/content/groups/public</url>
       <releases>
         <enabled>true</enabled>
       </releases>
