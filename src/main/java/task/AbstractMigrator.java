@@ -80,12 +80,6 @@ public abstract class AbstractMigrator {
   protected String rootPath = null;
   protected String dataPath = null;
   protected String sharedDataPath = null;
-  protected Document sectionRoot = null;
-  protected String sectionRootPath = null;
-  protected String sectionDataPath = null;
-  protected String sectionSharedDataPath = null;
-  // Prefix used to distinguish Section documents in the cache
-  protected String sectionCachePrefix = "SECTION_";
   protected int errors = 0;
   protected Logger log = Logger.getLogger("Migrator");
   protected AbstractReader reader = null;
@@ -135,9 +129,6 @@ public abstract class AbstractMigrator {
 
     // TODO: handle this better
     String domain = rootPath.split("/Workspaces/")[0];
-    sectionRootPath = domain + "/sections";
-    sectionDataPath = sectionRootPath + "/Data/";
-    sectionSharedDataPath = sectionRootPath + "/SharedData/";
 
     reader.open();
 
@@ -160,7 +151,6 @@ public abstract class AbstractMigrator {
 
       try {
         root = client.schemas("*").repository().fetchDocumentByPath(dataPath);
-        sectionRoot = client.schemas("*").repository().fetchDocumentByPath(sectionDataPath);
 
         // Print the name out
         while (reader.next()) {
@@ -255,7 +245,6 @@ public abstract class AbstractMigrator {
     }
 
     Document dialectDoc = null;
-    Document sectionDialectDoc = null;
 
     key += dialectID;
 
