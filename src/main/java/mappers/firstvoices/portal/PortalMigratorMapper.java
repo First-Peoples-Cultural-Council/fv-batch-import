@@ -64,9 +64,6 @@ public class PortalMigratorMapper extends DictionaryCachedMapper {
           .execute();
       updatedPortals++;
 
-      // If the parent document exists in the section, go ahead and publish the current document
-      // to the section
-      //if(documents.get("SECTION_" + parentKey) != null) {
       publishDocument(result);
       //}
     }
