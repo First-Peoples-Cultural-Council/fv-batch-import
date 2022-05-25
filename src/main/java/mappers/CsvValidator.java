@@ -120,15 +120,15 @@ public class CsvValidator {
       lineNumber++;
 
       // Add to rows processed if not a duplicate --- Comment out line 96 and 98-102 if
-      // duplicates wanted
-      if (!rowsProcessed.containsKey(nextLine[0])) {
-        rowsProcessed.put(nextLine[0], nextLine);
-
-      // This is a duplicate within the CSV file - mark as such
-      } else {
-        addToInvalid("Duplicates",
-            "Cannot upload duplicate words in CSV: line " + (lineNumber + 1) + ", " + nextLine[0]);
-      }
+//      // duplicates wanted
+//      if (!rowsProcessed.containsKey(nextLine[0])) {
+//        rowsProcessed.put(nextLine[0], nextLine);
+//
+//      // This is a duplicate within the CSV file - mark as such
+//      } else {
+//        addToInvalid("Duplicates",
+//            "Cannot upload duplicate words in CSV: line " + (lineNumber + 1) + ", " + nextLine[0]);
+//      }
 
       // Review column values for each row
       for (String column : nextLine) {
@@ -153,6 +153,10 @@ public class CsvValidator {
         // This checks for duplicates against the remote DB, not within the CSV
         if (columnHeader.equals("WORD")) {
           checkWordDuplicate(column, lineNumber);
+        }
+
+        if (columnHeader.equals("PART_OF_SPEECH") && !column.equals("")) {
+          checkPartsOfSpeech(column, lineNumber);
         }
 
         if (columnHeader.equals("CATEGORIES") && categories != null && Boolean.FALSE.equals(createCategoryPolicy)) {
@@ -244,10 +248,10 @@ public class CsvValidator {
 
   private void checkPartsOfSpeech(String pos, int line) throws IOException {
     String temppos = pos.toLowerCase();
-    if (!temppos.equals(pos)) {
-      addToInvalid("Parts of Speech",
-          "Parts of speech must be written in lowercase: line " + (line + 1) + ", " + pos);
-    }
+//    if (!temppos.equals(pos)) {
+//      addToInvalid("Parts of Speech",
+//          "Parts of speech must be written in lowercase: line " + (line + 1) + ", " + pos);
+//    }
     temppos = temppos.replaceAll("/ -(),", "_");
     if (!POS.contains(temppos)) {
       addToInvalid("Parts of Speech",

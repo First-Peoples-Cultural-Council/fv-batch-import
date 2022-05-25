@@ -11,7 +11,7 @@ public class PartOfSpeechPropertyReader extends PropertyReader {
 
   @Override
   public String getValue(AbstractReader reader) {
-    switch (reader.getString(column)) {
+    switch (reader.getString(column).toLowerCase()) {
       case "0":
       case "basic":
         return "basic";
