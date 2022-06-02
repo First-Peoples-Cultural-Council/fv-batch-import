@@ -98,9 +98,6 @@ public abstract class BinaryMapper extends DictionaryCachedMapper {
         binaryFileRelativePath = binaryFileRelativePath.substring(1);
       }
 
-      // Replace slash with underscore
-      binaryFileRelativePath = binaryFileRelativePath.replace("/", "_");
-
       // Extract filename with no extension
       String filenameNoExtension = binaryFileRelativePath;
       int extensionPosition = binaryFileRelativePath.indexOf(".");
