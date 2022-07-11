@@ -155,6 +155,10 @@ public class CsvValidator {
           checkWordDuplicate(column, lineNumber);
         }
 
+        if (columnHeader.equals("PART_OF_SPEECH") && !column.equals("")) {
+          checkPartsOfSpeech(column, lineNumber);
+        }
+
         if (columnHeader.equals("CATEGORIES") && categories != null && Boolean.FALSE.equals(createCategoryPolicy)) {
           checkCategoryExists(column, lineNumber);
         }
@@ -244,10 +248,10 @@ public class CsvValidator {
 
   private void checkPartsOfSpeech(String pos, int line) throws IOException {
     String temppos = pos.toLowerCase();
-    if (!temppos.equals(pos)) {
-      addToInvalid("Parts of Speech",
-          "Parts of speech must be written in lowercase: line " + (line + 1) + ", " + pos);
-    }
+//    if (!temppos.equals(pos)) {
+//      addToInvalid("Parts of Speech",
+//          "Parts of speech must be written in lowercase: line " + (line + 1) + ", " + pos);
+//    }
     temppos = temppos.replaceAll("/ -(),", "_");
     if (!POS.contains(temppos)) {
       addToInvalid("Parts of Speech",
