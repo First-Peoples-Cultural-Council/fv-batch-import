@@ -120,15 +120,15 @@ public class CsvValidator {
       lineNumber++;
 
       // Add to rows processed if not a duplicate --- Comment out line 96 and 98-102 if
-//      // duplicates wanted
-//      if (!rowsProcessed.containsKey(nextLine[0])) {
-//        rowsProcessed.put(nextLine[0], nextLine);
-//
-//      // This is a duplicate within the CSV file - mark as such
-//      } else {
-//        addToInvalid("Duplicates",
-//            "Cannot upload duplicate words in CSV: line " + (lineNumber + 1) + ", " + nextLine[0]);
-//      }
+      // duplicates wanted
+      if (!rowsProcessed.containsKey(nextLine[0])) {
+        rowsProcessed.put(nextLine[0], nextLine);
+
+      // This is a duplicate within the CSV file - mark as such
+      } else {
+        addToInvalid("Duplicates",
+            "Cannot upload duplicate words in CSV: line " + (lineNumber + 1) + ", " + nextLine[0]);
+      }
 
       // Review column values for each row
       for (String column : nextLine) {
