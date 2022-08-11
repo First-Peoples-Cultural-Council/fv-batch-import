@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import mappers.propertyreaders.PropertyReader;
 import mappers.propertyreaders.StorePropertyReader;
+import mappers.propertyreaders.TrueFalsePropertyReader;
 import org.nuxeo.client.objects.Document;
 import org.nuxeo.client.objects.blob.FileBlob;
 import org.nuxeo.client.spi.NuxeoClientException;
@@ -35,11 +36,11 @@ public abstract class BinaryMapper extends DictionaryCachedMapper {
     //propertyReaders.add(new PropertyReader(Properties.MEDIA_STATUS, prefix + "_" + Columns
     // .STATUS));
     propertyReaders
-        .add(new PropertyReader(Properties.MEDIA_SHARED, prefix + "_" + Columns.SHARED));
+        .add(new TrueFalsePropertyReader(Properties.MEDIA_SHARED, prefix + "_" + Columns.SHARED));
     propertyReaders.add(new PropertyReader(Properties.MEDIA_ACKNOWLEDGEMENT,
         prefix + "_" + Columns.ACKNOWLEDGEMENT));
     propertyReaders
-        .add(new PropertyReader(Properties.CHILD_FOCUSED, prefix + "_" + Columns.CHILD_FOCUSED));
+        .add(new TrueFalsePropertyReader(Properties.CHILD_FOCUSED, prefix + "_" + Columns.CHILD_FOCUSED));
 
     subdocuments.add(new SourcesMapper(Properties.MEDIA_SOURCE, prefix + "_" + Columns.SOURCE));
     subdocuments
@@ -157,7 +158,7 @@ public abstract class BinaryMapper extends DictionaryCachedMapper {
       }
 
       if (doc.getDirtyProperties().get(Properties.CHILD_FOCUSED) == null) {
-        doc.setPropertyValue(Properties.CHILD_FOCUSED, false);
+        doc.setPropertyValue(Properties.CHILD_FOCUSED, true);
       }
 
       try {
