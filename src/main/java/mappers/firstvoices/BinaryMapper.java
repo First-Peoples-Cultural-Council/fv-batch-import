@@ -35,8 +35,8 @@ public abstract class BinaryMapper extends DictionaryCachedMapper {
     propertyReaders.add(new PropertyReader(Properties.DESCR, prefix + "_" + Columns.DESCR));
     //propertyReaders.add(new PropertyReader(Properties.MEDIA_STATUS, prefix + "_" + Columns
     // .STATUS));
-    propertyReaders
-        .add(new TrueFalsePropertyReader(Properties.MEDIA_SHARED, prefix + "_" + Columns.SHARED));
+//    propertyReaders
+//        .add(new PropertyReader(Properties.MEDIA_SHARED, prefix + "_" + Columns.SHARED)); // remove this property -- should not be configurable to true until we have a better data sharing plan
     propertyReaders.add(new PropertyReader(Properties.MEDIA_ACKNOWLEDGEMENT,
         prefix + "_" + Columns.ACKNOWLEDGEMENT));
     propertyReaders
@@ -153,9 +153,9 @@ public abstract class BinaryMapper extends DictionaryCachedMapper {
 
       // Set some defaults for binary documents if they are not defined
 
-      if (doc.getDirtyProperties().get(Properties.MEDIA_SHARED) == null) {
-        doc.setPropertyValue(Properties.MEDIA_SHARED, false);
-      }
+//      if (doc.getDirtyProperties().get(Properties.MEDIA_SHARED) == null) {
+//        doc.setPropertyValue(Properties.MEDIA_SHARED, false);
+//      }
 
       if (doc.getDirtyProperties().get(Properties.CHILD_FOCUSED) == null) {
         doc.setPropertyValue(Properties.CHILD_FOCUSED, true);
